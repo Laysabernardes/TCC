@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+  font-family: "Nunito Sans", sans-serif;
+}
+
+body {
+  background: var(--color-dark-1);
+}
+
+@theme {
+  --color-light-1: #ffffff;
+  --color-light-2: #f6f6f6;
+  --color-light-3: #e8e8e8;
+  --color-dark-1: #333333;
+  --color-dark-2: #202020;
+  --color-dark-3: #000000;
+  --color-red-1: #e5110b;
+  --color-red-2: #f53d38;
+  --color-red-3: #f87571;
+}
