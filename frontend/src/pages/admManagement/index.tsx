@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TypeInput, Selection } from "../../components/inputs";
+import { TypeInput, Textarea, Selection } from "../../components/inputs";
 import { Link } from "react-router-dom";
 import { FaGear } from "react-icons/fa6";
 import { RiArrowGoBackFill } from "react-icons/ri";
@@ -10,6 +10,8 @@ function AdmManagement() {
     // Projetos
     project_name: "",
     project_slug: "",
+    project_about: "",
+    project_people: [""],
     // Indexador para outras coleções
     project_id: "",
     // Perspectivas
@@ -57,7 +59,7 @@ function AdmManagement() {
       className="w-[100%] h-[100vh] flex flex-col items-center bg-dark-1"
     >
       <section className="w-[95%] h-1300 flex flex-row bg-dark-2 rounded-lg mt-16 mb-16">
-        <div className="w-1/2 bg-dark-2">
+        <div className="w-1/2 bg-dark-2 rounded-s-lg">
           <img
             src={usinaGuara}
             alt="background Usina Guará"
@@ -65,7 +67,7 @@ function AdmManagement() {
           />
         </div>
         <div className="flex flex-col w-1/2">
-          <form action="" className="p-15">
+          <form action="" className="p-15 overflow-y-scroll">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-light-3 flex gap-2 items-center">
                 <FaGear className="h-5 w-5" />
@@ -99,16 +101,38 @@ function AdmManagement() {
               required={true}
             />
             {collection === "Projeto" && action === "Criar" && (
-              <TypeInput
-                id="project_name"
-                title="Nome Projeto"
-                type="text"
-                placeholder="Digite o nome"
-                icon={<FaGear />}
-                value={form.project_name}
-                onChange={handleChange}
-                required={true}
-              />
+              <>
+                <TypeInput
+                  id="project_name"
+                  title="Nome Projeto"
+                  type="text"
+                  placeholder="Digite o nome"
+                  icon={<FaGear />}
+                  value={form.project_name}
+                  onChange={handleChange}
+                  required={true}
+                />
+                <TypeInput
+                  id="project_slug"
+                  title="Nome para URL"
+                  type="text"
+                  placeholder="Digite um nome para URL"
+                  icon={<FaGear />}
+                  value={form.project_slug}
+                  onChange={handleChange}
+                  required={true}
+                />
+                <Textarea
+                  id="project_about"
+                  title="Nome Projeto"
+                  type="text"
+                  placeholder="Digite o nome"
+                  icon={<FaGear />}
+                  value={form.project_about}
+                  onChange={handleChange}
+                  required={true}
+                />
+              </>
             )}
           </form>
         </div>

@@ -48,6 +48,51 @@ function TypeInput({
   );
 }
 
+interface TextAreaProps {
+  id: string;
+  title?: string;
+  type?: string;
+  placeholder?: string;
+  icon?: ReactElement<any, any>;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  required?: boolean;
+}
+
+function Textarea({
+  id,
+  title,
+  placeholder,
+  icon,
+  value,
+  onChange,
+  required,
+}: TextAreaProps) {
+  return (
+    <div className="my-5 flex flex-col gap-2">
+      <label htmlFor={id} className="text-lg font-bold text-light-3">
+        {title}
+      </label>
+      <div className="relative">
+        <div
+          id="icon"
+          className="absolute left-2 bottom-4 h-full flex items-center jusify-center text-red-3"
+        >
+          {icon}
+        </div>
+        <textarea
+          id={id}
+          placeholder={placeholder}
+          required={required}
+          value={value}
+          onChange={onChange}
+          className="w-full bg-dark-1 p-2 pl-7 rounded-lg text-red-3 resize-none"
+        />
+      </div>
+    </div>
+  );
+}
+
 interface SelectionProps {
   id: string;
   title?: string;
@@ -99,4 +144,4 @@ function Selection({
   );
 }
 
-export { TypeInput, Selection };
+export { TypeInput, Textarea, Selection };
