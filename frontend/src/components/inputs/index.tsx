@@ -76,7 +76,7 @@ function Textarea({
       <div className="relative">
         <div
           id="icon"
-          className="absolute left-2 bottom-4 h-full flex items-center jusify-center text-red-3"
+          className="absolute left-2 bottom-8.5 h-full flex items-center jusify-center text-red-3"
         >
           {icon}
         </div>
@@ -86,7 +86,7 @@ function Textarea({
           required={required}
           value={value}
           onChange={onChange}
-          className="w-full bg-dark-1 p-2 pl-7 rounded-lg text-red-3 resize-none"
+          className="w-full h-25 max-h-25 bg-dark-1 p-2 pl-7 rounded-lg text-red-3 resize-none"
         />
       </div>
     </div>

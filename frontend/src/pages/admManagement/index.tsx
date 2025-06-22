@@ -58,7 +58,7 @@ function AdmManagement() {
       id="hero"
       className="w-[100%] h-[100vh] flex flex-col items-center bg-dark-1"
     >
-      <section className="w-[95%] h-1300 flex flex-row bg-dark-2 rounded-lg mt-16 mb-16">
+      <section className="w-[95%] h-200 max-h-150 flex flex-row bg-dark-2 rounded-lg mt-16 mb-16">
         <div className="w-1/2 bg-dark-2 rounded-s-lg">
           <img
             src={usinaGuara}
@@ -67,8 +67,8 @@ function AdmManagement() {
           />
         </div>
         <div className="flex flex-col w-1/2">
-          <form action="" className="p-15 overflow-y-scroll">
-            <div className="flex justify-between items-center">
+          <form action="" className="p-15">
+            <div className="flex justify-between items-center pb-5">
               <h2 className="text-2xl font-bold text-light-3 flex gap-2 items-center">
                 <FaGear className="h-5 w-5" />
                 Formulário Administrador
@@ -82,58 +82,65 @@ function AdmManagement() {
                 </Link>
               </div>
             </div>
-            <Selection
-              id="colection"
-              title="Selecione uma coleção"
-              placeholder="Coleção"
-              icon={<FaGear />}
-              options={["Projeto", "Perspectiva", "Linha do Tempo", "Pessoas"]}
-              onChange={(e) => setCollection(e.target.value)}
-              required={true}
-            />
-            <Selection
-              id="action"
-              title="Selecione uma ação"
-              placeholder="Ação"
-              icon={<FaGear />}
-              options={["Criar", "Atualizar", "Deletar"]}
-              onChange={(e) => setAction(e.target.value)}
-              required={true}
-            />
-            {collection === "Projeto" && action === "Criar" && (
-              <>
-                <TypeInput
-                  id="project_name"
-                  title="Nome Projeto"
-                  type="text"
-                  placeholder="Digite o nome"
-                  icon={<FaGear />}
-                  value={form.project_name}
-                  onChange={handleChange}
-                  required={true}
-                />
-                <TypeInput
-                  id="project_slug"
-                  title="Nome para URL"
-                  type="text"
-                  placeholder="Digite um nome para URL"
-                  icon={<FaGear />}
-                  value={form.project_slug}
-                  onChange={handleChange}
-                  required={true}
-                />
-                <Textarea
-                  id="project_about"
-                  title="Nome Projeto"
-                  type="text"
-                  placeholder="Digite o nome"
-                  icon={<FaGear />}
-                  value={form.project_about}
-                  onChange={handleChange}
-                  required={true}
-                />
-              </>
-            )}
+            <div className="overflow-y-scroll overflow-visible h-[70%] pr-5">
+              <Selection
+                id="colection"
+                title="Selecione uma coleção"
+                placeholder="Coleção"
+                icon={<FaGear />}
+                options={[
+                  "Projeto",
+                  "Perspectiva",
+                  "Linha do Tempo",
+                  "Pessoas",
+                ]}
+                onChange={(e) => setCollection(e.target.value)}
+                required={true}
+              />
+              <Selection
+                id="action"
+                title="Selecione uma ação"
+                placeholder="Ação"
+                icon={<FaGear />}
+                options={["Criar", "Atualizar", "Deletar"]}
+                onChange={(e) => setAction(e.target.value)}
+                required={true}
+              />
+              {collection === "Projeto" && action === "Criar" && (
+                <>
+                  <TypeInput
+                    id="project_name"
+                    title="Nome Projeto"
+                    type="text"
+                    placeholder="Digite o nome"
+                    icon={<FaGear />}
+                    value={form.project_name}
+                    onChange={handleChange}
+                    required={true}
+                  />
+                  <TypeInput
+                    id="project_slug"
+                    title="Nome para URL"
+                    type="text"
+                    placeholder="Digite um nome para URL"
+                    icon={<FaGear />}
+                    value={form.project_slug}
+                    onChange={handleChange}
+                    required={true}
+                  />
+                  <Textarea
+                    id="project_about"
+                    title="Sobre o Projeto"
+                    type="text"
+                    placeholder="Digite o nome"
+                    icon={<FaGear />}
+                    value={form.project_about}
+                    onChange={handleChange}
+                    required={true}
+                  />
+                </>
+              )}
+            </div>
           </form>
         </div>
       </section>
