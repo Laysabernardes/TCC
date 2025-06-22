@@ -48,4 +48,55 @@ function TypeInput({
   );
 }
 
-export default TypeInput;
+interface SelectionProps {
+  id: string;
+  title?: string;
+  placeholder?: string;
+  icon?: ReactElement<any, any>;
+  options: string[];
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  required?: boolean;
+}
+
+function Selection({
+  id,
+  title,
+  placeholder,
+  icon,
+  options,
+  onChange,
+  required,
+}: SelectionProps) {
+  return (
+    <div className="my-5 flex flex-col gap-2">
+      <label htmlFor={id} className="text-lg font-bold text-light-3">
+        {title}
+      </label>
+      <div className="relative">
+        <div
+          id="icon"
+          className="absolute left-2 h-full flex items-center jusify-center text-red-3"
+        >
+          {icon}
+        </div>
+        <select
+          id={id}
+          required={required}
+          onChange={onChange}
+          className="w-full bg-dark-1 p-2 pl-7 rounded-lg text-red-3"
+        >
+          <option disabled selected>
+            {placeholder}
+          </option>
+          {options.map((o, idx) => (
+            <option key={idx} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+}
+
+export { TypeInput, Selection };

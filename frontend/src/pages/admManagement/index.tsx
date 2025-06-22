@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TypeInput from "../../components/inputs";
+import { TypeInput, Selection } from "../../components/inputs";
 import { Link } from "react-router-dom";
 import { FaGear } from "react-icons/fa6";
 import { RiArrowGoBackFill } from "react-icons/ri";
@@ -36,6 +36,9 @@ function AdmManagement() {
     person_contact: "",
     person_img: "",
   });
+  const [action, setAction] = useState("");
+  const [collection, setCollection] = useState("");
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -53,7 +56,7 @@ function AdmManagement() {
       id="hero"
       className="w-[100%] h-[100vh] flex flex-col items-center bg-dark-1"
     >
-      <section className="w-[95%] h-200 flex flex-row bg-dark-2 rounded-lg my-16">
+      <section className="w-[95%] h-1300 flex flex-row bg-dark-2 rounded-lg mt-16 mb-16">
         <div className="w-1/2 bg-dark-2">
           <img
             src={usinaGuara}
@@ -77,46 +80,36 @@ function AdmManagement() {
                 </Link>
               </div>
             </div>
-            <TypeInput
-              id="project_name"
-              title="Nome Projeto"
-              type="text"
-              placeholder="Digite o nome"
+            <Selection
+              id="colection"
+              title="Selecione uma coleção"
+              placeholder="Coleção"
               icon={<FaGear />}
-              value={form.project_name}
-              onChange={handleChange}
+              options={["Projeto", "Perspectiva", "Linha do Tempo", "Pessoas"]}
+              onChange={(e) => setCollection(e.target.value)}
               required={true}
             />
-            <TypeInput
-              id="project_name"
-              title="Nome Projeto"
-              type="text"
-              placeholder="Digite o nome"
+            <Selection
+              id="action"
+              title="Selecione uma ação"
+              placeholder="Ação"
               icon={<FaGear />}
-              value={form.project_name}
-              onChange={handleChange}
+              options={["Criar", "Atualizar", "Deletar"]}
+              onChange={(e) => setAction(e.target.value)}
               required={true}
             />
-            <TypeInput
-              id="project_name"
-              title="Nome Projeto"
-              type="text"
-              placeholder="Digite o nome"
-              icon={<FaGear />}
-              value={form.project_name}
-              onChange={handleChange}
-              required={true}
-            />
-            <TypeInput
-              id="project_name"
-              title="Nome Projeto"
-              type="text"
-              placeholder="Digite o nome"
-              icon={<FaGear />}
-              value={form.project_name}
-              onChange={handleChange}
-              required={true}
-            />
+            {collection === "Projeto" && action === "Criar" && (
+              <TypeInput
+                id="project_name"
+                title="Nome Projeto"
+                type="text"
+                placeholder="Digite o nome"
+                icon={<FaGear />}
+                value={form.project_name}
+                onChange={handleChange}
+                required={true}
+              />
+            )}
           </form>
         </div>
       </section>
