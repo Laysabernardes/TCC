@@ -1,0 +1,37 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend para o TCC Usina Guara",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index",
+    "tsoa:build": "tsoa routes && tsoa spec",
+    "dev": "npm run tsoa:build && concurrently \"tsoa routes -w\" \"tsoa spec -w\" \"ts-node-dev --respawn src/app.ts\""
+  },
+  "keywords": [],
+  "author": "Laysa Bernardes",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.2.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.0",
+    "swagger-ui-express": "^5.0.1",
+    "tsoa": "^6.6.0",
+    "zod": "^3.5.4",
+    "zod-to-openapi": "^0.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/swagger-ui-express": "^4.1.8",
+    "@typescript-eslint/eslint-plugin": "^8.34.1",
+    "@typescript-eslint/parser": "^8.34.1",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.0",
+    "prettier": "^3.5.3",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
