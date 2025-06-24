@@ -1,0 +1,252 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"IReferenceDTO": {
+				"properties": {
+					"text": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"text"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IPerspectiveDTO": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"slug": {
+						"type": "string"
+					},
+					"order": {
+						"type": "number",
+						"format": "double"
+					},
+					"template": {
+						"type": "number",
+						"format": "double"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"content": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"editoria": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"references": {
+						"items": {
+							"$ref": "#/components/schemas/IReferenceDTO"
+						},
+						"type": "array"
+					},
+					"authors": {
+						"items": {},
+						"type": "array"
+					}
+				},
+				"required": [
+					"_id",
+					"title",
+					"slug",
+					"order",
+					"template",
+					"images",
+					"content",
+					"editoria",
+					"references",
+					"authors"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ITimelineEventDTO": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"order": {
+						"type": "number",
+						"format": "double"
+					},
+					"description_html": {
+						"type": "string"
+					},
+					"imageUrl": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"_id",
+					"title",
+					"order",
+					"description_html",
+					"imageUrl"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ProjectResponseType": {
+				"properties": {
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"timeline": {
+						"items": {
+							"$ref": "#/components/schemas/ITimelineEventDTO"
+						},
+						"type": "array"
+					},
+					"perspectives": {
+						"items": {
+							"$ref": "#/components/schemas/IPerspectiveDTO"
+						},
+						"type": "array"
+					},
+					"collaborators": {
+						"items": {},
+						"type": "array"
+					},
+					"members": {
+						"items": {},
+						"type": "array"
+					},
+					"about": {
+						"properties": {
+							"content_html": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"content_html"
+						],
+						"type": "object"
+					},
+					"slug": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"_id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"updatedAt",
+					"createdAt",
+					"timeline",
+					"perspectives",
+					"collaborators",
+					"members",
+					"about",
+					"slug",
+					"name",
+					"_id"
+				],
+				"type": "object"
+			},
+			"CreateProjectInput": {
+				"properties": {
+					"slug": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"info": {
+		"title": "backend",
+		"version": "1.0.0",
+		"description": "Backend para o TCC Usina Guara",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {
+			"name": "Laysa Bernardes"
+		}
+	},
+	"paths": {
+		"/api/projects": {
+			"post": {
+				"operationId": "CreateProject",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProjectResponseType"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "Conflict - Slug já está em uso"
+					}
+				},
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateProjectInput"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

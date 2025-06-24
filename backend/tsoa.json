@@ -1,0 +1,21 @@
+
+{
+  "entryFile": "src/app.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controllers/**/*.controller.ts"],
+  "spec": {
+    "outputDirectory": "dist",
+    "specVersion": 3,
+    "securityDefinitions": {
+        "jwt": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+        }
+    }
+  },
+  "routes": {
+    "routesDir": "dist"
+    
+  }
+}
