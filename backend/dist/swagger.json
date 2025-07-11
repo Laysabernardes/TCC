@@ -7,94 +7,24 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"IReferenceDTO": {
-				"properties": {
-					"text": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"text"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"IPerspectiveDTO": {
+			"PersonResponseType": {
 				"properties": {
 					"_id": {
 						"type": "string"
 					},
-					"title": {
+					"name": {
 						"type": "string"
 					},
-					"slug": {
+					"kind": {
 						"type": "string"
 					},
-					"order": {
-						"type": "number",
-						"format": "double"
-					},
-					"template": {
-						"type": "number",
-						"format": "double"
-					},
-					"images": {
+					"description": {
 						"items": {
 							"type": "string"
 						},
 						"type": "array"
 					},
-					"content": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
-					"editoria": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
-					"references": {
-						"items": {
-							"$ref": "#/components/schemas/IReferenceDTO"
-						},
-						"type": "array"
-					},
-					"authors": {
-						"items": {},
-						"type": "array"
-					}
-				},
-				"required": [
-					"_id",
-					"title",
-					"slug",
-					"order",
-					"template",
-					"images",
-					"content",
-					"editoria",
-					"references",
-					"authors"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"ITimelineEventDTO": {
-				"properties": {
-					"_id": {
-						"type": "string"
-					},
-					"title": {
-						"type": "string"
-					},
-					"order": {
-						"type": "number",
-						"format": "double"
-					},
-					"description_html": {
+					"contact": {
 						"type": "string"
 					},
 					"imageUrl": {
@@ -103,81 +33,76 @@
 				},
 				"required": [
 					"_id",
-					"title",
-					"order",
-					"description_html",
-					"imageUrl"
+					"name",
+					"kind",
+					"description"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
 			"ProjectResponseType": {
 				"properties": {
-					"updatedAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"timeline": {
-						"items": {
-							"$ref": "#/components/schemas/ITimelineEventDTO"
-						},
-						"type": "array"
-					},
-					"perspectives": {
-						"items": {
-							"$ref": "#/components/schemas/IPerspectiveDTO"
-						},
-						"type": "array"
-					},
-					"collaborators": {
-						"items": {},
-						"type": "array"
-					},
-					"members": {
-						"items": {},
-						"type": "array"
-					},
-					"about": {
-						"properties": {
-							"content_html": {
-								"type": "string"
-							}
-						},
-						"required": [
-							"content_html"
-						],
-						"type": "object"
-					},
-					"slug": {
+					"_id": {
 						"type": "string"
 					},
 					"name": {
 						"type": "string"
 					},
-					"_id": {
+					"slug": {
 						"type": "string"
+					},
+					"about_html": {
+						"type": "string"
+					},
+					"team": {
+						"items": {
+							"$ref": "#/components/schemas/PersonResponseType"
+						},
+						"type": "array"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
 					}
 				},
 				"required": [
-					"updatedAt",
-					"createdAt",
-					"timeline",
-					"perspectives",
-					"collaborators",
-					"members",
-					"about",
-					"slug",
+					"_id",
 					"name",
-					"_id"
+					"slug",
+					"about_html",
+					"team",
+					"createdAt",
+					"updatedAt"
 				],
-				"type": "object"
+				"type": "object",
+				"additionalProperties": false
 			},
 			"CreateProjectInput": {
 				"properties": {
+					"slug": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"UpdateProjectInput": {
+				"properties": {
+					"team": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"about_html": {
+						"type": "string"
+					},
 					"slug": {
 						"type": "string"
 					},
@@ -208,7 +133,7 @@
 		}
 	},
 	"paths": {
-		"/api/projects": {
+		"/projects": {
 			"post": {
 				"operationId": "CreateProject",
 				"responses": {
@@ -223,7 +148,7 @@
 						}
 					},
 					"409": {
-						"description": "Conflict - Slug já está em uso"
+						"description": "Conflict"
 					}
 				},
 				"tags": [
@@ -241,6 +166,132 @@
 						}
 					}
 				}
+			},
+			"get": {
+				"operationId": "GetAllProjects",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ProjectResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/projects/{slug}": {
+			"get": {
+				"operationId": "GetProjectBySlug",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProjectResponseType"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "slug",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/projects/{id}": {
+			"put": {
+				"operationId": "UpdateProject",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ProjectResponseType"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateProjectInput"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteProject",
+				"responses": {
+					"204": {
+						"description": "No Content"
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		}
 	},

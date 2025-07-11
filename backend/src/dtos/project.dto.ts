@@ -1,39 +1,12 @@
-interface IReferenceDTO {
-  text: string;
-}
 
-interface IPerspectiveDTO {
-  _id: string;
-  title: string;
-  slug: string;
-  order: number;
-  template: number;
-  images: string[];
-  content: string[];
-  editoria: string[];
-  references: IReferenceDTO[];
-  authors: any[]; 
-}
+import { PersonResponseType } from './person.dto';
 
-interface ITimelineEventDTO {
-  _id: string;
-  title: string;
-  order: number;
-  description_html: string;
-  imageUrl: string;
-}
-
-export type ProjectResponseType = {
+export interface ProjectResponseType {
   _id: string;
   name: string;
   slug: string;
-  about: {
-    content_html: string;
-  };
-  members: any[]; 
-  collaborators: any[];
-  perspectives: IPerspectiveDTO[];
-  timeline: ITimelineEventDTO[];
+  about_html: string;
+  team: PersonResponseType[];
   createdAt: Date;
   updatedAt: Date;
 }
