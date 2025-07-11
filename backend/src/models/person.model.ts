@@ -1,10 +1,13 @@
 import { Schema, model, Document } from 'mongoose';
+
 export interface IPerson extends Document {
   name: string;
-  kind: string;
+  kind: string; // Ex: "Membro da Equipe", "Colaborador", "Autor"
   description: string[];
   contact?: string; 
   imageUrl?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const personSchema = new Schema<IPerson>({
@@ -27,7 +30,6 @@ const personSchema = new Schema<IPerson>({
     type: String 
   }
 }, {
-  
   timestamps: true 
 });
 
