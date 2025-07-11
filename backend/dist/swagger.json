@@ -122,6 +122,208 @@
 				},
 				"type": "object"
 			},
+			"IReferenceDTO": {
+				"properties": {
+					"text": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"text"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PerspectiveResponseType": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"projectId": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"slug": {
+						"type": "string"
+					},
+					"order": {
+						"type": "number",
+						"format": "double"
+					},
+					"template": {
+						"type": "number",
+						"format": "double"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"content": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"editoria": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"references": {
+						"items": {
+							"$ref": "#/components/schemas/IReferenceDTO"
+						},
+						"type": "array"
+					},
+					"authors": {
+						"items": {
+							"$ref": "#/components/schemas/PersonResponseType"
+						},
+						"type": "array"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"_id",
+					"projectId",
+					"title",
+					"slug",
+					"order",
+					"template",
+					"images",
+					"content",
+					"editoria",
+					"references",
+					"authors",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreatePerspectiveInput": {
+				"properties": {
+					"authors": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"references": {
+						"items": {
+							"properties": {
+								"text": {
+									"type": "string"
+								}
+							},
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"editoria": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"content": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"template": {
+						"type": "number",
+						"format": "double"
+					},
+					"order": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"projectId": {
+						"type": "string"
+					},
+					"slug": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"UpdatePerspectiveInput": {
+				"properties": {
+					"authors": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"references": {
+						"items": {
+							"properties": {
+								"text": {
+									"type": "string"
+								}
+							},
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"editoria": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"content": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"images": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"template": {
+						"type": "number",
+						"format": "double"
+					},
+					"order": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"slug": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
 			"CreatePersonInput": {
 				"properties": {
 					"imageUrl": {
@@ -342,6 +544,180 @@
 					{
 						"in": "path",
 						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/projects/{projectId}/perspectives": {
+			"post": {
+				"operationId": "CreatePerspective",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PerspectiveResponseType"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Perspectives"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreatePerspectiveInput"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetPerspectivesForProject",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/PerspectiveResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Perspectives"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/perspectives/{perspectiveId}": {
+			"get": {
+				"operationId": "GetPerspectiveById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PerspectiveResponseType"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"Perspectives"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "perspectiveId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdatePerspective",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PerspectiveResponseType"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"Perspectives"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "perspectiveId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdatePerspectiveInput"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeletePerspective",
+				"responses": {
+					"204": {
+						"description": "No Content"
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"Perspectives"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "perspectiveId",
 						"required": true,
 						"schema": {
 							"type": "string"

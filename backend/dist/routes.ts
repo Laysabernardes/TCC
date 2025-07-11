@@ -6,6 +6,8 @@ import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ProjectController } from './../src/controllers/project.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { PerspectiveController } from './../src/controllers/perspective.controller';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PersonController } from './../src/controllers/person.controller';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
 
@@ -51,6 +53,44 @@ const models: TsoaRoute.Models = {
     "UpdateProjectInput": {
         "dataType": "refAlias",
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"slug":{"dataType":"string"},"name":{"dataType":"string"}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IReferenceDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "text": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "PerspectiveResponseType": {
+        "dataType": "refObject",
+        "properties": {
+            "_id": {"dataType":"string","required":true},
+            "projectId": {"dataType":"string","required":true},
+            "title": {"dataType":"string","required":true},
+            "slug": {"dataType":"string","required":true},
+            "order": {"dataType":"double","required":true},
+            "template": {"dataType":"double","required":true},
+            "images": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "content": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "editoria": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "references": {"dataType":"array","array":{"dataType":"refObject","ref":"IReferenceDTO"},"required":true},
+            "authors": {"dataType":"array","array":{"dataType":"refObject","ref":"PersonResponseType"},"required":true},
+            "createdAt": {"dataType":"datetime","required":true},
+            "updatedAt": {"dataType":"datetime","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreatePerspectiveInput": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"editoria":{"dataType":"array","array":{"dataType":"string"}},"content":{"dataType":"array","array":{"dataType":"string"}},"images":{"dataType":"array","array":{"dataType":"string"}},"template":{"dataType":"double"},"order":{"dataType":"double"},"title":{"dataType":"string"},"projectId":{"dataType":"string"},"slug":{"dataType":"string"}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UpdatePerspectiveInput": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"editoria":{"dataType":"array","array":{"dataType":"string"}},"content":{"dataType":"array","array":{"dataType":"string"}},"images":{"dataType":"array","array":{"dataType":"string"}},"template":{"dataType":"double"},"order":{"dataType":"double"},"title":{"dataType":"string"},"slug":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreatePersonInput": {
@@ -219,6 +259,158 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'deleteProject',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 204,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPerspectiveController_createPerspective: Record<string, TsoaRoute.ParameterSchema> = {
+                projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
+                body: {"in":"body","name":"body","required":true,"ref":"CreatePerspectiveInput"},
+        };
+        app.post('/projects/:projectId/perspectives',
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.createPerspective)),
+
+            async function PerspectiveController_createPerspective(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsPerspectiveController_createPerspective, request, response });
+
+                const controller = new PerspectiveController();
+
+              await templateService.apiHandler({
+                methodName: 'createPerspective',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 201,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPerspectiveController_getPerspectivesForProject: Record<string, TsoaRoute.ParameterSchema> = {
+                projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
+        };
+        app.get('/projects/:projectId/perspectives',
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.getPerspectivesForProject)),
+
+            async function PerspectiveController_getPerspectivesForProject(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsPerspectiveController_getPerspectivesForProject, request, response });
+
+                const controller = new PerspectiveController();
+
+              await templateService.apiHandler({
+                methodName: 'getPerspectivesForProject',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPerspectiveController_getPerspectiveById: Record<string, TsoaRoute.ParameterSchema> = {
+                perspectiveId: {"in":"path","name":"perspectiveId","required":true,"dataType":"string"},
+        };
+        app.get('/perspectives/:perspectiveId',
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.getPerspectiveById)),
+
+            async function PerspectiveController_getPerspectiveById(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsPerspectiveController_getPerspectiveById, request, response });
+
+                const controller = new PerspectiveController();
+
+              await templateService.apiHandler({
+                methodName: 'getPerspectiveById',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPerspectiveController_updatePerspective: Record<string, TsoaRoute.ParameterSchema> = {
+                perspectiveId: {"in":"path","name":"perspectiveId","required":true,"dataType":"string"},
+                body: {"in":"body","name":"body","required":true,"ref":"UpdatePerspectiveInput"},
+        };
+        app.put('/perspectives/:perspectiveId',
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.updatePerspective)),
+
+            async function PerspectiveController_updatePerspective(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsPerspectiveController_updatePerspective, request, response });
+
+                const controller = new PerspectiveController();
+
+              await templateService.apiHandler({
+                methodName: 'updatePerspective',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPerspectiveController_deletePerspective: Record<string, TsoaRoute.ParameterSchema> = {
+                perspectiveId: {"in":"path","name":"perspectiveId","required":true,"dataType":"string"},
+        };
+        app.delete('/perspectives/:perspectiveId',
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.deletePerspective)),
+
+            async function PerspectiveController_deletePerspective(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsPerspectiveController_deletePerspective, request, response });
+
+                const controller = new PerspectiveController();
+
+              await templateService.apiHandler({
+                methodName: 'deletePerspective',
                 controller,
                 response,
                 next,
