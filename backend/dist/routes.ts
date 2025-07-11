@@ -4,6 +4,8 @@
 import type { TsoaRoute } from '@tsoa/runtime';
 import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { TimelineEventController } from './../src/controllers/timelineEvent.controller';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ProjectController } from './../src/controllers/project.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PerspectiveController } from './../src/controllers/perspective.controller';
@@ -16,6 +18,31 @@ import type { Request as ExRequest, Response as ExResponse, RequestHandler, Rout
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "TimelineEventResponseType": {
+        "dataType": "refObject",
+        "properties": {
+            "_id": {"dataType":"string","required":true},
+            "projectId": {"dataType":"string","required":true},
+            "title": {"dataType":"string","required":true},
+            "order": {"dataType":"double","required":true},
+            "description_html": {"dataType":"string","required":true},
+            "imageUrl": {"dataType":"string","required":true},
+            "createdAt": {"dataType":"datetime","required":true},
+            "updatedAt": {"dataType":"datetime","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CreateTimelineEventInput": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"imageUrl":{"dataType":"string"},"description_html":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"},"projectId":{"dataType":"string"}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UpdateTimelineEventInput": {
+        "dataType": "refAlias",
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"imageUrl":{"dataType":"string"},"description_html":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "PersonResponseType": {
         "dataType": "refObject",
         "properties": {
@@ -85,22 +112,22 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreatePerspectiveInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"editoria":{"dataType":"array","array":{"dataType":"string"}},"content":{"dataType":"array","array":{"dataType":"string"}},"images":{"dataType":"array","array":{"dataType":"string"}},"template":{"dataType":"double"},"order":{"dataType":"double"},"title":{"dataType":"string"},"projectId":{"dataType":"string"},"slug":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"editoria":{"dataType":"array","array":{"dataType":"string"}},"content":{"dataType":"array","array":{"dataType":"string"}},"images":{"dataType":"array","array":{"dataType":"string"}},"template":{"dataType":"double"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"},"projectId":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UpdatePerspectiveInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"editoria":{"dataType":"array","array":{"dataType":"string"}},"content":{"dataType":"array","array":{"dataType":"string"}},"images":{"dataType":"array","array":{"dataType":"string"}},"template":{"dataType":"double"},"order":{"dataType":"double"},"title":{"dataType":"string"},"slug":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"editoria":{"dataType":"array","array":{"dataType":"string"}},"content":{"dataType":"array","array":{"dataType":"string"}},"images":{"dataType":"array","array":{"dataType":"string"}},"template":{"dataType":"double"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreatePersonInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"imageUrl":{"dataType":"string"},"contact":{"dataType":"string"},"description":{"dataType":"array","array":{"dataType":"string"}},"kind":{"dataType":"string"},"name":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"contact":{"dataType":"string"},"description":{"dataType":"array","array":{"dataType":"string"}},"kind":{"dataType":"string"},"name":{"dataType":"string"},"imageUrl":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UpdatePersonInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"imageUrl":{"dataType":"string"},"contact":{"dataType":"string"},"description":{"dataType":"array","array":{"dataType":"string"}},"kind":{"dataType":"string"},"name":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"contact":{"dataType":"string"},"description":{"dataType":"array","array":{"dataType":"string"}},"kind":{"dataType":"string"},"name":{"dataType":"string"},"imageUrl":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -120,6 +147,158 @@ export function RegisterRoutes(app: Router) {
 
 
     
+        const argsTimelineEventController_createTimelineEvent: Record<string, TsoaRoute.ParameterSchema> = {
+                projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
+                body: {"in":"body","name":"body","required":true,"ref":"CreateTimelineEventInput"},
+        };
+        app.post('/projects/:projectId/timeline',
+            ...(fetchMiddlewares<RequestHandler>(TimelineEventController)),
+            ...(fetchMiddlewares<RequestHandler>(TimelineEventController.prototype.createTimelineEvent)),
+
+            async function TimelineEventController_createTimelineEvent(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsTimelineEventController_createTimelineEvent, request, response });
+
+                const controller = new TimelineEventController();
+
+              await templateService.apiHandler({
+                methodName: 'createTimelineEvent',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 201,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsTimelineEventController_getTimelineEventsForProject: Record<string, TsoaRoute.ParameterSchema> = {
+                projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
+        };
+        app.get('/projects/:projectId/timeline',
+            ...(fetchMiddlewares<RequestHandler>(TimelineEventController)),
+            ...(fetchMiddlewares<RequestHandler>(TimelineEventController.prototype.getTimelineEventsForProject)),
+
+            async function TimelineEventController_getTimelineEventsForProject(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsTimelineEventController_getTimelineEventsForProject, request, response });
+
+                const controller = new TimelineEventController();
+
+              await templateService.apiHandler({
+                methodName: 'getTimelineEventsForProject',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsTimelineEventController_getTimelineEventById: Record<string, TsoaRoute.ParameterSchema> = {
+                timelineEventId: {"in":"path","name":"timelineEventId","required":true,"dataType":"string"},
+        };
+        app.get('/timeline/:timelineEventId',
+            ...(fetchMiddlewares<RequestHandler>(TimelineEventController)),
+            ...(fetchMiddlewares<RequestHandler>(TimelineEventController.prototype.getTimelineEventById)),
+
+            async function TimelineEventController_getTimelineEventById(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsTimelineEventController_getTimelineEventById, request, response });
+
+                const controller = new TimelineEventController();
+
+              await templateService.apiHandler({
+                methodName: 'getTimelineEventById',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsTimelineEventController_updateTimelineEvent: Record<string, TsoaRoute.ParameterSchema> = {
+                timelineEventId: {"in":"path","name":"timelineEventId","required":true,"dataType":"string"},
+                body: {"in":"body","name":"body","required":true,"ref":"UpdateTimelineEventInput"},
+        };
+        app.put('/timeline/:timelineEventId',
+            ...(fetchMiddlewares<RequestHandler>(TimelineEventController)),
+            ...(fetchMiddlewares<RequestHandler>(TimelineEventController.prototype.updateTimelineEvent)),
+
+            async function TimelineEventController_updateTimelineEvent(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsTimelineEventController_updateTimelineEvent, request, response });
+
+                const controller = new TimelineEventController();
+
+              await templateService.apiHandler({
+                methodName: 'updateTimelineEvent',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsTimelineEventController_deleteTimelineEvent: Record<string, TsoaRoute.ParameterSchema> = {
+                timelineEventId: {"in":"path","name":"timelineEventId","required":true,"dataType":"string"},
+        };
+        app.delete('/timeline/:timelineEventId',
+            ...(fetchMiddlewares<RequestHandler>(TimelineEventController)),
+            ...(fetchMiddlewares<RequestHandler>(TimelineEventController.prototype.deleteTimelineEvent)),
+
+            async function TimelineEventController_deleteTimelineEvent(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsTimelineEventController_deleteTimelineEvent, request, response });
+
+                const controller = new TimelineEventController();
+
+              await templateService.apiHandler({
+                methodName: 'deleteTimelineEvent',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 204,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsProjectController_createProject: Record<string, TsoaRoute.ParameterSchema> = {
                 body: {"in":"body","name":"body","required":true,"ref":"CreateProjectInput"},
         };

@@ -7,6 +7,88 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"TimelineEventResponseType": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"projectId": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"order": {
+						"type": "number",
+						"format": "double"
+					},
+					"description_html": {
+						"type": "string"
+					},
+					"imageUrl": {
+						"type": "string"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"_id",
+					"projectId",
+					"title",
+					"order",
+					"description_html",
+					"imageUrl",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateTimelineEventInput": {
+				"properties": {
+					"imageUrl": {
+						"type": "string"
+					},
+					"description_html": {
+						"type": "string"
+					},
+					"order": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"projectId": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"UpdateTimelineEventInput": {
+				"properties": {
+					"imageUrl": {
+						"type": "string"
+					},
+					"description_html": {
+						"type": "string"
+					},
+					"order": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
 			"PersonResponseType": {
 				"properties": {
 					"_id": {
@@ -254,6 +336,9 @@
 						"type": "number",
 						"format": "double"
 					},
+					"slug": {
+						"type": "string"
+					},
 					"order": {
 						"type": "number",
 						"format": "double"
@@ -262,9 +347,6 @@
 						"type": "string"
 					},
 					"projectId": {
-						"type": "string"
-					},
-					"slug": {
 						"type": "string"
 					}
 				},
@@ -311,14 +393,14 @@
 						"type": "number",
 						"format": "double"
 					},
+					"slug": {
+						"type": "string"
+					},
 					"order": {
 						"type": "number",
 						"format": "double"
 					},
 					"title": {
-						"type": "string"
-					},
-					"slug": {
 						"type": "string"
 					}
 				},
@@ -326,9 +408,6 @@
 			},
 			"CreatePersonInput": {
 				"properties": {
-					"imageUrl": {
-						"type": "string"
-					},
 					"contact": {
 						"type": "string"
 					},
@@ -342,6 +421,9 @@
 						"type": "string"
 					},
 					"name": {
+						"type": "string"
+					},
+					"imageUrl": {
 						"type": "string"
 					}
 				},
@@ -349,9 +431,6 @@
 			},
 			"UpdatePersonInput": {
 				"properties": {
-					"imageUrl": {
-						"type": "string"
-					},
 					"contact": {
 						"type": "string"
 					},
@@ -365,6 +444,9 @@
 						"type": "string"
 					},
 					"name": {
+						"type": "string"
+					},
+					"imageUrl": {
 						"type": "string"
 					}
 				},
@@ -391,6 +473,180 @@
 		}
 	},
 	"paths": {
+		"/projects/{projectId}/timeline": {
+			"post": {
+				"operationId": "CreateTimelineEvent",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TimelineEventResponseType"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Timeline"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateTimelineEventInput"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "GetTimelineEventsForProject",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/TimelineEventResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Timeline"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "projectId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/timeline/{timelineEventId}": {
+			"get": {
+				"operationId": "GetTimelineEventById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TimelineEventResponseType"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"Timeline"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "timelineEventId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateTimelineEvent",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TimelineEventResponseType"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"Timeline"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "timelineEventId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateTimelineEventInput"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteTimelineEvent",
+				"responses": {
+					"204": {
+						"description": "No Content"
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"Timeline"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "timelineEventId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/projects": {
 			"post": {
 				"operationId": "CreateProject",
