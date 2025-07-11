@@ -13,9 +13,11 @@
   "author": "Laysa Bernardes",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "concurrently": "^9.2.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0",
     "swagger-ui-express": "^5.0.1",
     "tsoa": "^6.6.0",
@@ -23,7 +25,9 @@
     "zod-to-openapi": "^0.2.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/swagger-ui-express": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^8.34.1",
     "@typescript-eslint/parser": "^8.34.1",
