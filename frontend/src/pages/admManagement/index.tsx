@@ -14,6 +14,7 @@ import { RiArrowGoBackFill } from "react-icons/ri";
 import usinaGuara from "../../assets/usinaGuara.webp";
 
 const ProjectSchema = z.object({
+  id: z.number().optional(),
   project_name: z.string().min(1, "Nome obrigatório"),
   project_slug: z.string().min(1, "Slug obrigatório"),
   project_about: z.string().optional(),
@@ -28,19 +29,19 @@ function AdmManagement() {
     }
   );
 
-  const [projectId, setProjectId] = useState<string | null>(null);
+  const [projectId, setProjectId] = useState<number | null>(null);
 
   // Endpoint Pegar Projetos
   const allProjects = [
     {
-      id: "1",
+      id: 1,
       project_name: "Projeto 1",
       project_slug: "alpha",
       project_about: "Projeto top",
       project_people: ["2"],
     },
     {
-      id: "2",
+      id: 2,
       project_name: "Projeto 2",
       project_slug: "beta",
       project_about: "Projeto massa",
@@ -69,16 +70,23 @@ function AdmManagement() {
     const project = allProjects.find((p) => p.id === projectId);
     if (!project) return;
 
+    setValue("id", project.id);
     setValue("project_name", project.project_name);
     setValue("project_slug", project.project_slug);
     setValue("project_about", project.project_about);
     setValue("project_people", project.project_people);
-
-    console.log(getValues());
   };
 
-  const handleSubmitForm = () => {
-    console.log(getValues());
+  const handleSubmitForm = (data: ProjectFormData) => {
+    if (action === "Create") {
+      console.log(data);
+    } else if (action === "Update") {
+      console.log(data);
+    } else if (action === "Delete") {
+      console.log(data.id);
+    } else {
+      throw new Error();
+    }
   };
 
   // Ao selecionar um projeto
@@ -100,18 +108,21 @@ function AdmManagement() {
       className="w-[100%] h-[100vh] flex flex-col items-center bg-dark-1"
     >
       <section className="w-[95%] h-200 max-h-150 flex flex-row bg-dark-2 rounded-lg mt-16 mb-16">
-        <div className="w-1/2 bg-dark-2 rounded-s-lg">
+        <div className="hidden w-1/2 bg-dark-2 rounded-s-lg md:block">
           <img
             src={usinaGuara}
             alt="background Usina Guará"
             className="w-full h-full object-cover rounded-s-lg"
           />
         </div>
-        <div className="flex flex-col w-1/2">
-          <form action="" className="p-15">
-            <div className="flex justify-between items-center pb-5">
+        <div className="flex flex-col w-full md:w-1/2 ">
+          <form
+            onSubmit={handleSubmit(handleSubmitForm)}
+            className="p-5 sm:p-15"
+          >
+            <div className="flex justify-between items-start gap-5 pb-5 flex-col-reverse sm:flex-row sm:items-center">
               <h2 className="text-2xl font-bold text-light-3 flex gap-2 items-center">
-                <FaGear className="h-5 w-5" />
+                <FaGear className="h-7 w-7 sm:h-5 w-5*" />
                 Formulário Administrador
               </h2>
               <div id="goback" className="w-max">
@@ -119,7 +130,7 @@ function AdmManagement() {
                   to="/"
                   className="text-red-3 text-1xl cursor-pointer flex items-center gap-2 transition-all hover:text-red-2"
                 >
-                  Voltar pra home <RiArrowGoBackFill />
+                  Voltar <RiArrowGoBackFill />
                 </Link>
               </div>
             </div>
@@ -127,7 +138,7 @@ function AdmManagement() {
               <Selection
                 id="colection"
                 title="Selecione uma coleção"
-                placeholder="Coleção"
+                placeholder="-"
                 icon={<FaGear />}
                 options={[
                   { id: "Project", text: "Projeto" },
@@ -141,7 +152,7 @@ function AdmManagement() {
               <Selection
                 id="action"
                 title="Selecione uma ação"
-                placeholder="Ação"
+                placeholder="-"
                 icon={<FaGear />}
                 options={[
                   { id: "Create", text: "Criar" },
@@ -157,10 +168,10 @@ function AdmManagement() {
                     <Selection
                       id="project_id"
                       title="Selecione projeto"
-                      placeholder="Projeto"
+                      placeholder="-"
                       icon={<FaGear />}
                       options={allProjectsId()}
-                      onChange={(e) => setProjectId(e.target.value)}
+                      onChange={(e) => setProjectId(Number(e.target.value))}
                       required={true}
                     />
                   </>
@@ -209,12 +220,12 @@ function AdmManagement() {
                   </>
                 )}
               {collection && action && (
-                <div
-                  onClick={handleSubmitForm}
-                  className="bg-red-2 text-1xl font-bold text-white text-center rounded-lg p-2 mt-10 mb-10 cursor-pointer transition hover:bg-red-1"
+                <button
+                  type="submit"
+                  className="w-full bg-red-2 text-1xl font-bold text-white text-center rounded-lg p-2 py-3 my-5 cursor-pointer transition hover:bg-red-1"
                 >
                   Submeter
-                </div>
+                </button>
               )}
             </div>
           </form>

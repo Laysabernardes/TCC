@@ -249,7 +249,7 @@ export default function MultiSelect({
           </span>
         ))}
 
-        <FaArrowDown className="ml-auto text-gray-500" />
+        <FaArrowDown className="ml-auto text-light-3" />
       </div>
 
       {isOpen && (
