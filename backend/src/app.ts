@@ -43,13 +43,18 @@ const startServer = async () => {
       });
     }
     if (err instanceof Error) {
+      console.error("ERRO CAPTURADO PELO SERVIDOR:", err);
+
+      if (err.message === 'Este slug já está em uso.') {
+          return res.status(409).json({ message: err.message });
+      }
       return res.status(500).json({
         message: "Internal Server Error",
       });
     }
 
     next();
-  }as ErrorRequestHandler); 
+  } as ErrorRequestHandler);
 
   // --- INICIALIZAÇÃO DO SERVIDOR ---
   app.listen(PORT, () => {

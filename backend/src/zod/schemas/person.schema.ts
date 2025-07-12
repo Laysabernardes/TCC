@@ -13,7 +13,6 @@ export const createPersonSchema = z.object({
   }),
 });
 
-// Schema para ATUALIZAR uma pessoa
 export const updatePersonSchema = z.object({
   body: z.object({
     name: z.string().min(1).optional(),

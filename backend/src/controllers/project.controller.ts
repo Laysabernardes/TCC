@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Path, Post, Put, Route, SuccessResponse, Tags, Response } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Route, SuccessResponse, Tags, Response, Security} from 'tsoa';
 import { z } from 'zod';
 import { ProjectService } from '../services/project.service';
 import { ProjectResponseType } from '../dtos/project.dto';
@@ -14,6 +14,7 @@ export class ProjectController extends Controller {
   @Post("/")
   @SuccessResponse("201", "Created")
   @Response("409", "Conflict")
+  @Security("jwt")
   public async createProject(@Body() body: CreateProjectInput): Promise<ProjectResponseType> {
     try {
       const project = await ProjectService.create(body);
@@ -43,6 +44,7 @@ export class ProjectController extends Controller {
 
   @Put("{id}")
   @Response("404", "Not Found")
+  @Security("jwt")
   public async updateProject(@Path() id: string, @Body() body: UpdateProjectInput): Promise<ProjectResponseType> {
     const updatedProject = await ProjectService.update(id, body);
     if (!updatedProject) {
@@ -55,6 +57,7 @@ export class ProjectController extends Controller {
   @Delete("{id}")
   @SuccessResponse("204", "No Content")
   @Response("404", "Not Found")
+  @Security("jwt")
   public async deleteProject(@Path() id: string): Promise<void> {
     try {
       await ProjectService.delete(id);

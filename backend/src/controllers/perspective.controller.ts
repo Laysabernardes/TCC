@@ -10,6 +10,7 @@ import {
   SuccessResponse,
   Tags,
   Response,
+  Security
 } from 'tsoa';
 import { z } from 'zod';
 import { PerspectiveService } from '../services/perspective.service';
@@ -26,6 +27,7 @@ export class PerspectiveController extends Controller {
 
   @Post("/projects/{projectId}/perspectives")
   @SuccessResponse("201", "Created")
+  @Security("jwt")
   public async createPerspective(
     @Path() projectId: string,
     @Body() body: CreatePerspectiveInput
@@ -46,6 +48,7 @@ export class PerspectiveController extends Controller {
 
   @Get("/perspectives/{perspectiveId}")
   @Response("404", "Not Found")
+  @Security("jwt")
   public async getPerspectiveById(
     @Path() perspectiveId: string
   ): Promise<PerspectiveResponseType> {
@@ -59,6 +62,7 @@ export class PerspectiveController extends Controller {
   
   @Put("/perspectives/{perspectiveId}")
   @Response("404", "Not Found")
+  @Security("jwt")
   public async updatePerspective(
     @Path() perspectiveId: string,
     @Body() body: UpdatePerspectiveInput
@@ -74,6 +78,7 @@ export class PerspectiveController extends Controller {
   @Delete("/perspectives/{perspectiveId}")
   @SuccessResponse("204", "No Content")
   @Response("404", "Not Found")
+  @Security("jwt")
   public async deletePerspective(
     @Path() perspectiveId: string
   ): Promise<void> {

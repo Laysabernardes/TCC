@@ -10,6 +10,7 @@ import {
   SuccessResponse,
   Tags,
   Response,
+  Security
 } from 'tsoa';
 import { z } from 'zod';
 import { UserService } from '../services/user.service';
@@ -25,6 +26,7 @@ type UpdateUserInput = {
 
 @Route("users")
 @Tags("Users")
+@Security("jwt")
 export class UserController extends Controller {
 
   @Post("/")

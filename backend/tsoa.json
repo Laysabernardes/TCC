@@ -7,15 +7,16 @@
     "outputDirectory": "dist",
     "specVersion": 3,
     "securityDefinitions": {
-        "jwt": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT"
-        }
+      "jwt": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Token JWT no formato 'Bearer {token}'"
+      }
     }
   },
   "routes": {
-    "routesDir": "dist"
-    
+    "routesDir": "dist",
+    "authenticationModule": "./src/middleware/auth.middleware.ts"
   }
 }

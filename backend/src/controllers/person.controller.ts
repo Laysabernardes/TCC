@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Path, Post, Put, Query, Route, SuccessResponse, Tags, Response } from 'tsoa';
+import { Body, Controller, Delete, Get, Path, Post, Put, Query, Route, SuccessResponse, Tags, Response, Security} from 'tsoa';
 import { z } from 'zod';
 import { PersonService } from '../services/person.service';
 import { PersonResponseType } from '../dtos/person.dto';
@@ -13,6 +13,7 @@ export class PersonController extends Controller {
 
   @Post("/")
   @SuccessResponse("201", "Created")
+  @Security("jwt")
   public async createPerson(@Body() body: CreatePersonInput): Promise<PersonResponseType> {
     const person = await PersonService.create(body);
     this.setStatus(201);
@@ -37,6 +38,7 @@ export class PersonController extends Controller {
 
   @Put("{id}")
   @Response("404", "Not Found")
+  @Security("jwt")
   public async updatePerson(@Path() id: string, @Body() body: UpdatePersonInput): Promise<PersonResponseType> {
     const updatedPerson = await PersonService.update(id, body);
     if (!updatedPerson) {
@@ -49,6 +51,7 @@ export class PersonController extends Controller {
   @Delete("{id}")
   @SuccessResponse("204", "No Content")
   @Response("404", "Not Found")
+  @Security("jwt")
   public async deletePerson(@Path() id: string): Promise<void> {
     try {
       await PersonService.delete(id);

@@ -10,6 +10,7 @@ import {
   SuccessResponse,
   Tags,
   Response,
+  Security
 } from 'tsoa';
 import { z } from 'zod';
 import { TimelineEventService } from '../services/timelineEvent.service';
@@ -26,6 +27,7 @@ export class TimelineEventController extends Controller {
 
   @Post("/projects/{projectId}/timeline")
   @SuccessResponse("201", "Created")
+  @Security("jwt")
   public async createTimelineEvent(
     @Path() projectId: string,
     @Body() body: CreateTimelineEventInput
@@ -58,6 +60,7 @@ export class TimelineEventController extends Controller {
   
   @Put("/timeline/{timelineEventId}")
   @Response("404", "Not Found")
+  @Security("jwt")
   public async updateTimelineEvent(
     @Path() timelineEventId: string,
     @Body() body: UpdateTimelineEventInput
@@ -73,6 +76,7 @@ export class TimelineEventController extends Controller {
   @Delete("/timeline/{timelineEventId}")
   @SuccessResponse("204", "No Content")
   @Response("404", "Not Found")
+  @Security("jwt")
   public async deleteTimelineEvent(
     @Path() timelineEventId: string
   ): Promise<void> {
