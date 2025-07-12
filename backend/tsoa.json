@@ -1,0 +1,22 @@
+
+{
+  "entryFile": "src/app.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controllers/**/*.controller.ts"],
+  "spec": {
+    "outputDirectory": "dist",
+    "specVersion": 3,
+    "securityDefinitions": {
+      "jwt": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Token JWT no formato 'Bearer {token}'"
+      }
+    }
+  },
+  "routes": {
+    "routesDir": "dist",
+    "authenticationModule": "./src/middleware/auth.middleware.ts"
+  }
+}
