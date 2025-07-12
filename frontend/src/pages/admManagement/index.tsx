@@ -1,5 +1,10 @@
-import { useState } from "react";
-import { TypeInput, Textarea, Selection } from "../../components/inputs";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
+import MultiSelect, {
+  TypeInput,
+  Textarea,
+  Selection,
+} from "../../components/inputs";
 import { Link } from "react-router-dom";
 import { FaGear } from "react-icons/fa6";
 import { RiArrowGoBackFill } from "react-icons/ri";
@@ -42,16 +47,32 @@ function AdmManagement() {
   const [collection, setCollection] = useState("");
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e:
+      | React.ChangeEvent<
+          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+      | { target: { name: string; value: any } }
   ) => {
-    const { id, value } = e.target;
+    const { name, value } = e.target;
     setForm((prevForm) => ({
       ...prevForm,
-      [id]: value,
+      [name]: value,
     }));
   };
+
+  // APAGAR DEPOIS
+
+  useEffect(() => {
+    console.log(form);
+  }, [form]);
+
+  const people = [
+    { id: "1", text: "Laysa" },
+    { id: "2", text: "Lucas" },
+    { id: "3", text: "Rogério" },
+  ];
+
+  //
 
   return (
     <div
@@ -82,9 +103,10 @@ function AdmManagement() {
                 </Link>
               </div>
             </div>
-            <div className="overflow-y-scroll overflow-visible h-[70%] pr-5">
+            <div className="overflow-y-auto overflow-visible h-100 pr-5">
               <Selection
                 id="colection"
+                name="colection"
                 title="Selecione uma coleção"
                 placeholder="Coleção"
                 icon={<FaGear />}
@@ -99,6 +121,7 @@ function AdmManagement() {
               />
               <Selection
                 id="action"
+                name="action"
                 title="Selecione uma ação"
                 placeholder="Ação"
                 icon={<FaGear />}
@@ -110,6 +133,7 @@ function AdmManagement() {
                 <>
                   <TypeInput
                     id="project_name"
+                    name="project_name"
                     title="Nome Projeto"
                     type="text"
                     placeholder="Digite o nome"
@@ -120,6 +144,7 @@ function AdmManagement() {
                   />
                   <TypeInput
                     id="project_slug"
+                    name="project_slug"
                     title="Nome para URL"
                     type="text"
                     placeholder="Digite um nome para URL"
@@ -128,10 +153,20 @@ function AdmManagement() {
                     onChange={handleChange}
                     required={true}
                   />
+                  <MultiSelect
+                    id="project_people"
+                    name="project_people"
+                    title="Integrantes"
+                    placeholder="Selecione os integrantes"
+                    icon={<FaGear />}
+                    options={people}
+                    onChange={handleChange}
+                    required
+                  />
                   <Textarea
                     id="project_about"
+                    name="project_about"
                     title="Sobre o Projeto"
-                    type="text"
                     placeholder="Digite o nome"
                     icon={<FaGear />}
                     value={form.project_about}
