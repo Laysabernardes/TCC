@@ -9,21 +9,17 @@ interface InputProps {
   type?: string;
   placeholder?: string;
   icon?: ReactElement<any, any>;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
 }
 
 function TypeInput({
   id,
-  name,
   title,
   type = "text",
   placeholder,
   icon,
-  value,
-  onChange,
   required,
+  ...rest
 }: InputProps) {
   return (
     <div className="my-5 flex flex-col gap-2">
@@ -39,12 +35,10 @@ function TypeInput({
         </div>
         <input
           id={id}
-          name={name}
           type={type}
           placeholder={placeholder}
           required={required}
-          value={value}
-          onChange={onChange}
+          {...rest}
           className="w-full bg-dark-1 p-2 pl-7 rounded-lg text-red-3"
         />
       </div>
@@ -54,24 +48,19 @@ function TypeInput({
 
 interface TextAreaProps {
   id: string;
-  name: string;
   title?: string;
   placeholder?: string;
   icon?: ReactElement<any, any>;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   required?: boolean;
 }
 
 function Textarea({
   id,
-  name,
   title,
   placeholder,
   icon,
-  value,
-  onChange,
   required,
+  ...rest
 }: TextAreaProps) {
   return (
     <div className="my-5 flex flex-col gap-2">
@@ -87,11 +76,9 @@ function Textarea({
         </div>
         <textarea
           id={id}
-          name={name}
           placeholder={placeholder}
           required={required}
-          value={value}
-          onChange={onChange}
+          {...rest}
           className="w-full h-25 max-h-25 bg-dark-1 p-2 pl-7 rounded-lg text-red-3 resize-none"
         />
       </div>
@@ -99,26 +86,29 @@ function Textarea({
   );
 }
 
+interface OptionItem {
+  id: string | number;
+  text: string;
+}
+
 interface SelectionProps {
   id: string;
-  name: string;
   title?: string;
   placeholder?: string;
   icon?: ReactElement<any, any>;
-  options: string[];
+  options: OptionItem[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   required?: boolean;
 }
 
 function Selection({
   id,
-  name,
   title,
   placeholder,
   icon,
   options,
-  onChange,
   required,
+  ...rest
 }: SelectionProps) {
   return (
     <div className="my-5 flex flex-col gap-2">
@@ -134,17 +124,16 @@ function Selection({
         </div>
         <select
           id={id}
-          name={name}
           required={required}
-          onChange={onChange}
+          {...rest}
           className="w-full bg-dark-1 p-2 pl-7 rounded-lg text-red-3"
         >
           <option disabled selected>
             {placeholder}
           </option>
-          {options.map((o, idx) => (
-            <option key={idx} value={o}>
-              {o}
+          {options.map((opt) => (
+            <option key={opt.id} value={opt.id}>
+              {opt.text}
             </option>
           ))}
         </select>
@@ -155,11 +144,6 @@ function Selection({
 
 import { FaArrowDown } from "react-icons/fa6";
 
-interface OptionItem {
-  id: string | number;
-  text: string;
-}
-
 interface MultiSelectionProps {
   name: string;
   id: string;
@@ -167,19 +151,20 @@ interface MultiSelectionProps {
   placeholder?: string;
   icon?: ReactElement;
   options: OptionItem[];
-  onChange: (e: { target: { name: string; value: string[] } }) => void;
   required?: boolean;
+  value?: string[];
+  setValue?: (value: string[]) => void;
 }
 
 export default function MultiSelect({
-  name,
   id,
   title,
   placeholder,
   icon,
   options,
-  onChange,
   required,
+  value,
+  setValue,
 }: MultiSelectionProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<OptionItem[]>([]);
@@ -194,13 +179,13 @@ export default function MultiSelect({
       : [...selected, item];
 
     setSelected(newSelected);
-    onChange({ target: { name, value: newSelected.map((i) => i.text) } });
+    setValue?.(newSelected.map((i) => i.id.toString()));
   };
 
   const removeItem = (id: string | number) => {
     const newSelected = selected.filter((s) => s.id !== id);
     setSelected(newSelected);
-    onChange({ target: { name, value: newSelected.map((i) => i.text) } });
+    setValue?.(newSelected.map((i) => i.id.toString()));
   };
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -216,6 +201,15 @@ export default function MultiSelect({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    if (value) {
+      const initialSelected = options.filter((o) =>
+        value.includes(o.id.toString())
+      );
+      setSelected(initialSelected);
+    }
+  }, [value, options]);
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -259,7 +253,7 @@ export default function MultiSelect({
       </div>
 
       {isOpen && (
-        <div className="mt-1 rounded-lg bg-dark-1 max-h-60 overflow-y-auto absolute z-10 w-full">
+        <div className="mt-1 rounded-lg bg-dark-1 max-h-60 overflow-y-auto z-10 w-full">
           {options.map((item) => (
             <label
               key={item.id}

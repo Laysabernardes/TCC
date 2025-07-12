@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import MultiSelect, {
   TypeInput,
   Textarea,
@@ -10,69 +13,86 @@ import { FaGear } from "react-icons/fa6";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import usinaGuara from "../../assets/usinaGuara.webp";
 
-function AdmManagement() {
-  const [form, setForm] = useState({
-    // Projetos
-    project_name: "",
-    project_slug: "",
-    project_about: "",
-    project_people: [""],
-    // Indexador para outras coleções
-    project_id: "",
-    // Perspectivas
-    perspective_name: "",
-    perspective_slug: "",
-    perspective_order: 1,
-    perspective_template: 1,
-    perspective_content: [""],
-    perspective_imgs: [""],
-    perspective_editoria: [""],
-    perspective_refs: [""],
-    perspective_people: [],
-    perspective_lastUpdate: "",
-    // BlockTime
-    blockTime_name: "",
-    blockTime_order: 1,
-    blockTime_content: "",
-    blockTime_img: "",
-    blockTime_lastUpdate: "",
-    // Pessoas
-    person_name: "",
-    person_kind: "",
-    person_description: [""],
-    person_contact: "",
-    person_img: "",
-  });
-  const [action, setAction] = useState("");
-  const [collection, setCollection] = useState("");
+const ProjectSchema = z.object({
+  project_name: z.string().min(1, "Nome obrigatório"),
+  project_slug: z.string().min(1, "Slug obrigatório"),
+  project_about: z.string().optional(),
+  project_people: z.array(z.string()),
+});
+type ProjectFormData = z.infer<typeof ProjectSchema>;
 
-  const handleChange = (
-    e:
-      | React.ChangeEvent<
-          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-        >
-      | { target: { name: string; value: any } }
-  ) => {
-    const { name, value } = e.target;
-    setForm((prevForm) => ({
-      ...prevForm,
-      [name]: value,
+function AdmManagement() {
+  const { register, setValue, getValues, watch, handleSubmit, reset } = useForm(
+    {
+      resolver: zodResolver(ProjectSchema),
+    }
+  );
+
+  const [projectId, setProjectId] = useState<string | null>(null);
+
+  // Endpoint Pegar Projetos
+  const allProjects = [
+    {
+      id: "1",
+      project_name: "Projeto 1",
+      project_slug: "alpha",
+      project_about: "Projeto top",
+      project_people: ["2"],
+    },
+    {
+      id: "2",
+      project_name: "Projeto 2",
+      project_slug: "beta",
+      project_about: "Projeto massa",
+      project_people: ["1"],
+    },
+  ];
+
+  const allProjectsId = () => {
+    return allProjects.map((p) => ({
+      id: p.id,
+      text: p.project_name,
     }));
   };
 
-  // APAGAR DEPOIS
-
-  useEffect(() => {
-    console.log(form);
-  }, [form]);
-
+  // Endpoint Pegar Pessoas
   const people = [
     { id: "1", text: "Laysa" },
     { id: "2", text: "Lucas" },
     { id: "3", text: "Rogério" },
   ];
 
-  //
+  const [action, setAction] = useState("");
+  const [collection, setCollection] = useState("");
+
+  const handleSelectProject = () => {
+    const project = allProjects.find((p) => p.id === projectId);
+    if (!project) return;
+
+    setValue("project_name", project.project_name);
+    setValue("project_slug", project.project_slug);
+    setValue("project_about", project.project_about);
+    setValue("project_people", project.project_people);
+
+    console.log(getValues());
+  };
+
+  const handleSubmitForm = () => {
+    console.log(getValues());
+  };
+
+  // Ao selecionar um projeto
+  useEffect(() => {
+    if (projectId) {
+      handleSelectProject();
+    }
+  }, [projectId]);
+
+  // Ao mudar a ação
+  useEffect(() => {
+    reset();
+    setProjectId(null);
+  }, [action]);
 
   return (
     <div
@@ -106,74 +126,95 @@ function AdmManagement() {
             <div className="overflow-y-auto overflow-visible h-100 pr-5">
               <Selection
                 id="colection"
-                name="colection"
                 title="Selecione uma coleção"
                 placeholder="Coleção"
                 icon={<FaGear />}
                 options={[
-                  "Projeto",
-                  "Perspectiva",
-                  "Linha do Tempo",
-                  "Pessoas",
+                  { id: "Project", text: "Projeto" },
+                  { id: "Perspective", text: "Perspectiva" },
+                  { id: "Timeline", text: "Linha do Tempo" },
+                  { id: "People", text: "Pessoas" },
                 ]}
                 onChange={(e) => setCollection(e.target.value)}
                 required={true}
               />
               <Selection
                 id="action"
-                name="action"
                 title="Selecione uma ação"
                 placeholder="Ação"
                 icon={<FaGear />}
-                options={["Criar", "Atualizar", "Deletar"]}
+                options={[
+                  { id: "Create", text: "Criar" },
+                  { id: "Update", text: "Atualizar" },
+                  { id: "Delete", text: "Deletar" },
+                ]}
                 onChange={(e) => setAction(e.target.value)}
                 required={true}
               />
-              {collection === "Projeto" && action === "Criar" && (
-                <>
-                  <TypeInput
-                    id="project_name"
-                    name="project_name"
-                    title="Nome Projeto"
-                    type="text"
-                    placeholder="Digite o nome"
-                    icon={<FaGear />}
-                    value={form.project_name}
-                    onChange={handleChange}
-                    required={true}
-                  />
-                  <TypeInput
-                    id="project_slug"
-                    name="project_slug"
-                    title="Nome para URL"
-                    type="text"
-                    placeholder="Digite um nome para URL"
-                    icon={<FaGear />}
-                    value={form.project_slug}
-                    onChange={handleChange}
-                    required={true}
-                  />
-                  <MultiSelect
-                    id="project_people"
-                    name="project_people"
-                    title="Integrantes"
-                    placeholder="Selecione os integrantes"
-                    icon={<FaGear />}
-                    options={people}
-                    onChange={handleChange}
-                    required
-                  />
-                  <Textarea
-                    id="project_about"
-                    name="project_about"
-                    title="Sobre o Projeto"
-                    placeholder="Digite o nome"
-                    icon={<FaGear />}
-                    value={form.project_about}
-                    onChange={handleChange}
-                    required={true}
-                  />
-                </>
+              {collection === "Project" &&
+                (action === "Update" || action === "Delete") && (
+                  <>
+                    <Selection
+                      id="project_id"
+                      title="Selecione projeto"
+                      placeholder="Projeto"
+                      icon={<FaGear />}
+                      options={allProjectsId()}
+                      onChange={(e) => setProjectId(e.target.value)}
+                      required={true}
+                    />
+                  </>
+                )}
+              {collection === "Project" &&
+                (action === "Create" ||
+                  (action === "Update" && projectId != null)) && (
+                  <>
+                    <TypeInput
+                      id="project_name"
+                      title="Nome Projeto"
+                      type="text"
+                      placeholder="Digite o nome"
+                      icon={<FaGear />}
+                      required={true}
+                      {...register("project_name")}
+                    />
+                    <TypeInput
+                      id="project_slug"
+                      title="Nome para URL"
+                      type="text"
+                      placeholder="Digite um nome para URL"
+                      icon={<FaGear />}
+                      required={true}
+                      {...register("project_slug")}
+                    />
+                    <MultiSelect
+                      id="project_people"
+                      name="project_people"
+                      title="Integrantes"
+                      placeholder="Selecione os integrantes"
+                      icon={<FaGear />}
+                      options={people}
+                      required
+                      value={watch("project_people")}
+                      setValue={(value) => setValue("project_people", value)}
+                    />
+                    <Textarea
+                      id="project_about"
+                      title="Sobre o Projeto"
+                      placeholder="Digite o nome"
+                      icon={<FaGear />}
+                      required={true}
+                      {...register("project_about")}
+                    />
+                  </>
+                )}
+              {collection && action && (
+                <div
+                  onClick={handleSubmitForm}
+                  className="bg-red-2 text-1xl font-bold text-white text-center rounded-lg p-2 mt-10 mb-10 cursor-pointer transition hover:bg-red-1"
+                >
+                  Submeter
+                </div>
               )}
             </div>
           </form>
