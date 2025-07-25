@@ -6,6 +6,7 @@ import express, {
 } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import { ValidateError } from 'tsoa';
+import cors from 'cors'; 
 
 import { connectDB } from './config/database';
 import { RegisterRoutes } from '../dist/routes'; 
@@ -17,6 +18,7 @@ const startServer = async () => {
 
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
+  app.use(cors());
 
   app.use('/api-docs', swaggerUi.serve, async (_req: ExRequest, res: ExResponse) => {
     try {
