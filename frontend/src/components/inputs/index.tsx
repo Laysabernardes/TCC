@@ -2,9 +2,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import type { ReactElement } from "react";
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
-  name: string;
   title?: string;
   type?: string;
   placeholder?: string;
@@ -46,7 +45,8 @@ function TypeInput({
   );
 }
 
-interface TextAreaProps {
+interface TextAreaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   id: string;
   title?: string;
   placeholder?: string;
@@ -91,7 +91,7 @@ interface OptionItem {
   text: string;
 }
 
-interface SelectionProps {
+interface SelectionProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   id: string;
   title?: string;
   placeholder?: string;
@@ -156,7 +156,7 @@ interface MultiSelectionProps {
   setValue?: (value: string[]) => void;
 }
 
-export default function MultiSelect({
+function MultiSelect({
   id,
   title,
   placeholder,

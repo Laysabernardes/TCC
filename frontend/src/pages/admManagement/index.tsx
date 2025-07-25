@@ -3,33 +3,87 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import MultiSelect, {
+import {
   TypeInput,
   Textarea,
   Selection,
+  MultiSelect,
 } from "../../components/inputs";
 import { Link } from "react-router-dom";
 import { FaGear } from "react-icons/fa6";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import usinaGuara from "../../assets/usinaGuara.webp";
 
-const ProjectSchema = z.object({
+// Função de normalização para o Zod
+function normalizeDelimitedText(input: string): string[] {
+  return input
+    .split(/[\n;,]+/)
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
+}
+
+const FormSchema = z.object({
+  // Reutilizaveis
   id: z.number().optional(),
-  project_name: z.string().min(1, "Nome obrigatório"),
-  project_slug: z.string().min(1, "Slug obrigatório"),
+  project_id: z.number().optional(),
+
+  // Project
+  project_name: z.string().optional(),
+  project_slug: z.string().optional(),
   project_about: z.string().optional(),
-  project_people: z.array(z.string()),
+  project_people: z.array(z.string()).optional(),
+
+  // Perspective
+  perspective_name: z.string().min(1, "Nome obrigatório").optional(),
+  perspective_slug: z.string().min(1, "Slug obrigatório").optional(),
+  perspective_order: z.number().optional(),
+  perspective_template: z.number().optional(),
+  perspective_content: z
+    .union([z.string(), z.array(z.string())])
+    .transform((val) =>
+      typeof val === "string" ? normalizeDelimitedText(val) : val
+    )
+    .refine((val) => val.length > 0, {
+      message: "Conteúdo é obrigatório",
+    })
+    .optional(),
+  perspective_imgs: z
+    .union([z.string(), z.array(z.string())])
+    .optional()
+    .transform((val) =>
+      typeof val === "string" ? normalizeDelimitedText(val) : val
+    )
+    .optional(),
+  perspective_editoria: z
+    .union([z.string(), z.array(z.string())])
+    .transform((val) =>
+      typeof val === "string" ? normalizeDelimitedText(val) : val
+    )
+    .refine((val) => val.length > 0, {
+      message: "Digite ao menos uma editoria",
+    })
+    .optional(),
+  perspective_refs: z
+    .union([z.string(), z.array(z.string())])
+    .transform((val) =>
+      typeof val === "string" ? normalizeDelimitedText(val) : val
+    )
+    .refine((val) => val.length > 0, {
+      message: "Digite ao menos uma referência",
+    })
+    .optional(),
+  perspective_people: z.array(z.string()).optional(),
 });
-type ProjectFormData = z.infer<typeof ProjectSchema>;
+
+type FormData = z.infer<typeof FormSchema>;
 
 function AdmManagement() {
-  const { register, setValue, getValues, watch, handleSubmit, reset } = useForm(
-    {
-      resolver: zodResolver(ProjectSchema),
-    }
-  );
+  const { register, setValue, watch, handleSubmit, reset } = useForm({
+    resolver: zodResolver(FormSchema),
+  });
 
   const [projectId, setProjectId] = useState<number | null>(null);
+  const [perspectiveId, setPerspectiveId] = useState<number | null>(null);
 
   // Endpoint Pegar Projetos
   const allProjects = [
@@ -49,12 +103,35 @@ function AdmManagement() {
     },
   ];
 
-  const allProjectsId = () => {
-    return allProjects.map((p) => ({
-      id: p.id,
-      text: p.project_name,
-    }));
-  };
+  // Endpoint Pegar Perspectivas
+  const allPerspectives = [
+    {
+      id: 1,
+      project_id: 1,
+      perspective_name: "Perspectiva 1",
+      perspective_slug: "",
+      perspective_order: 1,
+      perspective_template: 1,
+      perspective_content: ["Abc", "123"],
+      perspective_imgs: [".png", ".jpeg"],
+      perspective_editoria: ["Usina", "Guará"],
+      perspective_refs: ["https://abc", "https://123"],
+      perspective_people: ["1"],
+    },
+    {
+      id: 2,
+      project_id: 1,
+      perspective_name: "Perspectiva 2",
+      perspective_slug: "",
+      perspective_order: 2,
+      perspective_template: 1,
+      perspective_content: ["def", "456"],
+      perspective_imgs: [null],
+      perspective_editoria: ["Usina", "Guará"],
+      perspective_refs: ["https://abc", "https://123"],
+      perspective_people: ["1", "2"],
+    },
+  ];
 
   // Endpoint Pegar Pessoas
   const people = [
@@ -66,41 +143,126 @@ function AdmManagement() {
   const [action, setAction] = useState("");
   const [collection, setCollection] = useState("");
 
-  const handleSelectProject = () => {
-    const project = allProjects.find((p) => p.id === projectId);
-    if (!project) return;
-
-    setValue("id", project.id);
-    setValue("project_name", project.project_name);
-    setValue("project_slug", project.project_slug);
-    setValue("project_about", project.project_about);
-    setValue("project_people", project.project_people);
+  const resolveIds = (data: any[], text: string) => {
+    return data.map((d) => ({
+      id: d.id,
+      text: d[text],
+    }));
   };
 
-  const handleSubmitForm = (data: ProjectFormData) => {
-    if (action === "Create") {
-      console.log(data);
-    } else if (action === "Update") {
-      console.log(data);
-    } else if (action === "Delete") {
-      console.log(data.id);
+  const handleSelectCollection = (c: string) => {
+    if (c === "Project") {
+      const project = allProjects.find((p) => p.id === projectId);
+      if (!project) return;
+
+      setValue("id", project.id);
+      setValue("project_name", project.project_name);
+      setValue("project_slug", project.project_slug);
+      setValue("project_about", project.project_about);
+      setValue("project_people", project.project_people);
+    } else if (c === "Perspective") {
+      const perspective = allPerspectives.find((p) => p.id === perspectiveId);
+      if (!perspective) return;
+
+      setValue("id", perspective.id);
+      setValue("project_id", perspective.project_id);
+      setValue("perspective_name", perspective.perspective_name);
+      setValue("perspective_slug", perspective.perspective_slug);
+      setValue("perspective_order", perspective.perspective_order);
+      setValue("perspective_template", perspective.perspective_template);
+      setValue("perspective_content", perspective.perspective_content);
+      setValue(
+        "perspective_imgs",
+        perspective.perspective_imgs?.filter(
+          (img): img is string => img !== null
+        )
+      );
+      setValue("perspective_editoria", perspective.perspective_editoria);
+      setValue("perspective_refs", perspective.perspective_refs);
+      setValue("perspective_people", perspective.perspective_people);
     } else {
-      throw new Error();
+      return;
     }
   };
+
+  const handleSubmitForm = (data: FormData) => {
+    if (collection === "Project") {
+      const projectData = {
+        id: data.id,
+        project_name: data.project_name,
+        project_slug: data.project_slug,
+        project_about: data.project_about,
+        project_people: data.project_people,
+      };
+
+      if (action === "Create") {
+        console.log("createProject(projectData)");
+        console.log(projectData);
+      } else if (action === "Update") {
+        console.log("updateProject(projectData)");
+        console.log(projectData);
+      } else {
+        console.log("deleteProject(projectData.id)");
+        console.log(projectData.id);
+      }
+    } else if (collection === "Perspective") {
+      const perspectiveData = {
+        id: data.id,
+        project_id: data.project_id,
+        perspective_name: data.perspective_name,
+        perspective_slug: data.perspective_slug,
+        perspective_order: data.perspective_order,
+        perspective_template: data.perspective_template,
+        perspective_content: data.perspective_content,
+        perspective_imgs: data.perspective_imgs,
+        perspective_editoria: data.perspective_editoria,
+        perspective_refs: data.perspective_refs,
+        perspective_people: data.perspective_people,
+      };
+
+      if (action === "Create") {
+        console.log("createPerspective(perspectiveData)");
+        console.log(perspectiveData);
+      } else if (action === "Update") {
+        console.log("updatePerspective(perspectiveData)");
+        console.log(perspectiveData);
+      } else {
+        console.log("deletePerspective(perspectiveData.id)");
+        console.log(perspectiveData.id);
+      }
+    }
+  };
+
+  const setNullToCollections = () => {
+    setProjectId(null);
+    setPerspectiveId(null);
+    reset();
+  };
+
+  // Ao mudar a collection
+  useEffect(() => {
+    setAction("-");
+    setNullToCollections();
+  }, [collection]);
+
+  // Ao mudar a ação
+  useEffect(() => {
+    setNullToCollections();
+  }, [action]);
 
   // Ao selecionar um projeto
   useEffect(() => {
     if (projectId) {
-      handleSelectProject();
+      handleSelectCollection("Project");
     }
   }, [projectId]);
 
-  // Ao mudar a ação
+  // Ao selecionar uma perspectiva
   useEffect(() => {
-    reset();
-    setProjectId(null);
-  }, [action]);
+    if (perspectiveId) {
+      handleSelectCollection("Perspective");
+    }
+  }, [perspectiveId]);
 
   return (
     <div
@@ -159,67 +321,178 @@ function AdmManagement() {
                   { id: "Update", text: "Atualizar" },
                   { id: "Delete", text: "Deletar" },
                 ]}
+                value={action}
                 onChange={(e) => setAction(e.target.value)}
                 required={true}
               />
-              {collection === "Project" &&
-                (action === "Update" || action === "Delete") && (
-                  <>
+              {/* Selection que cataloga a collection do banco */}
+              {(action === "Update" || action === "Delete") && (
+                <>
+                  {collection === "Project" ? (
                     <Selection
                       id="project_id"
-                      title="Selecione projeto"
+                      title="Selecione um Projeto"
                       placeholder="-"
                       icon={<FaGear />}
-                      options={allProjectsId()}
+                      options={resolveIds(allProjects, "project_name")}
                       onChange={(e) => setProjectId(Number(e.target.value))}
+                      value={projectId != null ? projectId : "-"}
                       required={true}
                     />
-                  </>
-                )}
-              {collection === "Project" &&
-                (action === "Create" ||
-                  (action === "Update" && projectId != null)) && (
-                  <>
-                    <TypeInput
-                      id="project_name"
-                      title="Nome Projeto"
-                      type="text"
-                      placeholder="Digite o nome"
+                  ) : collection === "Perspective" ? (
+                    <Selection
+                      id="perspective_id"
+                      title="Selecione uma Perspectiva"
+                      placeholder="-"
                       icon={<FaGear />}
+                      options={resolveIds(allPerspectives, "perspective_name")}
+                      onChange={(e) => setPerspectiveId(Number(e.target.value))}
+                      value={perspectiveId != null ? perspectiveId : "-"}
                       required={true}
-                      {...register("project_name")}
                     />
-                    <TypeInput
-                      id="project_slug"
-                      title="Nome para URL"
-                      type="text"
-                      placeholder="Digite um nome para URL"
-                      icon={<FaGear />}
-                      required={true}
-                      {...register("project_slug")}
-                    />
-                    <MultiSelect
-                      id="project_people"
-                      name="project_people"
-                      title="Integrantes"
-                      placeholder="Selecione os integrantes"
-                      icon={<FaGear />}
-                      options={people}
-                      required
-                      value={watch("project_people")}
-                      setValue={(value) => setValue("project_people", value)}
-                    />
-                    <Textarea
-                      id="project_about"
-                      title="Sobre o Projeto"
-                      placeholder="Digite o nome"
-                      icon={<FaGear />}
-                      required={true}
-                      {...register("project_about")}
-                    />
-                  </>
-                )}
-              {collection && action && (
+                  ) : null}
+                </>
+              )}
+              {/* Formulário caso action = Create ou Update */}
+              {(action === "Create" ||
+                (action === "Update" &&
+                  (projectId != null || perspectiveId != null))) && (
+                <>
+                  {collection === "Project" ? (
+                    <>
+                      <TypeInput
+                        id="project_name"
+                        title="Nome Projeto"
+                        type="text"
+                        placeholder="Digite o nome"
+                        icon={<FaGear />}
+                        required={true}
+                        {...register("project_name")}
+                      />
+                      <TypeInput
+                        id="project_slug"
+                        title="Nome para URL"
+                        type="text"
+                        placeholder="Digite um nome para URL"
+                        icon={<FaGear />}
+                        required={true}
+                        {...register("project_slug")}
+                      />
+                      <MultiSelect
+                        id="project_people"
+                        name="project_people"
+                        title="Integrantes"
+                        placeholder="Selecione os integrantes"
+                        icon={<FaGear />}
+                        options={people}
+                        required
+                        value={watch("project_people")}
+                        setValue={(value) => setValue("project_people", value)}
+                      />
+                      <Textarea
+                        id="project_about"
+                        title="Sobre o Projeto"
+                        placeholder="Digite o nome"
+                        icon={<FaGear />}
+                        required={true}
+                        {...register("project_about")}
+                      />
+                    </>
+                  ) : collection === "Perspective" ? (
+                    <>
+                      <TypeInput
+                        id="perspective_name"
+                        title="Nome da Perspectiva"
+                        type="text"
+                        placeholder="Digite o nome"
+                        icon={<FaGear />}
+                        required={true}
+                        {...register("perspective_name")}
+                      />
+                      <TypeInput
+                        id="perspective_slug"
+                        title="Nome para URL"
+                        type="text"
+                        placeholder="Digite um nome para URL"
+                        icon={<FaGear />}
+                        required={true}
+                        {...register("perspective_slug")}
+                      />
+                      <TypeInput
+                        id="perspective_order"
+                        title="Ordem de aparição"
+                        type="number"
+                        placeholder="1"
+                        icon={<FaGear />}
+                        required={true}
+                        {...register("perspective_order", {
+                          valueAsNumber: true,
+                        })}
+                      />
+                      <TypeInput
+                        id="perspective_template"
+                        title="Template Design"
+                        type="number"
+                        placeholder="1"
+                        icon={<FaGear />}
+                        required={true}
+                        {...register("perspective_template", {
+                          valueAsNumber: true,
+                        })}
+                      />
+                      <Textarea
+                        id="perspective_content"
+                        title="Conteúdo"
+                        placeholder="Digite o nome"
+                        icon={<FaGear />}
+                        required={false}
+                        {...register("perspective_content")}
+                      />
+                      <TypeInput
+                        id="perspective_imgs"
+                        title="Imagens"
+                        type="text"
+                        placeholder="Links das imagens"
+                        icon={<FaGear />}
+                        required={true}
+                        {...register("perspective_imgs")}
+                      />
+                      <TypeInput
+                        id="perspective_editoria"
+                        title="Editoria"
+                        type="text"
+                        placeholder="Usina Guará, Outros"
+                        icon={<FaGear />}
+                        required={true}
+                        {...register("perspective_editoria")}
+                      />
+                      <MultiSelect
+                        id="perspective_people"
+                        name="perspective_people"
+                        title="Integrantes"
+                        placeholder="Selecione os integrantes"
+                        icon={<FaGear />}
+                        options={people}
+                        required
+                        value={watch("perspective_people")}
+                        setValue={(value) =>
+                          setValue("perspective_people", value)
+                        }
+                      />
+                      <TypeInput
+                        id="perspective_refs"
+                        title="Referências"
+                        type="text"
+                        placeholder="Links das referências"
+                        icon={<FaGear />}
+                        required={true}
+                        {...register("perspective_refs")}
+                      />
+                    </>
+                  ) : null}
+                </>
+              )}
+              {collection != "" && (action != "-" || action != "-") && (
                 <button
                   type="submit"
                   className="w-full bg-red-2 text-1xl font-bold text-white text-center rounded-lg p-2 py-3 my-5 cursor-pointer transition hover:bg-red-1"
