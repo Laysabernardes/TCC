@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useRef, useEffect } from "react";
 import type { ReactElement } from "react";
+import { FaRegEye, FaRegEyeSlash, FaLock } from "react-icons/fa6";
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id: string;
-  name: string;
   title?: string;
   type?: string;
   placeholder?: string;
   icon?: ReactElement<any, any>;
   required?: boolean;
+  errors?: any;
 }
 
 function TypeInput({
@@ -46,7 +47,50 @@ function TypeInput({
   );
 }
 
-interface TextAreaProps {
+function PasswordInput({
+  id,
+  title,
+  type = "text",
+  placeholder,
+  icon,
+  required,
+  errors,
+  ...rest
+}: InputProps) {
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <div className="my-5 flex flex-col gap-2">
+      <label htmlFor={id} className="text-lg font-bold text-light-3">
+        {title} {required && <span className="text-red-3">*</span>}
+      </label>
+      <div className="relative">
+        <div className="absolute left-2 h-full flex items-center justify-center text-red-3">
+          <FaLock />
+        </div>
+        <input
+          id={id}
+          type={showPassword ? "text" : "password"}
+          className={`w-full bg-dark-1 p-2 pl-10 pr-10 rounded-lg text-light-2 border 
+            ${errors?.[id] ? "border-red-3" : "border-dark-4"} 
+            focus:outline-none focus:ring-2 focus:ring-red-2`}
+          {...rest}
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-2 inset-y-0 flex items-center text-red-3"
+          aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+        >
+          {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+interface TextAreaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   id: string;
   title?: string;
   placeholder?: string;
@@ -91,7 +135,7 @@ interface OptionItem {
   text: string;
 }
 
-interface SelectionProps {
+interface SelectionProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   id: string;
   title?: string;
   placeholder?: string;
@@ -156,7 +200,7 @@ interface MultiSelectionProps {
   setValue?: (value: string[]) => void;
 }
 
-export default function MultiSelect({
+function MultiSelect({
   id,
   title,
   placeholder,
@@ -274,4 +318,4 @@ export default function MultiSelect({
   );
 }
 
-export { TypeInput, Textarea, Selection, MultiSelect };
+export { TypeInput, PasswordInput, Textarea, Selection, MultiSelect };
