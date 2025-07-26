@@ -9,10 +9,13 @@ type UpdateProjectInput = z.infer<typeof updateProjectSchema>['body'];
 // Função auxiliar para converter o documento Mongoose para nosso DTO
 const toProjectResponse = (project: any): ProjectResponseType => {
   return {
-    ...project,
-    _id: project._id.toString(),
-    members: project.members || [], 
-    team: project.team || [],
+     _id: project._id.toString(),
+    project_name: project.project_name,
+    project_slug: project.project_slug,
+    project_about_html: project.project_about_html,
+    project_team: project.project_team,
+    project_createdAt: project.createdAt, 
+    project_updatedAt: project.updatedAt,
   };
 };
 
@@ -23,7 +26,7 @@ export class ProjectService {
       const project = await ProjectModel.create(input);
       return toProjectResponse(project.toObject());
     } catch (error: any) {
-      if (error.code === 11000 && error.keyPattern?.slug) {
+      if (error.code === 11000 && error.keyPattern?.project_slug) {
         throw new Error('Este slug já está em uso.');
       }
       throw error;
@@ -37,9 +40,9 @@ export class ProjectService {
   }
 
   // --- BUSCAR UM POR SLUG ---
-  static async findBySlug(slug: string): Promise<ProjectResponseType | null> {
-    const project = await ProjectModel.findOne({ slug })
-      .populate('team') 
+  static async findBySlug(project_slug: string): Promise<ProjectResponseType | null> {
+    const project = await ProjectModel.findOne({ project_slug })
+      .populate('project_team') 
       .lean();
     
     if (!project) return null;

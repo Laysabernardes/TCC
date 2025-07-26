@@ -3,10 +3,10 @@ import { PersonResponseType } from './person.dto';
 
 export interface ProjectResponseType {
   _id: string;
-  name: string;
-  slug: string;
-  about_html: string;
-  team: PersonResponseType[];
-  createdAt: Date;
-  updatedAt: Date;
+  project_name: string;
+  project_slug: string;
+  project_about_html: string;
+  project_team: PersonResponseType[];
+  project_createdAt: Date;
+  project_updatedAt: Date;
 }

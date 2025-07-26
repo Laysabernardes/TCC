@@ -92,24 +92,24 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "_id": {"dataType":"string","required":true},
-            "name": {"dataType":"string","required":true},
-            "slug": {"dataType":"string","required":true},
-            "about_html": {"dataType":"string","required":true},
-            "team": {"dataType":"array","array":{"dataType":"refObject","ref":"PersonResponseType"},"required":true},
-            "createdAt": {"dataType":"datetime","required":true},
-            "updatedAt": {"dataType":"datetime","required":true},
+            "project_name": {"dataType":"string","required":true},
+            "project_slug": {"dataType":"string","required":true},
+            "project_about_html": {"dataType":"string","required":true},
+            "project_team": {"dataType":"array","array":{"dataType":"refObject","ref":"PersonResponseType"},"required":true},
+            "project_createdAt": {"dataType":"datetime","required":true},
+            "project_updatedAt": {"dataType":"datetime","required":true},
         },
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateProjectInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"slug":{"dataType":"string"},"name":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"project_team":{"dataType":"array","array":{"dataType":"string"}},"project_about_html":{"dataType":"string"},"project_slug":{"dataType":"string"},"project_name":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UpdateProjectInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"slug":{"dataType":"string"},"name":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"project_team":{"dataType":"array","array":{"dataType":"string"}},"project_about_html":{"dataType":"string"},"project_slug":{"dataType":"string"},"project_name":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "IReferenceDTO": {

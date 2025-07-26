@@ -214,48 +214,57 @@
 					"_id": {
 						"type": "string"
 					},
-					"name": {
+					"project_name": {
 						"type": "string"
 					},
-					"slug": {
+					"project_slug": {
 						"type": "string"
 					},
-					"about_html": {
+					"project_about_html": {
 						"type": "string"
 					},
-					"team": {
+					"project_team": {
 						"items": {
 							"$ref": "#/components/schemas/PersonResponseType"
 						},
 						"type": "array"
 					},
-					"createdAt": {
+					"project_createdAt": {
 						"type": "string",
 						"format": "date-time"
 					},
-					"updatedAt": {
+					"project_updatedAt": {
 						"type": "string",
 						"format": "date-time"
 					}
 				},
 				"required": [
 					"_id",
-					"name",
-					"slug",
-					"about_html",
-					"team",
-					"createdAt",
-					"updatedAt"
+					"project_name",
+					"project_slug",
+					"project_about_html",
+					"project_team",
+					"project_createdAt",
+					"project_updatedAt"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
 			"CreateProjectInput": {
 				"properties": {
-					"slug": {
+					"project_team": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"project_about_html": {
 						"type": "string"
 					},
-					"name": {
+					"project_slug": {
+						"type": "string"
+					},
+					"project_name": {
 						"type": "string"
 					}
 				},
@@ -263,19 +272,19 @@
 			},
 			"UpdateProjectInput": {
 				"properties": {
-					"team": {
+					"project_team": {
 						"items": {
 							"type": "string"
 						},
 						"type": "array"
 					},
-					"about_html": {
+					"project_about_html": {
 						"type": "string"
 					},
-					"slug": {
+					"project_slug": {
 						"type": "string"
 					},
-					"name": {
+					"project_name": {
 						"type": "string"
 					}
 				},
