@@ -57,10 +57,11 @@ export const formService = {
 
   updateProject: async (
     token: string,
-    project: ProjectRequest
+    project: ProjectRequest,
+    id?: string
   ): Promise<ProjectResponse> => {
     const response = await api.put<ProjectResponse>(
-      `/projects/${project._id}`,
+      `/projects/${id}`,
       project,
       {
         headers: {

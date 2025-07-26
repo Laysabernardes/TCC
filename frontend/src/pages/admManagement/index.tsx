@@ -159,13 +159,11 @@ function AdmManagement() {
     if (c === "Project" && allProjects != null) {
       const project = allProjects.find((p: any) => p._id === projectId);
       if (!project) return;
-
-      setValue("_id", project.id);
+      setValue("_id", project._id);
       setValue("project_name", project.project_name);
       setValue("project_slug", project.project_slug);
       setValue("project_about_html", project.project_about_html);
       setValue("project_team", project.project_team);
-      console.log(project);
     } else if (c === "Perspective") {
       const perspective = allPerspectives.find((p) => p.id === perspectiveId);
       if (!perspective) return;
@@ -193,20 +191,15 @@ function AdmManagement() {
 
   const handleSubmitForm = async (data: FormData) => {
     if (collection === "Project") {
-      const projectData: ProjectRequest = {
-        _id: data._id,
-        project_name: data.project_name,
-        project_slug: data.project_slug,
-        project_about_html: data.project_about_html,
-        project_team: data.project_team,
-      };
-
-      if (projectData === undefined) {
-        return;
-      }
-
       if (action === "Create") {
         try {
+          const projectData: ProjectRequest = {
+            project_name: data.project_name,
+            project_slug: data.project_slug,
+            project_about_html: data.project_about_html,
+            project_team: data.project_team,
+          };
+
           const response = formService.createProject(token, projectData);
           alert("Projeto Criado");
           console.log(response);
@@ -215,7 +208,18 @@ function AdmManagement() {
         }
       } else if (action === "Update") {
         try {
-          const response = formService.updateProject(token, projectData);
+          const projectData: ProjectRequest = {
+            project_name: data.project_name,
+            project_slug: data.project_slug,
+            project_about_html: data.project_about_html,
+            project_team: data.project_team,
+          };
+
+          const response = formService.updateProject(
+            token,
+            projectData,
+            data._id
+          );
           alert("Projeto Criado");
           console.log(response);
         } catch (e) {
@@ -223,7 +227,7 @@ function AdmManagement() {
         }
       } else {
         try {
-          const response = formService.deleteProject(token, projectData._id);
+          const response = formService.deleteProject(token, data._id);
           alert("Projeto Criado");
           console.log(response);
         } catch (e) {
@@ -279,9 +283,6 @@ function AdmManagement() {
   useEffect(() => {
     if (projectId) {
       handleSelectCollection("Project");
-      console.log(allProjects);
-      console.log(projectId);
-      console.log(getValues());
     }
   }, [projectId]);
 
