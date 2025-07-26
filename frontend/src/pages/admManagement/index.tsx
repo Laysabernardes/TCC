@@ -87,6 +87,8 @@ function AdmManagement() {
   const [allProjects, setAllProjects] = useState<any>(null);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [perspectiveId, setPerspectiveId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
   let token = localStorage.getItem("authToken");
   if (!token) {
     alert("perdeu token");
@@ -190,6 +192,7 @@ function AdmManagement() {
   };
 
   const handleSubmitForm = async (data: FormData) => {
+    setFeedback(null); // Limpa o feedback anterior a cada nova submissão
     if (collection === "Project") {
       if (action === "Create") {
         try {
@@ -200,11 +203,19 @@ function AdmManagement() {
             project_team: data.project_team,
           };
 
-          const response = formService.createProject(token, projectData);
-          alert("Projeto Criado");
+          const response = await formService.createProject(token, projectData);
+          //alert("Projeto Criado");
+          setFeedback({ type: 'success', message: 'Projeto criado com sucesso!' });
           console.log(response);
-        } catch (e) {
-          console.log(e);
+
+          // atualizar e limpar a tela
+          await getAllProjects();
+          setAction('-');
+
+        } catch (error: any) {
+          const errorMessage = error.response?.data?.message || 'Falha ao criar o projeto.';
+          setFeedback({ type: 'error', message: errorMessage });
+          console.log(error);
         }
       } else if (action === "Update") {
         try {
@@ -215,25 +226,38 @@ function AdmManagement() {
             project_team: data.project_team,
           };
 
-          const response = formService.updateProject(
+          const response = await formService.updateProject(
             token,
             projectData,
             data._id
           );
-          alert("Projeto Criado");
+          //("Projeto Criado");
+          setFeedback({ type: 'success', message: 'Projeto atualizado com sucesso!' });
           console.log(response);
-        } catch (e) {
-          console.log(e);
+
+          await getAllProjects();
+          setAction('-');
+
+        } catch (error: any) {
+          const errorMessage = error.response?.data?.message || 'Falha ao atualizar o projeto.';
+          setFeedback({ type: 'error', message: errorMessage });
+          console.log(error);
         }
       } else {
         try {
-          const response = formService.deleteProject(token, data._id);
-          alert("Projeto Criado");
+          const response = await formService.deleteProject(token, data._id);
+          setFeedback({ type: 'success', message: 'Projeto deletado com sucesso!' });
+          await getAllProjects();
+          setAction('-');
+          //alert("Projeto Criado");
           console.log(response);
-        } catch (e) {
-          console.log(e);
+        } catch (error: any) {
+          const errorMessage = error.response?.data?.message || 'Falha ao deletar o projeto.';
+          setFeedback({ type: 'error', message: errorMessage });
+          console.log(error);
         }
       }
+
     } else if (collection === "Perspective") {
       const perspectiveData = {
         id: data._id,
@@ -325,7 +349,17 @@ function AdmManagement() {
                 </Link>
               </div>
             </div>
+
             <div className="overflow-y-auto overflow-visible h-100 pr-5">
+              {feedback && (
+                <div
+                  className={`p-3 my-4 rounded-lg text-white text-center ${feedback.type === 'success' ? 'bg-green-500/80' : 'bg-red-500/80'
+                    }`}
+                >
+                  {feedback.message}
+                </div>
+              )}
+
               <Selection
                 id="colection"
                 title="Selecione uma coleção"
@@ -354,6 +388,7 @@ function AdmManagement() {
                 onChange={(e) => setAction(e.target.value)}
                 required={true}
               />
+
               {/* Selection que cataloga a collection do banco */}
               {(action === "Update" || action === "Delete") && (
                 <>
@@ -384,141 +419,141 @@ function AdmManagement() {
               {(action === "Create" ||
                 (action === "Update" &&
                   (projectId != null || perspectiveId != null))) && (
-                <>
-                  {collection === "Project" ? (
-                    <>
-                      <TypeInput
-                        id="project_name"
-                        title="Nome Projeto"
-                        type="text"
-                        placeholder="Digite o nome"
-                        icon={<FaGear />}
-                        required={true}
-                        {...register("project_name")}
-                      />
-                      <TypeInput
-                        id="project_slug"
-                        title="Nome para URL"
-                        type="text"
-                        placeholder="Digite um nome para URL"
-                        icon={<FaGear />}
-                        required={true}
-                        {...register("project_slug")}
-                      />
-                      <MultiSelect
-                        id="project_team"
-                        name="project_team"
-                        title="Integrantes"
-                        placeholder="Selecione os integrantes"
-                        icon={<FaGear />}
-                        options={people}
-                        required
-                        value={watch("project_team")}
-                        setValue={(value) => setValue("project_team", value)}
-                      />
-                      <Textarea
-                        id="project_about_html"
-                        title="Sobre o Projeto"
-                        placeholder="Digite o nome"
-                        icon={<FaGear />}
-                        required={true}
-                        {...register("project_about_html")}
-                      />
-                    </>
-                  ) : collection === "Perspective" ? (
-                    <>
-                      <TypeInput
-                        id="perspective_name"
-                        title="Nome da Perspectiva"
-                        type="text"
-                        placeholder="Digite o nome"
-                        icon={<FaGear />}
-                        required={true}
-                        {...register("perspective_name")}
-                      />
-                      <TypeInput
-                        id="perspective_slug"
-                        title="Nome para URL"
-                        type="text"
-                        placeholder="Digite um nome para URL"
-                        icon={<FaGear />}
-                        required={true}
-                        {...register("perspective_slug")}
-                      />
-                      <TypeInput
-                        id="perspective_order"
-                        title="Ordem de aparição"
-                        type="number"
-                        placeholder="1"
-                        icon={<FaGear />}
-                        required={true}
-                        {...register("perspective_order", {
-                          valueAsNumber: true,
-                        })}
-                      />
-                      <TypeInput
-                        id="perspective_template"
-                        title="Template Design"
-                        type="number"
-                        placeholder="1"
-                        icon={<FaGear />}
-                        required={true}
-                        {...register("perspective_template", {
-                          valueAsNumber: true,
-                        })}
-                      />
-                      <Textarea
-                        id="perspective_content"
-                        title="Conteúdo"
-                        placeholder="Digite o nome"
-                        icon={<FaGear />}
-                        required={false}
-                        {...register("perspective_content")}
-                      />
-                      <TypeInput
-                        id="perspective_imgs"
-                        title="Imagens"
-                        type="text"
-                        placeholder="Links das imagens"
-                        icon={<FaGear />}
-                        required={true}
-                        {...register("perspective_imgs")}
-                      />
-                      <TypeInput
-                        id="perspective_editoria"
-                        title="Editoria"
-                        type="text"
-                        placeholder="Usina Guará, Outros"
-                        icon={<FaGear />}
-                        required={true}
-                        {...register("perspective_editoria")}
-                      />
-                      <MultiSelect
-                        id="perspective_people"
-                        name="perspective_people"
-                        title="Integrantes"
-                        placeholder="Selecione os integrantes"
-                        icon={<FaGear />}
-                        options={people}
-                        required
-                        value={watch("perspective_people")}
-                        setValue={(value) =>
-                          setValue("perspective_people", value)
-                        }
-                      />
-                      <TypeInput
-                        id="perspective_refs"
-                        title="Referências"
-                        type="text"
-                        placeholder="Links das referências"
-                        icon={<FaGear />}
-                        required={true}
-                        {...register("perspective_refs")}
-                      />
-                    </>
-                  ) : null}
-                </>
-              )}
+                  <>
+                    {collection === "Project" ? (
+                      <>
+                        <TypeInput
+                          id="project_name"
+                          title="Nome Projeto"
+                          type="text"
+                          placeholder="Digite o nome"
+                          icon={<FaGear />}
+                          required={true}
+                          {...register("project_name")}
+                        />
+                        <TypeInput
+                          id="project_slug"
+                          title="Nome para URL"
+                          type="text"
+                          placeholder="Digite um nome para URL"
+                          icon={<FaGear />}
+                          required={true}
+                          {...register("project_slug")}
+                        />
+                        <MultiSelect
+                          id="project_team"
+                          name="project_team"
+                          title="Integrantes"
+                          placeholder="Selecione os integrantes"
+                          icon={<FaGear />}
+                          options={people}
+                          required
+                          value={watch("project_team")}
+                          setValue={(value) => setValue("project_team", value)}
+                        />
+                        <Textarea
+                          id="project_about_html"
+                          title="Sobre o Projeto"
+                          placeholder="Digite o nome"
+                          icon={<FaGear />}
+                          required={true}
+                          {...register("project_about_html")}
+                        />
+                      </>
+                    ) : collection === "Perspective" ? (
+                      <>
+                        <TypeInput
+                          id="perspective_name"
+                          title="Nome da Perspectiva"
+                          type="text"
+                          placeholder="Digite o nome"
+                          icon={<FaGear />}
+                          required={true}
+                          {...register("perspective_name")}
+                        />
+                        <TypeInput
+                          id="perspective_slug"
+                          title="Nome para URL"
+                          type="text"
+                          placeholder="Digite um nome para URL"
+                          icon={<FaGear />}
+                          required={true}
+                          {...register("perspective_slug")}
+                        />
+                        <TypeInput
+                          id="perspective_order"
+                          title="Ordem de aparição"
+                          type="number"
+                          placeholder="1"
+                          icon={<FaGear />}
+                          required={true}
+                          {...register("perspective_order", {
+                            valueAsNumber: true,
+                          })}
+                        />
+                        <TypeInput
+                          id="perspective_template"
+                          title="Template Design"
+                          type="number"
+                          placeholder="1"
+                          icon={<FaGear />}
+                          required={true}
+                          {...register("perspective_template", {
+                            valueAsNumber: true,
+                          })}
+                        />
+                        <Textarea
+                          id="perspective_content"
+                          title="Conteúdo"
+                          placeholder="Digite o nome"
+                          icon={<FaGear />}
+                          required={false}
+                          {...register("perspective_content")}
+                        />
+                        <TypeInput
+                          id="perspective_imgs"
+                          title="Imagens"
+                          type="text"
+                          placeholder="Links das imagens"
+                          icon={<FaGear />}
+                          required={true}
+                          {...register("perspective_imgs")}
+                        />
+                        <TypeInput
+                          id="perspective_editoria"
+                          title="Editoria"
+                          type="text"
+                          placeholder="Usina Guará, Outros"
+                          icon={<FaGear />}
+                          required={true}
+                          {...register("perspective_editoria")}
+                        />
+                        <MultiSelect
+                          id="perspective_people"
+                          name="perspective_people"
+                          title="Integrantes"
+                          placeholder="Selecione os integrantes"
+                          icon={<FaGear />}
+                          options={people}
+                          required
+                          value={watch("perspective_people")}
+                          setValue={(value) =>
+                            setValue("perspective_people", value)
+                          }
+                        />
+                        <TypeInput
+                          id="perspective_refs"
+                          title="Referências"
+                          type="text"
+                          placeholder="Links das referências"
+                          icon={<FaGear />}
+                          required={true}
+                          {...register("perspective_refs")}
+                        />
+                      </>
+                    ) : null}
+                  </>
+                )}
               {collection != "" && (action != "-" || action != "-") && (
                 <button
                   type="submit"
