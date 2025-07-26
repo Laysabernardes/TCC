@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { formService, type ProjectRequest } from "../../service/formService";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -24,14 +25,14 @@ function normalizeDelimitedText(input: string): string[] {
 
 const FormSchema = z.object({
   // Reutilizaveis
-  id: z.number().optional(),
-  project_id: z.number().optional(),
+  _id: z.string().optional(),
+  project_id: z.string().optional(),
 
   // Project
   project_name: z.string().optional(),
   project_slug: z.string().optional(),
-  project_about: z.string().optional(),
-  project_people: z.array(z.string()).optional(),
+  project_about_html: z.string().optional(),
+  project_team: z.array(z.string()).optional(),
 
   // Perspective
   perspective_name: z.string().min(1, "Nome obrigatório").optional(),
@@ -78,36 +79,40 @@ const FormSchema = z.object({
 type FormData = z.infer<typeof FormSchema>;
 
 function AdmManagement() {
-  const { register, setValue, watch, handleSubmit, reset } = useForm({
-    resolver: zodResolver(FormSchema),
-  });
-
-  const [projectId, setProjectId] = useState<number | null>(null);
-  const [perspectiveId, setPerspectiveId] = useState<number | null>(null);
+  const { register, setValue, watch, handleSubmit, reset, getValues } = useForm(
+    {
+      resolver: zodResolver(FormSchema),
+    }
+  );
+  const [allProjects, setAllProjects] = useState<any>(null);
+  const [projectId, setProjectId] = useState<string | null>(null);
+  const [perspectiveId, setPerspectiveId] = useState<string | null>(null);
+  let token = localStorage.getItem("authToken");
+  if (!token) {
+    alert("perdeu token");
+    token = "";
+  }
 
   // Endpoint Pegar Projetos
-  const allProjects = [
-    {
-      id: 1,
-      project_name: "Projeto 1",
-      project_slug: "alpha",
-      project_about: "Projeto top",
-      project_people: ["2"],
-    },
-    {
-      id: 2,
-      project_name: "Projeto 2",
-      project_slug: "beta",
-      project_about: "Projeto massa",
-      project_people: ["1"],
-    },
-  ];
+  const getAllProjects = async () => {
+    try {
+      const response = await formService.getAllProjects(token);
+      setAllProjects(response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // OnInit
+  useEffect(() => {
+    getAllProjects();
+  }, []);
 
   // Endpoint Pegar Perspectivas
   const allPerspectives = [
     {
-      id: 1,
-      project_id: 1,
+      id: "1",
+      project_id: "1",
       perspective_name: "Perspectiva 1",
       perspective_slug: "",
       perspective_order: 1,
@@ -119,8 +124,8 @@ function AdmManagement() {
       perspective_people: ["1"],
     },
     {
-      id: 2,
-      project_id: 1,
+      id: "2",
+      project_id: "1",
       perspective_name: "Perspectiva 2",
       perspective_slug: "",
       perspective_order: 2,
@@ -145,26 +150,27 @@ function AdmManagement() {
 
   const resolveIds = (data: any[], text: string) => {
     return data.map((d) => ({
-      id: d.id,
+      id: d._id,
       text: d[text],
     }));
   };
 
   const handleSelectCollection = (c: string) => {
-    if (c === "Project") {
-      const project = allProjects.find((p) => p.id === projectId);
+    if (c === "Project" && allProjects != null) {
+      const project = allProjects.find((p: any) => p._id === projectId);
       if (!project) return;
 
-      setValue("id", project.id);
+      setValue("_id", project.id);
       setValue("project_name", project.project_name);
       setValue("project_slug", project.project_slug);
-      setValue("project_about", project.project_about);
-      setValue("project_people", project.project_people);
+      setValue("project_about_html", project.project_about_html);
+      setValue("project_team", project.project_team);
+      console.log(project);
     } else if (c === "Perspective") {
       const perspective = allPerspectives.find((p) => p.id === perspectiveId);
       if (!perspective) return;
 
-      setValue("id", perspective.id);
+      setValue("_id", perspective.id);
       setValue("project_id", perspective.project_id);
       setValue("perspective_name", perspective.perspective_name);
       setValue("perspective_slug", perspective.perspective_slug);
@@ -185,29 +191,48 @@ function AdmManagement() {
     }
   };
 
-  const handleSubmitForm = (data: FormData) => {
+  const handleSubmitForm = async (data: FormData) => {
     if (collection === "Project") {
-      const projectData = {
-        id: data.id,
+      const projectData: ProjectRequest = {
+        _id: data._id,
         project_name: data.project_name,
         project_slug: data.project_slug,
-        project_about: data.project_about,
-        project_people: data.project_people,
+        project_about_html: data.project_about_html,
+        project_team: data.project_team,
       };
 
+      if (projectData === undefined) {
+        return;
+      }
+
       if (action === "Create") {
-        console.log("createProject(projectData)");
-        console.log(projectData);
+        try {
+          const response = formService.createProject(token, projectData);
+          alert("Projeto Criado");
+          console.log(response);
+        } catch (e) {
+          console.log(e);
+        }
       } else if (action === "Update") {
-        console.log("updateProject(projectData)");
-        console.log(projectData);
+        try {
+          const response = formService.updateProject(token, projectData);
+          alert("Projeto Criado");
+          console.log(response);
+        } catch (e) {
+          console.log(e);
+        }
       } else {
-        console.log("deleteProject(projectData.id)");
-        console.log(projectData.id);
+        try {
+          const response = formService.deleteProject(token, projectData._id);
+          alert("Projeto Criado");
+          console.log(response);
+        } catch (e) {
+          console.log(e);
+        }
       }
     } else if (collection === "Perspective") {
       const perspectiveData = {
-        id: data.id,
+        id: data._id,
         project_id: data.project_id,
         perspective_name: data.perspective_name,
         perspective_slug: data.perspective_slug,
@@ -254,6 +279,9 @@ function AdmManagement() {
   useEffect(() => {
     if (projectId) {
       handleSelectCollection("Project");
+      console.log(allProjects);
+      console.log(projectId);
+      console.log(getValues());
     }
   }, [projectId]);
 
@@ -335,8 +363,7 @@ function AdmManagement() {
                       placeholder="-"
                       icon={<FaGear />}
                       options={resolveIds(allProjects, "project_name")}
-                      onChange={(e) => setProjectId(Number(e.target.value))}
-                      value={projectId != null ? projectId : "-"}
+                      onChange={(e) => setProjectId(e.target.value)}
                       required={true}
                     />
                   ) : collection === "Perspective" ? (
@@ -346,8 +373,7 @@ function AdmManagement() {
                       placeholder="-"
                       icon={<FaGear />}
                       options={resolveIds(allPerspectives, "perspective_name")}
-                      onChange={(e) => setPerspectiveId(Number(e.target.value))}
-                      value={perspectiveId != null ? perspectiveId : "-"}
+                      onChange={(e) => setPerspectiveId(e.target.value)}
                       required={true}
                     />
                   ) : null}
@@ -379,23 +405,23 @@ function AdmManagement() {
                         {...register("project_slug")}
                       />
                       <MultiSelect
-                        id="project_people"
-                        name="project_people"
+                        id="project_team"
+                        name="project_team"
                         title="Integrantes"
                         placeholder="Selecione os integrantes"
                         icon={<FaGear />}
                         options={people}
                         required
-                        value={watch("project_people")}
-                        setValue={(value) => setValue("project_people", value)}
+                        value={watch("project_team")}
+                        setValue={(value) => setValue("project_team", value)}
                       />
                       <Textarea
-                        id="project_about"
+                        id="project_about_html"
                         title="Sobre o Projeto"
                         placeholder="Digite o nome"
                         icon={<FaGear />}
                         required={true}
-                        {...register("project_about")}
+                        {...register("project_about_html")}
                       />
                     </>
                   ) : collection === "Perspective" ? (

@@ -23,7 +23,6 @@ type LoginFormData = z.infer<typeof LoginSchema>;
 function Login() {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   // Configurar o react-hook-form com o resolver do Zod
