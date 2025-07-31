@@ -92,10 +92,16 @@ const models: TsoaRoute.Models = {
         "dataType": "refObject",
         "properties": {
             "_id": {"dataType":"string","required":true},
-            "project_name": {"dataType":"string","required":true},
+            "project_title": {"dataType":"string","required":true},
+            "project_subtitle": {"dataType":"string","required":true},
             "project_slug": {"dataType":"string","required":true},
             "project_about_html": {"dataType":"string","required":true},
             "project_team": {"dataType":"array","array":{"dataType":"refObject","ref":"PersonResponseType"},"required":true},
+            "project_status": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}],"required":true},
+            "project_isCarrossel": {"dataType":"boolean"},
+            "project_orderCarrossel": {"dataType":"double"},
+            "project_banner": {"dataType":"string"},
+            "project_extraURL": {"dataType":"string"},
             "project_createdAt": {"dataType":"datetime","required":true},
             "project_updatedAt": {"dataType":"datetime","required":true},
         },
@@ -104,12 +110,12 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateProjectInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"project_team":{"dataType":"array","array":{"dataType":"string"}},"project_about_html":{"dataType":"string"},"project_slug":{"dataType":"string"},"project_name":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarrossel":{"dataType":"double"},"isCarrossel":{"dataType":"boolean"},"project_status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"project_team":{"dataType":"array","array":{"dataType":"string"}},"project_about_html":{"dataType":"string"},"project_slug":{"dataType":"string"},"project_subtitle":{"dataType":"string"},"project_title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UpdateProjectInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"project_team":{"dataType":"array","array":{"dataType":"string"}},"project_about_html":{"dataType":"string"},"project_slug":{"dataType":"string"},"project_name":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarrossel":{"dataType":"double"},"isCarrossel":{"dataType":"boolean"},"project_status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"project_team":{"dataType":"array","array":{"dataType":"string"}},"project_about_html":{"dataType":"string"},"project_slug":{"dataType":"string"},"project_subtitle":{"dataType":"string"},"project_title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "IReferenceDTO": {
@@ -550,6 +556,152 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getAllProjects',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsProjectController_getProjectsByStatus: Record<string, TsoaRoute.ParameterSchema> = {
+                status: {"in":"path","name":"status","required":true,"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},
+        };
+        app.get('/projects/status/:status',
+            ...(fetchMiddlewares<RequestHandler>(ProjectController)),
+            ...(fetchMiddlewares<RequestHandler>(ProjectController.prototype.getProjectsByStatus)),
+
+            async function ProjectController_getProjectsByStatus(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsProjectController_getProjectsByStatus, request, response });
+
+                const controller = new ProjectController();
+
+              await templateService.apiHandler({
+                methodName: 'getProjectsByStatus',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsProjectController_getCarouselItems: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/projects/carousel',
+            ...(fetchMiddlewares<RequestHandler>(ProjectController)),
+            ...(fetchMiddlewares<RequestHandler>(ProjectController.prototype.getCarouselItems)),
+
+            async function ProjectController_getCarouselItems(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsProjectController_getCarouselItems, request, response });
+
+                const controller = new ProjectController();
+
+              await templateService.apiHandler({
+                methodName: 'getCarouselItems',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsProjectController_getCarouselItemsSorted: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/projects/carousel/sorted',
+            ...(fetchMiddlewares<RequestHandler>(ProjectController)),
+            ...(fetchMiddlewares<RequestHandler>(ProjectController.prototype.getCarouselItemsSorted)),
+
+            async function ProjectController_getCarouselItemsSorted(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsProjectController_getCarouselItemsSorted, request, response });
+
+                const controller = new ProjectController();
+
+              await templateService.apiHandler({
+                methodName: 'getCarouselItemsSorted',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsProjectController_getProjectsWithBanner: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/projects/with-banner',
+            ...(fetchMiddlewares<RequestHandler>(ProjectController)),
+            ...(fetchMiddlewares<RequestHandler>(ProjectController.prototype.getProjectsWithBanner)),
+
+            async function ProjectController_getProjectsWithBanner(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsProjectController_getProjectsWithBanner, request, response });
+
+                const controller = new ProjectController();
+
+              await templateService.apiHandler({
+                methodName: 'getProjectsWithBanner',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsProjectController_getProjectsWithExtraUrl: Record<string, TsoaRoute.ParameterSchema> = {
+        };
+        app.get('/projects/with-extra-url',
+            ...(fetchMiddlewares<RequestHandler>(ProjectController)),
+            ...(fetchMiddlewares<RequestHandler>(ProjectController.prototype.getProjectsWithExtraUrl)),
+
+            async function ProjectController_getProjectsWithExtraUrl(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsProjectController_getProjectsWithExtraUrl, request, response });
+
+                const controller = new ProjectController();
+
+              await templateService.apiHandler({
+                methodName: 'getProjectsWithExtraUrl',
                 controller,
                 response,
                 next,

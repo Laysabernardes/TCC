@@ -214,7 +214,10 @@
 					"_id": {
 						"type": "string"
 					},
-					"project_name": {
+					"project_title": {
+						"type": "string"
+					},
+					"project_subtitle": {
 						"type": "string"
 					},
 					"project_slug": {
@@ -229,6 +232,26 @@
 						},
 						"type": "array"
 					},
+					"project_status": {
+						"type": "string",
+						"enum": [
+							"draft",
+							"published"
+						]
+					},
+					"project_isCarrossel": {
+						"type": "boolean"
+					},
+					"project_orderCarrossel": {
+						"type": "number",
+						"format": "double"
+					},
+					"project_banner": {
+						"type": "string"
+					},
+					"project_extraURL": {
+						"type": "string"
+					},
 					"project_createdAt": {
 						"type": "string",
 						"format": "date-time"
@@ -240,10 +263,12 @@
 				},
 				"required": [
 					"_id",
-					"project_name",
+					"project_title",
+					"project_subtitle",
 					"project_slug",
 					"project_about_html",
 					"project_team",
+					"project_status",
 					"project_createdAt",
 					"project_updatedAt"
 				],
@@ -252,6 +277,26 @@
 			},
 			"CreateProjectInput": {
 				"properties": {
+					"extraURL": {
+						"type": "string"
+					},
+					"banner": {
+						"type": "string"
+					},
+					"orderCarrossel": {
+						"type": "number",
+						"format": "double"
+					},
+					"isCarrossel": {
+						"type": "boolean"
+					},
+					"project_status": {
+						"type": "string",
+						"enum": [
+							"draft",
+							"published"
+						]
+					},
 					"project_team": {
 						"items": {
 							"type": "string"
@@ -264,7 +309,10 @@
 					"project_slug": {
 						"type": "string"
 					},
-					"project_name": {
+					"project_subtitle": {
+						"type": "string"
+					},
+					"project_title": {
 						"type": "string"
 					}
 				},
@@ -272,6 +320,26 @@
 			},
 			"UpdateProjectInput": {
 				"properties": {
+					"extraURL": {
+						"type": "string"
+					},
+					"banner": {
+						"type": "string"
+					},
+					"orderCarrossel": {
+						"type": "number",
+						"format": "double"
+					},
+					"isCarrossel": {
+						"type": "boolean"
+					},
+					"project_status": {
+						"type": "string",
+						"enum": [
+							"draft",
+							"published"
+						]
+					},
 					"project_team": {
 						"items": {
 							"type": "string"
@@ -284,7 +352,10 @@
 					"project_slug": {
 						"type": "string"
 					},
-					"project_name": {
+					"project_subtitle": {
+						"type": "string"
+					},
+					"project_title": {
 						"type": "string"
 					}
 				},
@@ -970,6 +1041,8 @@
 						"description": "Conflict"
 					}
 				},
+				"description": "Cria um novo projeto.",
+				"summary": "Cria um novo projeto.",
 				"tags": [
 					"Projects"
 				],
@@ -980,11 +1053,13 @@
 				],
 				"parameters": [],
 				"requestBody": {
+					"description": "Dados para a criação do novo projeto.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/CreateProjectInput"
+								"$ref": "#/components/schemas/CreateProjectInput",
+								"description": "Dados para a criação do novo projeto."
 							}
 						}
 					}
@@ -1007,6 +1082,157 @@
 						}
 					}
 				},
+				"description": "Retorna uma lista de todos os projetos.",
+				"summary": "Retorna todos os projetos.",
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/projects/status/{status}": {
+			"get": {
+				"operationId": "GetProjectsByStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ProjectResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Filtra projetos por um status específico.",
+				"summary": "Filtra projetos por status.",
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "O status para filtrar. Valores aceitos: 'draft' ou 'published'.",
+						"in": "path",
+						"name": "status",
+						"required": true,
+						"schema": {
+							"type": "string",
+							"enum": [
+								"draft",
+								"published"
+							]
+						}
+					}
+				]
+			}
+		},
+		"/projects/carousel": {
+			"get": {
+				"operationId": "GetCarouselItems",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ProjectResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retorna todos os projetos que fazem parte do carrossel.",
+				"summary": "Retorna itens do carrossel (sem ordem).",
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/projects/carousel/sorted": {
+			"get": {
+				"operationId": "GetCarouselItemsSorted",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ProjectResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retorna todos os projetos do carrossel, em ordem crescente.",
+				"summary": "Retorna itens do carrossel (ordenados).",
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/projects/with-banner": {
+			"get": {
+				"operationId": "GetProjectsWithBanner",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ProjectResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Busca projetos que possuem um banner definido.",
+				"summary": "Busca projetos com banner.",
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/projects/with-extra-url": {
+			"get": {
+				"operationId": "GetProjectsWithExtraUrl",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ProjectResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Busca projetos que possuem uma URL extra definida no carrossel.",
+				"summary": "Busca projetos com URL extra.",
 				"tags": [
 					"Projects"
 				],
@@ -1032,12 +1258,15 @@
 						"description": "Not Found"
 					}
 				},
+				"description": "Busca um projeto único pelo seu slug.",
+				"summary": "Busca um projeto por slug.",
 				"tags": [
 					"Projects"
 				],
 				"security": [],
 				"parameters": [
 					{
+						"description": "O slug único do projeto a ser recuperado.",
 						"in": "path",
 						"name": "slug",
 						"required": true,
@@ -1066,6 +1295,8 @@
 						"description": "Not Found"
 					}
 				},
+				"description": "Atualiza os dados de um projeto existente.",
+				"summary": "Atualiza um projeto.",
 				"tags": [
 					"Projects"
 				],
@@ -1076,6 +1307,7 @@
 				],
 				"parameters": [
 					{
+						"description": "O ID do projeto a ser atualizado.",
 						"in": "path",
 						"name": "id",
 						"required": true,
@@ -1085,11 +1317,13 @@
 					}
 				],
 				"requestBody": {
+					"description": "Dados parciais do projeto para atualização.",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UpdateProjectInput"
+								"$ref": "#/components/schemas/UpdateProjectInput",
+								"description": "Dados parciais do projeto para atualização."
 							}
 						}
 					}
@@ -1105,6 +1339,8 @@
 						"description": "Not Found"
 					}
 				},
+				"description": "Deleta um projeto permanentemente.",
+				"summary": "Deleta um projeto.",
 				"tags": [
 					"Projects"
 				],
@@ -1115,6 +1351,7 @@
 				],
 				"parameters": [
 					{
+						"description": "O ID do projeto a ser deletado.",
 						"in": "path",
 						"name": "id",
 						"required": true,
