@@ -239,17 +239,17 @@
 							"published"
 						]
 					},
-					"project_isCarrossel": {
+					"isCarrossel": {
 						"type": "boolean"
 					},
-					"project_orderCarrossel": {
+					"orderCarrossel": {
 						"type": "number",
 						"format": "double"
 					},
-					"project_banner": {
+					"banner": {
 						"type": "string"
 					},
-					"project_extraURL": {
+					"extraURL": {
 						"type": "string"
 					},
 					"project_createdAt": {

@@ -1,10 +1,13 @@
-import { z } from 'zod';
-import { ProjectModel, IProject } from '../models/project.model';
-import { ProjectResponseType } from '../dtos/project.dto';
-import { createProjectSchema, updateProjectSchema } from '../zod/schemas/project.schema';
+import { z } from "zod";
+import { ProjectModel, IProject } from "../models/project.model";
+import { ProjectResponseType } from "../dtos/project.dto";
+import {
+  createProjectSchema,
+  updateProjectSchema,
+} from "../zod/schemas/project.schema";
 
-type CreateProjectInput = z.infer<typeof createProjectSchema>['body'];
-type UpdateProjectInput = z.infer<typeof updateProjectSchema>['body'];
+type CreateProjectInput = z.infer<typeof createProjectSchema>["body"];
+type UpdateProjectInput = z.infer<typeof updateProjectSchema>["body"];
 
 const toProjectResponse = (project: any): ProjectResponseType => {
   return {
@@ -17,15 +20,17 @@ const toProjectResponse = (project: any): ProjectResponseType => {
     project_status: project.project_status,
     project_createdAt: project.createdAt,
     project_updatedAt: project.updatedAt,
-    project_isCarrossel: !!project.project_carousel,
-    project_orderCarrossel: project.project_carousel?.order,
-    project_banner: project.project_carousel?.banner_url,
-    project_extraURL: project.project_carousel?.extra_url,
+    isCarrossel: !!project.project_carousel,
+    orderCarrossel: project.project_carousel?.order,
+    banner: project.project_carousel?.banner_url,
+    extraURL: project.project_carousel?.extra_url,
   };
 };
 
 export class ProjectService {
-  private static transformInputForDatabase(input: CreateProjectInput | UpdateProjectInput) {
+  private static transformInputForDatabase(
+    input: CreateProjectInput | UpdateProjectInput
+  ) {
     const {
       isCarrossel,
       orderCarrossel,
@@ -53,9 +58,13 @@ export class ProjectService {
   static async create(input: CreateProjectInput): Promise<ProjectResponseType> {
     try {
       if (input.isCarrossel && input.orderCarrossel !== undefined) {
-        const orderExists = await ProjectModel.findOne({ 'project_carousel.order': input.orderCarrossel });
+        const orderExists = await ProjectModel.findOne({
+          "project_carousel.order": input.orderCarrossel,
+        });
         if (orderExists) {
-          throw new Error(`Order ${input.orderCarrossel} is already in use by another project.`);
+          throw new Error(
+            `Order ${input.orderCarrossel} is already in use by another project.`
+          );
         }
       }
       const dataForDatabase = this.transformInputForDatabase(input);
@@ -63,25 +72,32 @@ export class ProjectService {
       return toProjectResponse(project.toObject());
     } catch (error: any) {
       if (error.code === 11000 && error.keyPattern?.project_slug) {
-        throw new Error('This slug is already in use.');
+        throw new Error("This slug is already in use.");
       }
       throw error;
     }
   }
 
-  static async update(id: string, input: UpdateProjectInput): Promise<ProjectResponseType | null> {
+  static async update(
+    id: string,
+    input: UpdateProjectInput
+  ): Promise<ProjectResponseType | null> {
     if (input.isCarrossel && input.orderCarrossel !== undefined) {
       // Encontra um projeto que usa a mesma ordem, mas que NÃO SEJA o projeto que estamos editando
-      const orderExists = await ProjectModel.findOne({ 
-        'project_carousel.order': input.orderCarrossel,
-        '_id': { $ne: id } // $ne = "not equal" (diferente de)
+      const orderExists = await ProjectModel.findOne({
+        "project_carousel.order": input.orderCarrossel,
+        _id: { $ne: id }, // $ne = "not equal" (diferente de)
       });
       if (orderExists) {
-        throw new Error(`A ordem ${input.orderCarrossel} já está em uso por outro projeto.`);
+        throw new Error(
+          `A ordem ${input.orderCarrossel} já está em uso por outro projeto.`
+        );
       }
     }
     const dataForDatabase = this.transformInputForDatabase(input);
-    const project = await ProjectModel.findByIdAndUpdate(id, dataForDatabase, { new: true }).lean();
+    const project = await ProjectModel.findByIdAndUpdate(id, dataForDatabase, {
+      new: true,
+    }).lean();
     if (!project) return null;
     return toProjectResponse(project);
   }
@@ -91,43 +107,49 @@ export class ProjectService {
     return projects.map(toProjectResponse);
   }
 
-  static async findBySlug(project_slug: string): Promise<ProjectResponseType | null> {
-    const project = await ProjectModel.findOne({ project_slug }).populate('project_team').lean();
+  static async findBySlug(
+    project_slug: string
+  ): Promise<ProjectResponseType | null> {
+    const project = await ProjectModel.findOne({ project_slug })
+      .populate("project_team")
+      .lean();
     if (!project) return null;
     return toProjectResponse(project);
   }
 
-  static async findByStatus(status: 'draft' | 'published'): Promise<ProjectResponseType[]> {
+  static async findByStatus(
+    status: "draft" | "published"
+  ): Promise<ProjectResponseType[]> {
     const projects = await ProjectModel.find({ project_status: status }).lean();
     return projects.map(toProjectResponse);
   }
 
   static async findCarouselItems(): Promise<ProjectResponseType[]> {
-    const projects = await ProjectModel.find({ 
-      'project_carousel': { $exists: true } 
+    const projects = await ProjectModel.find({
+      project_carousel: { $exists: true },
     }).lean();
     return projects.map(toProjectResponse);
   }
 
   static async findCarouselItemsSorted(): Promise<ProjectResponseType[]> {
-    const projects = await ProjectModel.find({ 
-      'project_carousel': { $exists: true } 
+    const projects = await ProjectModel.find({
+      project_carousel: { $exists: true },
     })
-    .sort({ 'project_carousel.order': 1 }) // Ordena pela ordem do carrossel
-    .lean();
+      .sort({ "project_carousel.order": 1 }) // Ordena pela ordem do carrossel
+      .lean();
     return projects.map(toProjectResponse);
   }
 
   static async findWithBanner(): Promise<ProjectResponseType[]> {
-    const projects = await ProjectModel.find({ 
-      'project_carousel.banner_url': { $exists: true, $ne: null } 
+    const projects = await ProjectModel.find({
+      "project_carousel.banner_url": { $exists: true, $ne: null },
     }).lean();
     return projects.map(toProjectResponse);
   }
 
   static async findWithExtraUrl(): Promise<ProjectResponseType[]> {
-    const projects = await ProjectModel.find({ 
-      'project_carousel.extra_url': { $exists: true, $ne: null } 
+    const projects = await ProjectModel.find({
+      "project_carousel.extra_url": { $exists: true, $ne: null },
     }).lean();
     return projects.map(toProjectResponse);
   }
