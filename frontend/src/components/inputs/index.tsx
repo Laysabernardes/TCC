@@ -94,37 +94,69 @@ interface TextAreaProps
   id: string;
   title?: string;
   placeholder?: string;
-  icon?: ReactElement<any, any>;
   required?: boolean;
 }
-
 function Textarea({
   id,
   title,
   placeholder,
-  icon,
   required,
   ...rest
 }: TextAreaProps) {
+  const addImg = () => {
+    const textarea = document.getElementById(id) as HTMLTextAreaElement;
+    const linkInput = document.getElementById(
+      `${id}-img-link`
+    ) as HTMLInputElement;
+    if (!textarea || !linkInput) return;
+
+    const link = linkInput.value.trim();
+    if (!link) return; // Se o input estiver vazio, não faz nada
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+
+    const imgToken = `[IMG]('${link}')`;
+
+    textarea.value = text.slice(0, start) + imgToken + text.slice(end);
+
+    const newCursorPos = start + imgToken.length;
+    textarea.selectionStart = textarea.selectionEnd = newCursorPos;
+
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+
+    linkInput.value = ""; // Limpa o input depois de inserir
+  };
+
   return (
     <div className="my-5 flex flex-col gap-2">
       <label htmlFor={id} className="text-lg font-bold text-light-3">
         {title} {required && <span className="text-red-3">*</span>}
       </label>
-      <div className="relative">
-        <div
-          id="icon"
-          className="absolute left-2 bottom-8.5 h-full flex items-center justify-center text-red-3"
-        >
-          {icon}
-        </div>
+      <div>
         <textarea
           id={id}
           placeholder={placeholder}
           {...rest}
           required={required}
-          className="w-full h-25 max-h-25 bg-dark-1 p-2 pl-7 rounded-lg text-red-3 resize-none"
+          className="w-full h-50 max-h-50 bg-dark-1 p-2 pl-7 rounded-lg text-red-3 resize-none"
         />
+        <div className="flex items-center gap-2 h-10 mt-2">
+          <input
+            id={`${id}-img-link`} // ID único vinculado ao textarea
+            type="text"
+            placeholder="Insira a URL da imagem aqui"
+            className="w-[80%] bg-dark-1 p-2 pl-7 rounded-lg text-red-3"
+          />
+          <button
+            type="button"
+            onClick={addImg}
+            className="w-[20%] h-full px-2 bg-red-3 text-white rounded"
+          >
+            Adicionar
+          </button>
+        </div>
       </div>
     </div>
   );

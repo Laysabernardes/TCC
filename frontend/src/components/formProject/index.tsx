@@ -314,7 +314,6 @@ export function FormProject({
             id="project_about_html"
             title="Sobre o Projeto"
             placeholder="Digite o conteúdo"
-            icon={<FaGear />}
             required={false}
             {...register("project_about_html")}
           />

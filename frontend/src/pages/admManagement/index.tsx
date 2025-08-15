@@ -51,14 +51,14 @@ function AdmManagement() {
       className="w-[100%] h-[100vh] flex flex-col items-center bg-dark-1"
     >
       <section className="w-[95%] h-200 max-h-150 flex flex-row bg-dark-2 rounded-lg mt-16 mb-16">
-        <div className="hidden w-1/2 bg-dark-2 rounded-s-lg md:block">
+        <div className="hidden w-1/3 bg-dark-2 rounded-s-lg md:block">
           <img
             src={usinaGuara}
             alt="background Usina Guará"
             className="w-full h-full object-cover rounded-s-lg"
           />
         </div>
-        <div className="flex flex-col w-full md:w-1/2 ">
+        <div className="flex flex-col w-full md:w-2/3 ">
           <div className="p-5 sm:p-15">
             <div className="flex justify-between items-start gap-5 pb-5 flex-col-reverse sm:flex-row sm:items-center">
               <h2 className="text-2xl font-bold text-light-3 flex gap-2 items-center">
