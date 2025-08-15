@@ -1,24 +1,8 @@
 import api from "./api";
+import type ProjectRequest from "../dto/request/projectRequest";
+import type ProjectResponse from "../dto/response/projectResponse";
 
-export interface ProjectRequest {
-  _id?: string;
-  project_name?: string;
-  project_slug?: string;
-  project_about_html?: string;
-  project_team?: any[];
-}
-
-// DTO de resposta ao criar/buscar um projeto
-export interface ProjectResponse {
-  _id: string;
-  project_name: string;
-  project_slug: string;
-  project_about_html: string;
-  project_team: any[];
-  createdAt: string;
-  updatedAt: string;
-}
-export const formService = {
+export const ProjectService = {
   createProject: async (
     token: string,
     project: ProjectRequest

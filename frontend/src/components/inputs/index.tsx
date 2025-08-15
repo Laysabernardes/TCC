@@ -38,8 +38,8 @@ function TypeInput({
           id={id}
           type={type}
           placeholder={placeholder}
-          required={required}
           {...rest}
+          required={required}
           className="w-full bg-dark-1 p-2 pl-7 rounded-lg text-red-3"
         />
       </div>
@@ -121,8 +121,8 @@ function Textarea({
         <textarea
           id={id}
           placeholder={placeholder}
-          required={required}
           {...rest}
+          required={required}
           className="w-full h-25 max-h-25 bg-dark-1 p-2 pl-7 rounded-lg text-red-3 resize-none"
         />
       </div>
@@ -140,6 +140,7 @@ interface SelectionProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   title?: string;
   placeholder?: string;
   icon?: ReactElement<any, any>;
+  nullOption?: boolean;
   options: OptionItem[];
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   required?: boolean;
@@ -150,6 +151,7 @@ function Selection({
   title,
   placeholder,
   icon,
+  nullOption = true,
   options,
   required,
   ...rest
@@ -168,13 +170,15 @@ function Selection({
         </div>
         <select
           id={id}
-          required={required}
           {...rest}
+          required={required}
           className="w-full bg-dark-1 p-2 pl-7 rounded-lg text-red-3"
         >
-          <option disabled selected>
-            {placeholder}
-          </option>
+          {nullOption && (
+            <option disabled selected>
+              {placeholder}
+            </option>
+          )}
           {options.map((opt) => (
             <option key={opt.id} value={opt.id}>
               {opt.text}
