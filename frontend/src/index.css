@@ -3,6 +3,8 @@
 * {
   box-sizing: border-box;
   font-family: "Nunito Sans", sans-serif;
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-red-3) transparent;
 }
 
 body {
@@ -34,7 +36,15 @@ body {
   border-radius: 10px;
 }
 
-* {
-  scrollbar-width: auto;
-  scrollbar-color: var(--color-red-3) transparent;
+.fade_out {
+  animation: fadeout 500ms ease forwards;
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
