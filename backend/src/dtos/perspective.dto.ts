@@ -1,4 +1,4 @@
-import { PersonResponseType } from './person.dto'; 
+import { PersonResponseType } from "./person.dto";
 
 // DTO para as referências (que são parte da perspectiva)
 interface IReferenceDTO {
@@ -11,12 +11,13 @@ export interface PerspectiveResponseType {
   title: string;
   slug: string;
   order: number;
-  template: number;
-  images: string[];
   content: string[];
-  editoria: string[];
   references: IReferenceDTO[];
-  authors: PersonResponseType[]; 
+  authors: PersonResponseType[];
+  isCarrossel?: boolean;
+  orderCarrossel?: number;
+  banner?: string;
+  extraURL?: string;
   createdAt: Date;
   updatedAt: Date;
 }

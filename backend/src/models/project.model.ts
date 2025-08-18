@@ -1,50 +1,37 @@
 import { Schema, model, Document } from "mongoose";
 import { IPerson } from "./person.model";
+import { ICarousel, carouselSchema } from "./carousel.model";
 
-interface ICarousel {
-  order: number;
-  banner_url: string;
-  extra_url?: string;
-}
 export interface IProject extends Document {
-  project_title: string;
-  project_subtitle: string;
-  project_slug: string;
-  project_about_html: string;
-  project_team: (IPerson["_id"] | IPerson)[];
-  project_status: "draft" | "published";
-  project_carousel?: ICarousel;
+  title: string;
+  subtitle: string;
+  slug: string;
+  about_html: string;
+  team: (IPerson["_id"] | IPerson)[];
+  status: "draft" | "published";
+  carousel?: ICarousel;
+  banner: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-const carouselSchema = new Schema<ICarousel>(
-  {
-    order: { type: Number, required: true, default: 0 },
-    banner_url: { type: String, required: true },
-    extra_url: { type: String, required: false },
-  },
-  {
-    _id: false, // para não criar um _id para o sub-objeto
-  }
-);
-
 const projectSchema = new Schema<IProject>(
   {
-    project_title: { type: String, required: true },
-    project_subtitle: { type: String },
-    project_slug: { type: String, required: true, unique: true, index: true },
-    project_about_html: { type: String, default: "" },
-    project_team: [{ type: Schema.Types.ObjectId, ref: "Person" }],
-    project_status: {
+    title: { type: String, required: true },
+    subtitle: { type: String },
+    slug: { type: String, required: true, unique: true, index: true },
+    about_html: { type: String, default: "" },
+    team: [{ type: Schema.Types.ObjectId, ref: "Person" }],
+    status: {
       type: String,
       enum: ["draft", "published"],
       default: "draft",
     },
-    project_carousel: {
+    carousel: {
       type: carouselSchema,
       required: false,
     },
+    banner: { type: String },
   },
   { timestamps: true }
 );

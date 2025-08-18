@@ -2,16 +2,16 @@ import { PersonResponseType } from "./person.dto";
 
 export interface ProjectResponseType {
   _id: string;
-  project_title: string;
-  project_subtitle: string;
-  project_slug: string;
-  project_about_html: string;
-  project_team: PersonResponseType[];
-  project_status: "draft" | "published";
+  title: string;
+  subtitle: string;
+  slug: string;
+  about_html: string;
+  team: PersonResponseType[];
+  status: "draft" | "published";
   isCarrossel?: boolean;
   orderCarrossel?: number;
   banner?: string;
   extraURL?: string;
-  project_createdAt: Date;
-  project_updatedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }

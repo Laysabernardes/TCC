@@ -12,18 +12,18 @@ type UpdateProjectInput = z.infer<typeof updateProjectSchema>["body"];
 const toProjectResponse = (project: any): ProjectResponseType => {
   return {
     _id: project._id.toString(),
-    project_title: project.project_title,
-    project_subtitle: project.project_subtitle,
-    project_slug: project.project_slug,
-    project_about_html: project.project_about_html,
-    project_team: project.project_team,
-    project_status: project.project_status,
-    project_createdAt: project.createdAt,
-    project_updatedAt: project.updatedAt,
-    isCarrossel: !!project.project_carousel,
-    orderCarrossel: project.project_carousel?.order,
-    banner: project.project_carousel?.banner_url,
-    extraURL: project.project_carousel?.extra_url,
+    title: project.title,
+    subtitle: project.subtitle,
+    slug: project.slug,
+    about_html: project.about_html,
+    team: project.team,
+    status: project.status,
+    createdAt: project.createdAt,
+    updatedAt: project.updatedAt,
+    isCarrossel: !!project.carousel,
+    orderCarrossel: project.carousel?.order,
+    banner: project.carousel?.banner_url,
+    extraURL: project.carousel?.extra_url,
   };
 };
 

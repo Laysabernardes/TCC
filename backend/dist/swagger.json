@@ -214,25 +214,25 @@
 					"_id": {
 						"type": "string"
 					},
-					"project_title": {
+					"title": {
 						"type": "string"
 					},
-					"project_subtitle": {
+					"subtitle": {
 						"type": "string"
 					},
-					"project_slug": {
+					"slug": {
 						"type": "string"
 					},
-					"project_about_html": {
+					"about_html": {
 						"type": "string"
 					},
-					"project_team": {
+					"team": {
 						"items": {
 							"$ref": "#/components/schemas/PersonResponseType"
 						},
 						"type": "array"
 					},
-					"project_status": {
+					"status": {
 						"type": "string",
 						"enum": [
 							"draft",
@@ -252,25 +252,25 @@
 					"extraURL": {
 						"type": "string"
 					},
-					"project_createdAt": {
+					"createdAt": {
 						"type": "string",
 						"format": "date-time"
 					},
-					"project_updatedAt": {
+					"updatedAt": {
 						"type": "string",
 						"format": "date-time"
 					}
 				},
 				"required": [
 					"_id",
-					"project_title",
-					"project_subtitle",
-					"project_slug",
-					"project_about_html",
-					"project_team",
-					"project_status",
-					"project_createdAt",
-					"project_updatedAt"
+					"title",
+					"subtitle",
+					"slug",
+					"about_html",
+					"team",
+					"status",
+					"createdAt",
+					"updatedAt"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -290,29 +290,29 @@
 					"isCarrossel": {
 						"type": "boolean"
 					},
-					"project_status": {
+					"status": {
 						"type": "string",
 						"enum": [
 							"draft",
 							"published"
 						]
 					},
-					"project_team": {
+					"team": {
 						"items": {
 							"type": "string"
 						},
 						"type": "array"
 					},
-					"project_about_html": {
+					"about_html": {
 						"type": "string"
 					},
-					"project_slug": {
+					"slug": {
 						"type": "string"
 					},
-					"project_subtitle": {
+					"subtitle": {
 						"type": "string"
 					},
-					"project_title": {
+					"title": {
 						"type": "string"
 					}
 				},
@@ -333,29 +333,29 @@
 					"isCarrossel": {
 						"type": "boolean"
 					},
-					"project_status": {
+					"status": {
 						"type": "string",
 						"enum": [
 							"draft",
 							"published"
 						]
 					},
-					"project_team": {
+					"team": {
 						"items": {
 							"type": "string"
 						},
 						"type": "array"
 					},
-					"project_about_html": {
+					"about_html": {
 						"type": "string"
 					},
-					"project_slug": {
+					"slug": {
 						"type": "string"
 					},
-					"project_subtitle": {
+					"subtitle": {
 						"type": "string"
 					},
-					"project_title": {
+					"title": {
 						"type": "string"
 					}
 				},
@@ -391,23 +391,7 @@
 						"type": "number",
 						"format": "double"
 					},
-					"template": {
-						"type": "number",
-						"format": "double"
-					},
-					"images": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
 					"content": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
-					"editoria": {
 						"items": {
 							"type": "string"
 						},
@@ -425,6 +409,19 @@
 						},
 						"type": "array"
 					},
+					"isCarrossel": {
+						"type": "boolean"
+					},
+					"orderCarrossel": {
+						"type": "number",
+						"format": "double"
+					},
+					"banner": {
+						"type": "string"
+					},
+					"extraURL": {
+						"type": "string"
+					},
 					"createdAt": {
 						"type": "string",
 						"format": "date-time"
@@ -440,10 +437,7 @@
 					"title",
 					"slug",
 					"order",
-					"template",
-					"images",
 					"content",
-					"editoria",
 					"references",
 					"authors",
 					"createdAt",
@@ -471,27 +465,21 @@
 						},
 						"type": "array"
 					},
-					"editoria": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
 					"content": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
+						"type": "string"
 					},
-					"images": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
+					"extraURL": {
+						"type": "string"
 					},
-					"template": {
+					"banner": {
+						"type": "string"
+					},
+					"orderCarrossel": {
 						"type": "number",
 						"format": "double"
+					},
+					"isCarrossel": {
+						"type": "boolean"
 					},
 					"slug": {
 						"type": "string"
@@ -528,27 +516,21 @@
 						},
 						"type": "array"
 					},
-					"editoria": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
 					"content": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
+						"type": "string"
 					},
-					"images": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
+					"extraURL": {
+						"type": "string"
 					},
-					"template": {
+					"banner": {
+						"type": "string"
+					},
+					"orderCarrossel": {
 						"type": "number",
 						"format": "double"
+					},
+					"isCarrossel": {
+						"type": "boolean"
 					},
 					"slug": {
 						"type": "string"
@@ -608,6 +590,43 @@
 					}
 				},
 				"type": "object"
+			},
+			"CarrosselResponseType": {
+				"properties": {
+					"_id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"collection_type": {
+						"type": "string",
+						"enum": [
+							"project",
+							"perspective"
+						]
+					},
+					"banner": {
+						"type": "string"
+					},
+					"isCarrossel": {
+						"type": "boolean"
+					},
+					"orderCarrossel": {
+						"type": "number",
+						"format": "double"
+					},
+					"extraURL": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"_id",
+					"title",
+					"collection_type"
+				],
+				"type": "object",
+				"additionalProperties": false
 			},
 			"LoginResponseType": {
 				"properties": {
@@ -1439,6 +1458,31 @@
 				]
 			}
 		},
+		"/perspectives": {
+			"get": {
+				"operationId": "GetAllPerspectives",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/PerspectiveResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Perspectives"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
 		"/perspectives/{perspectiveId}": {
 			"get": {
 				"operationId": "GetPerspectiveById",
@@ -1727,6 +1771,32 @@
 						}
 					}
 				]
+			}
+		},
+		"/carrossel": {
+			"get": {
+				"operationId": "GetAllCarouselOrder",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/CarrosselResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retorna uma lista ordenada dos itens que estão no carrossel.",
+				"tags": [
+					"Carrossel"
+				],
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/auth/login": {
