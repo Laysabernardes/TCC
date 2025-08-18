@@ -1,13 +1,16 @@
 // src/services/perspective.service.ts
 
-import { z } from 'zod';
-import { PerspectiveModel } from '../models/perspective.model';
-import { PerspectiveResponseType } from '../dtos/perspective.dto';
-import { createPerspectiveSchema, updatePerspectiveSchema } from '../zod/schemas/perspective.schema';
+import { z } from "zod";
+import { PerspectiveModel } from "../models/perspective.model";
+import { PerspectiveResponseType } from "../dtos/perspective.dto";
+import {
+  createPerspectiveSchema,
+  updatePerspectiveSchema,
+} from "../zod/schemas/perspective.schema";
 
 // Tipos inferidos do Zod para os corpos das requisições
-type CreatePerspectiveInput = z.infer<typeof createPerspectiveSchema>['body'];
-type UpdatePerspectiveInput = z.infer<typeof updatePerspectiveSchema>['body'];
+type CreatePerspectiveInput = z.infer<typeof createPerspectiveSchema>["body"];
+type UpdatePerspectiveInput = z.infer<typeof updatePerspectiveSchema>["body"];
 
 const toPerspectiveResponse = (perspective: any): PerspectiveResponseType => {
   return {
@@ -20,36 +23,51 @@ const toPerspectiveResponse = (perspective: any): PerspectiveResponseType => {
 };
 
 export class PerspectiveService {
-
-  static async create(input: CreatePerspectiveInput): Promise<PerspectiveResponseType> {
+  static async create(
+    input: CreatePerspectiveInput
+  ): Promise<PerspectiveResponseType> {
     try {
       const perspective = await PerspectiveModel.create(input);
-      await perspective.populate({ path: 'authors', model: 'Person' });
+      await perspective.populate({ path: "authors", model: "Person" });
       return toPerspectiveResponse(perspective.toObject());
     } catch (error: any) {
       if (error.code === 11000 && error.keyPattern?.slug) {
-        throw new Error('Este slug de perspectiva já está em uso.');
+        throw new Error("Este slug de perspectiva já está em uso.");
       }
       throw error;
     }
   }
 
-  static async findByProjectId(projectId: string): Promise<PerspectiveResponseType[]> {
+  static async findAll(): Promise<PerspectiveResponseType[]> {
+    const projects = await PerspectiveModel.find().lean();
+    return projects.map(toPerspectiveResponse);
+  }
+
+  static async findByProjectId(
+    projectId: string
+  ): Promise<PerspectiveResponseType[]> {
     const perspectives = await PerspectiveModel.find({ projectId })
-      .populate('authors') 
+      .populate("authors")
       .lean();
     return perspectives.map(toPerspectiveResponse);
   }
 
   static async findById(id: string): Promise<PerspectiveResponseType | null> {
-    const perspective = await PerspectiveModel.findById(id).populate('authors').lean();
+    const perspective = await PerspectiveModel.findById(id)
+      .populate("authors")
+      .lean();
     if (!perspective) return null;
     return toPerspectiveResponse(perspective);
   }
 
-  static async update(id: string, input: UpdatePerspectiveInput): Promise<PerspectiveResponseType | null> {
-    const perspective = await PerspectiveModel.findByIdAndUpdate(id, input, { new: true })
-      .populate('authors')
+  static async update(
+    id: string,
+    input: UpdatePerspectiveInput
+  ): Promise<PerspectiveResponseType | null> {
+    const perspective = await PerspectiveModel.findByIdAndUpdate(id, input, {
+      new: true,
+    })
+      .populate("authors")
       .lean();
     if (!perspective) return null;
     return toPerspectiveResponse(perspective);

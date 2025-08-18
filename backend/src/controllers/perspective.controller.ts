@@ -10,21 +10,23 @@ import {
   SuccessResponse,
   Tags,
   Response,
-  Security
-} from 'tsoa';
-import { z } from 'zod';
-import { PerspectiveService } from '../services/perspective.service';
-import { PerspectiveResponseType } from '../dtos/perspective.dto';
-import { createPerspectiveSchema, updatePerspectiveSchema } from '../zod/schemas/perspective.schema';
+  Security,
+} from "tsoa";
+import { z } from "zod";
+import { PerspectiveService } from "../services/perspective.service";
+import { PerspectiveResponseType } from "../dtos/perspective.dto";
+import {
+  createPerspectiveSchema,
+  updatePerspectiveSchema,
+} from "../zod/schemas/perspective.schema";
 
 // Tipos inferidos do Zod
-type CreatePerspectiveInput = z.infer<typeof createPerspectiveSchema>['body'];
-type UpdatePerspectiveInput = z.infer<typeof updatePerspectiveSchema>['body'];
+type CreatePerspectiveInput = z.infer<typeof createPerspectiveSchema>["body"];
+type UpdatePerspectiveInput = z.infer<typeof updatePerspectiveSchema>["body"];
 
-@Tags("Perspectives") 
-@Route("") 
+@Tags("Perspectives")
+@Route("")
 export class PerspectiveController extends Controller {
-
   @Post("/projects/{projectId}/perspectives")
   @SuccessResponse("201", "Created")
   @Security("jwt")
@@ -37,6 +39,11 @@ export class PerspectiveController extends Controller {
     const perspective = await PerspectiveService.create(body);
     this.setStatus(201);
     return perspective;
+  }
+
+  @Get("/perspectives")
+  public async getAllPerspectives(): Promise<PerspectiveResponseType[]> {
+    return await PerspectiveService.findAll();
   }
 
   @Get("/projects/{projectId}/perspectives")
@@ -59,7 +66,7 @@ export class PerspectiveController extends Controller {
     }
     return perspective;
   }
-  
+
   @Put("/perspectives/{perspectiveId}")
   @Response("404", "Not Found")
   @Security("jwt")
@@ -67,7 +74,10 @@ export class PerspectiveController extends Controller {
     @Path() perspectiveId: string,
     @Body() body: UpdatePerspectiveInput
   ): Promise<PerspectiveResponseType> {
-    const updatedPerspective = await PerspectiveService.update(perspectiveId, body);
+    const updatedPerspective = await PerspectiveService.update(
+      perspectiveId,
+      body
+    );
     if (!updatedPerspective) {
       this.setStatus(404);
       return { message: "Perspectiva não encontrada para atualizar" } as any;
@@ -79,15 +89,13 @@ export class PerspectiveController extends Controller {
   @SuccessResponse("204", "No Content")
   @Response("404", "Not Found")
   @Security("jwt")
-  public async deletePerspective(
-    @Path() perspectiveId: string
-  ): Promise<void> {
+  public async deletePerspective(@Path() perspectiveId: string): Promise<void> {
     try {
       await PerspectiveService.delete(perspectiveId);
       this.setStatus(204);
     } catch (error: any) {
       this.setStatus(404);
-      throw error; 
+      throw error;
     }
   }
 }
