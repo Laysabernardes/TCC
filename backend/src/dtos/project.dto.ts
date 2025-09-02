@@ -8,8 +8,8 @@ export interface ProjectResponseType {
   about_html: string;
   team: PersonResponseType[];
   status: "draft" | "published";
-  isCarrossel?: boolean;
-  orderCarrossel?: number;
+  isCarousel?: boolean;
+  orderCarousel?: number;
   banner?: string;
   extraURL?: string;
   createdAt: Date;

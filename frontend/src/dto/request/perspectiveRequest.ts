@@ -9,8 +9,8 @@ export default interface PerspectiveRequest {
   perspective_refs: string[];
   perspective_team: any[];
   perspective_status: string;
-  perspective_isCarrossel: boolean;
-  perspective_orderCarrossel: number;
+  perspective_isCarousel: boolean;
+  perspective_orderCarousel: number;
   perspective_banner: string;
   perspective_extraURL: string;
 }

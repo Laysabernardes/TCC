@@ -9,7 +9,10 @@ export interface IProject extends Document {
   about_html: string;
   team: (IPerson["_id"] | IPerson)[];
   status: "draft" | "published";
-  carousel?: ICarousel;
+  isCarousel?: boolean;
+  orderCarousel?: number;
+  extraURL?: string;
+  // carousel?: ICarousel;
   banner: string;
   createdAt: Date;
   updatedAt: Date;
@@ -27,20 +30,23 @@ const projectSchema = new Schema<IProject>(
       enum: ["draft", "published"],
       default: "draft",
     },
-    carousel: {
-      type: carouselSchema,
-      required: false,
-    },
+    isCarousel: { type: Boolean, default: false },
+    orderCarousel: { type: Number, required: false },
+    extraURL: { type: String, required: false },
+    // carousel: {
+    //   type: carouselSchema,
+    //   required: false,
+    // },
     banner: { type: String },
   },
   { timestamps: true }
 );
 
 projectSchema.index(
-  { "project_carousel.order": 1 },
+  { orderCarousel: 1 },
   {
     unique: true,
-    partialFilterExpression: { project_carousel: { $exists: true } },
+    partialFilterExpression: { orderCarousel: { $exists: true } },
   }
 );
 

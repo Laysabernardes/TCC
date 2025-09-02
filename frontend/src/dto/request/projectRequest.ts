@@ -1,13 +1,13 @@
 export default interface ProjectRequest {
   _id?: string;
-  project_title: string;
-  project_subtitle?: string;
-  project_slug: string;
-  project_about_html?: string;
-  project_team?: any[];
-  project_status: string;
-  isCarrossel: boolean;
-  orderCarrossel?: number;
+  title: string;
+  subtitle?: string;
+  slug: string;
+  about_html?: string;
+  team?: any[];
+  status: string;
+  isCarousel: boolean;
+  orderCarousel?: number;
   banner?: string;
   extraURL?: string;
 }

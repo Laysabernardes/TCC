@@ -1,16 +1,16 @@
 import { Controller, Get, Route, Tags } from "tsoa";
-import { CarrosselResponseType } from "../dtos/carousel.dto";
-import { CarrosselService } from "../services/carousel.service";
+import { CarouselResponseType } from "../dtos/carousel.dto";
+import { CarouselService } from "../services/carousel.service";
 
-@Route("carrossel")
-@Tags("Carrossel")
-export class CarrosselController extends Controller {
+@Route("carousel")
+@Tags("Carousel")
+export class CarouselController extends Controller {
   /**
    * Retorna uma lista ordenada dos itens que estão no carrossel.
    * @summary
    */
   @Get("/")
-  public async getAllCarouselOrder(): Promise<CarrosselResponseType[]> {
-    return await CarrosselService.getAllCarouselOrder();
+  public async getAllCarouselOrder(): Promise<CarouselResponseType[]> {
+    return await CarouselService.getAllCarouselOrder();
   }
 }

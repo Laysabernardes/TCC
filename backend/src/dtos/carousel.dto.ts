@@ -1,9 +1,9 @@
-export interface CarrosselResponseType {
+export interface CarouselResponseType {
   _id: string;
   title: string;
   collection_type: "project" | "perspective";
   banner?: string;
-  isCarrossel?: boolean;
-  orderCarrossel?: number;
+  isCarousel?: boolean;
+  orderCarousel?: number;
   extraURL?: string;
 }

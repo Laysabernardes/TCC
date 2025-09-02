@@ -239,10 +239,10 @@
 							"published"
 						]
 					},
-					"isCarrossel": {
+					"isCarousel": {
 						"type": "boolean"
 					},
-					"orderCarrossel": {
+					"orderCarousel": {
 						"type": "number",
 						"format": "double"
 					},
@@ -283,11 +283,11 @@
 					"banner": {
 						"type": "string"
 					},
-					"orderCarrossel": {
+					"orderCarousel": {
 						"type": "number",
 						"format": "double"
 					},
-					"isCarrossel": {
+					"isCarousel": {
 						"type": "boolean"
 					},
 					"status": {
@@ -326,11 +326,11 @@
 					"banner": {
 						"type": "string"
 					},
-					"orderCarrossel": {
+					"orderCarousel": {
 						"type": "number",
 						"format": "double"
 					},
-					"isCarrossel": {
+					"isCarousel": {
 						"type": "boolean"
 					},
 					"status": {
@@ -409,10 +409,10 @@
 						},
 						"type": "array"
 					},
-					"isCarrossel": {
+					"isCarousel": {
 						"type": "boolean"
 					},
-					"orderCarrossel": {
+					"orderCarousel": {
 						"type": "number",
 						"format": "double"
 					},
@@ -474,11 +474,11 @@
 					"banner": {
 						"type": "string"
 					},
-					"orderCarrossel": {
+					"orderCarousel": {
 						"type": "number",
 						"format": "double"
 					},
-					"isCarrossel": {
+					"isCarousel": {
 						"type": "boolean"
 					},
 					"slug": {
@@ -525,11 +525,11 @@
 					"banner": {
 						"type": "string"
 					},
-					"orderCarrossel": {
+					"orderCarousel": {
 						"type": "number",
 						"format": "double"
 					},
-					"isCarrossel": {
+					"isCarousel": {
 						"type": "boolean"
 					},
 					"slug": {
@@ -591,7 +591,7 @@
 				},
 				"type": "object"
 			},
-			"CarrosselResponseType": {
+			"CarouselResponseType": {
 				"properties": {
 					"_id": {
 						"type": "string"
@@ -609,10 +609,10 @@
 					"banner": {
 						"type": "string"
 					},
-					"isCarrossel": {
+					"isCarousel": {
 						"type": "boolean"
 					},
-					"orderCarrossel": {
+					"orderCarousel": {
 						"type": "number",
 						"format": "double"
 					},
@@ -1773,7 +1773,7 @@
 				]
 			}
 		},
-		"/carrossel": {
+		"/carousel": {
 			"get": {
 				"operationId": "GetAllCarouselOrder",
 				"responses": {
@@ -1783,7 +1783,7 @@
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/CarrosselResponseType"
+										"$ref": "#/components/schemas/CarouselResponseType"
 									},
 									"type": "array"
 								}
@@ -1793,7 +1793,7 @@
 				},
 				"description": "Retorna uma lista ordenada dos itens que estão no carrossel.",
 				"tags": [
-					"Carrossel"
+					"Carousel"
 				],
 				"security": [],
 				"parameters": []

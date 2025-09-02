@@ -14,8 +14,8 @@ export interface PerspectiveResponseType {
   content: string[];
   references: IReferenceDTO[];
   authors: PersonResponseType[];
-  isCarrossel?: boolean;
-  orderCarrossel?: number;
+  isCarousel?: boolean;
+  orderCarousel?: number;
   banner?: string;
   extraURL?: string;
   createdAt: Date;

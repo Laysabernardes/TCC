@@ -29,7 +29,7 @@ export const ProjectService = {
     project: ProjectRequest
   ): Promise<ProjectResponse> => {
     const response = await api.get<ProjectResponse>(
-      `/projects/${project.project_slug}`,
+      `/projects/${project.slug}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

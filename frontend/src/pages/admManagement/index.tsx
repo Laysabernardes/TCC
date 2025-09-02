@@ -29,14 +29,10 @@ function AdmManagement() {
 
   // Obter feedback
   useEffect(() => {
-    setAction("-");
     const feedback = document.getElementById("feedback");
     feedback?.classList.remove("fade_out");
     setTimeout(() => {
       feedback?.classList.add("fade_out");
-      setTimeout(() => {
-        setFeedback(null);
-      }, 500);
     }, 5000);
   }, [feedback]);
 
@@ -58,8 +54,8 @@ function AdmManagement() {
             className="w-full h-full object-cover rounded-s-lg"
           />
         </div>
-        <div className="flex flex-col w-full md:w-2/3 ">
-          <div className="p-5 sm:p-15">
+        <div className="flex flex-col w-full md:w-2/3">
+          <div className="p-10 h-full">
             <div className="flex justify-between items-start gap-5 pb-5 flex-col-reverse sm:flex-row sm:items-center">
               <h2 className="text-2xl font-bold text-light-3 flex gap-2 items-center">
                 <FaGear className="h-7 w-7 sm:h-5 w-5*" />
@@ -75,19 +71,17 @@ function AdmManagement() {
               </div>
             </div>
 
-            <div className="overflow-y-auto overflow-visible h-100 pr-5">
-              {feedback && (
-                <div
-                  id="feedback"
-                  className={`p-3 my-4 rounded-lg text-white text-center transition ${
-                    feedback.type === "success"
-                      ? "bg-green-500/80"
-                      : "bg-red-500/80"
-                  }`}
-                >
-                  {feedback.message}
-                </div>
-              )}
+            <div className="overflow-y-auto overflow-visible h-110 sm:h-120 pr-5">
+              <div
+                id="feedback"
+                className={`p-3 my-4 rounded-lg text-white text-center transition ${
+                  feedback?.type === "success"
+                    ? "bg-green-500/80"
+                    : "bg-red-500/80"
+                }`}
+              >
+                {feedback?.message}
+              </div>
 
               <Selection
                 id="colection"

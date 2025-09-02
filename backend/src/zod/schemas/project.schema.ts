@@ -11,8 +11,8 @@ const projectBodyBaseSchema = z.object({
   about_html: z.string().optional(),
   team: z.array(objectIdSchema).optional(),
   status: z.enum(["draft", "published"]).optional(),
-  isCarrossel: z.boolean().optional(),
-  orderCarrossel: z.number().optional(),
+  isCarousel: z.boolean().optional(),
+  orderCarousel: z.number().optional(),
   banner: z.string().url({ message: "URL do banner inválida" }).optional(),
   extraURL: z.string().url({ message: "URL extra inválida" }).optional(),
 });

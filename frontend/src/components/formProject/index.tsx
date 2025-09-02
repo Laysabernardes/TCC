@@ -11,21 +11,23 @@ import {
 import { FaGear } from "react-icons/fa6";
 import { ProjectService } from "../../service/project.service";
 import { PeopleService } from "../../service/people.service";
+import { CarouselService } from "../../service/carousel.service";
 import type ProjectRequest from "../../dto/request/projectRequest";
 import type ProjectResponse from "../../dto/response/projectResponse";
-import type PeopleRequest from "../../dto/request/peopleRequest";
 import type PeopleResponse from "../../dto/response/peopleResponse";
 
 const FormProjectData = z.object({
   _id: z.string().optional(),
-  project_title: z.string(),
-  project_subtitle: z.string().optional(),
-  project_slug: z.string(),
-  project_about_html: z.string().optional(),
-  project_team: z.array(z.string()).optional(),
-  project_status: z.string(),
-  isCarrossel: z.boolean(),
-  orderCarrossel: z.number().optional(),
+  title: z.string(),
+  subtitle: z.string().optional(),
+  slug: z.string(),
+  about_html: z.string().optional(),
+  team: z.array(z.string()).optional(),
+  status: z.string(),
+  isCarousel: z
+    .union([z.string(), z.boolean()])
+    .transform((val) => val === true || val === "true"),
+  orderCarousel: z.coerce.number().optional(),
   banner: z.string().optional(),
   extraURL: z.string().optional(),
 });
@@ -45,14 +47,17 @@ export function FormProject({
   const { register, setValue, watch, reset, getValues } = useForm({
     resolver: zodResolver(FormProjectData),
     defaultValues: {
-      isCarrossel: false,
-      project_status: "draft",
+      isCarousel: false,
+      status: "draft",
     },
   });
 
   const [projectId, setProjectId] = useState<string | null>(null);
   const [allProjects, setAllProjects] = useState<ProjectResponse[]>();
   const [allPeople, setAllPeople] = useState<PeopleResponse[]>();
+  const [carouselOptions, setCarouselOptions] = useState<
+    { id: string | number; text: string }[]
+  >([]);
 
   //Endpoint pra pegar pessoas
   const getAllPeople = async () => {
@@ -80,16 +85,20 @@ export function FormProject({
     )!;
     if (!project) return;
     setValue("_id", project._id);
-    setValue("project_title", project.project_title);
-    setValue("project_subtitle", project.project_subtitle);
-    setValue("project_slug", project.project_slug);
-    setValue("project_about_html", project.project_about_html);
-    setValue("project_team", project.project_team);
-    setValue("project_status", project.project_status);
-    setValue("isCarrossel", project.isCarrossel);
-    setValue("orderCarrossel", project.orderCarrossel);
+    setValue("title", project.title);
+    setValue("subtitle", project.subtitle);
+    setValue("slug", project.slug);
+    setValue("about_html", project.about_html);
+    setValue("team", project.team);
+    setValue("status", project.status);
+    setValue("isCarousel", project.isCarousel);
+    setValue("orderCarousel", project.orderCarousel);
     setValue("banner", project.banner);
     setValue("extraURL", project.extraURL);
+
+    if (project.isCarousel) {
+      getCarouselOrder(project.orderCarousel);
+    }
   };
 
   const resolveIds = (data: any[], text: string) => {
@@ -99,17 +108,40 @@ export function FormProject({
     }));
   };
 
+  const getCarouselOrder = async (currentOrder?: number) => {
+    try {
+      const carouselNumbers = await CarouselService.getAllCarouselOrder(token);
+
+      const usedOrders = carouselNumbers
+        .map((item) => item.orderCarousel)
+        .filter((n): n is number => n !== undefined);
+
+      const options = Array.from({ length: 10 }, (_, i) => i + 1)
+        .filter((n) => !usedOrders.includes(n) || n === currentOrder) // garante que o atual entre
+        .map((n) => ({
+          id: n,
+          text: `${n}°`,
+        }));
+
+      setCarouselOptions(options);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const handleSubmitProjectForm = async () => {
     const data = getValues();
     const projectData: ProjectRequest = {
-      project_title: data.project_title,
-      project_subtitle: data.project_subtitle,
-      project_slug: data.project_slug,
-      project_about_html: data.project_about_html,
-      project_team: data.project_team,
-      project_status: data.project_status,
-      isCarrossel: data.isCarrossel,
-      orderCarrossel: data.orderCarrossel,
+      title: data.title,
+      subtitle: data.subtitle,
+      slug: data.slug,
+      about_html: data.about_html,
+      team: data.team,
+      status: data.status,
+      isCarousel: data.isCarousel === true || data.isCarousel === "true",
+      orderCarousel: data.orderCarousel
+        ? Number(data.orderCarousel)
+        : undefined,
       banner: data.banner,
       extraURL: data.extraURL,
     };
@@ -121,23 +153,27 @@ export function FormProject({
           type: "success",
           message: "Projeto criado com sucesso!",
         });
+        getAllProjects();
+        reset();
       } else if (action === "Update" && projectId != "-") {
         await ProjectService.updateProject(token, projectData, data._id);
         setFeedback({
           type: "success",
           message: "Projeto atualizado com sucesso!",
         });
+        getAllProjects();
+        reset();
       } else if (action === "Delete" && projectId != "-") {
         await ProjectService.deleteProject(token, data._id);
         setFeedback({
           type: "success",
           message: "Projeto deletado com sucesso!",
         });
+        getAllProjects();
+        reset();
       } else {
         setFeedback({ type: "error", message: "Erro: Ação desconhecida." });
       }
-      getAllProjects();
-      reset();
     } catch (e: any) {
       console.log(e);
       setFeedback({
@@ -155,12 +191,12 @@ export function FormProject({
     }
   }, [projectId]);
 
-  // Ao trocar orderCarrossel
+  // Ao trocar orderCarousel
   useEffect(() => {
-    if (!watch("isCarrossel")) {
-      setValue("orderCarrossel", undefined);
+    if (!watch("isCarousel")) {
+      setValue("orderCarousel", undefined);
     }
-  }, [watch("isCarrossel"), setValue]);
+  }, [watch("isCarousel"), setValue]);
 
   // Ao trocar action
   useEffect(() => {
@@ -186,6 +222,14 @@ export function FormProject({
         message: "Erro ao buscar pessoas",
       });
     }
+    try {
+      getCarouselOrder();
+    } catch (e) {
+      setFeedback({
+        type: "error",
+        message: "Erro ao buscar CarouselOrder",
+      });
+    }
   }, []);
 
   return (
@@ -197,66 +241,44 @@ export function FormProject({
     >
       {(action === "Update" || action === "Delete") && allProjects && (
         <Selection
-          id="project_id"
+          id="id"
           title="Selecione um Projeto"
           placeholder="-"
           icon={<FaGear />}
-          options={resolveIds(allProjects, "project_title")}
+          options={resolveIds(allProjects, "title")}
           onChange={(e) => setProjectId(e.target.value)}
           value={projectId ?? "-"}
           required={true}
         />
       )}
-      {(action === "Create" || action === "Update") && allProjects && (
+      {(action === "Create" || (action === "Update" && projectId)) && (
         <>
           <TypeInput
-            id="project_title"
+            id="title"
             title="Título Projeto"
             type="text"
             placeholder="Digite o título"
             icon={<FaGear />}
             required={true}
-            {...register("project_title")}
+            {...register("title")}
           />
           <TypeInput
-            id="project_subtitle"
+            id="subtitle"
             title="Subtítulo Projeto"
             type="text"
             placeholder="Digite o subtítulo"
             icon={<FaGear />}
             required={false}
-            {...register("project_subtitle")}
-          />
-          <Selection
-            id="status"
-            title="Status"
-            placeholder="-"
-            icon={<FaGear />}
-            nullOption={false}
-            options={[
-              { id: "draft", text: "Rascunho" },
-              { id: "published", text: "Público" },
-            ]}
-            {...register("project_status")}
-            required={true}
+            {...register("subtitle")}
           />
           <TypeInput
-            id="project_slug"
+            id="slug"
             title="Nome para URL"
             type="text"
             placeholder="Digite um nome para URL"
             icon={<FaGear />}
             required={true}
-            {...register("project_slug")}
-          />
-          <TypeInput
-            id="extraURL"
-            title="URL Extra Carrossel"
-            type="text"
-            placeholder="Cole um link"
-            icon={<FaGear />}
-            required={false}
-            {...register("extraURL")}
+            {...register("slug")}
           />
           <TypeInput
             id="banner"
@@ -268,20 +290,19 @@ export function FormProject({
             {...register("banner")}
           />
           <MultiSelect
-            id="project_team"
-            name="project_team"
+            id="team"
+            name="team"
             title="Integrantes"
             placeholder="Selecione os integrantes"
             icon={<FaGear />}
             options={resolveIds(allPeople!, "name")}
             required
-            value={watch("project_team")}
-            setValue={(value) => setValue("project_team", value)}
+            value={watch("team")}
+            setValue={(value) => setValue("team", value)}
           />
           <Selection
-            id="isCarrossel"
-            title="Exibir Carrossel?"
-            placeholder="-"
+            id="isCarousel"
+            title="Exibir Carousel?"
             icon={<FaGear />}
             nullOption={false}
             options={[
@@ -289,33 +310,52 @@ export function FormProject({
               { id: "true", text: "Sim" },
             ]}
             required={false}
-            onChange={(e) => setValue("isCarrossel", e.target.value === "true")}
-            value={watch("isCarrossel") ? "true" : "false"}
+            onChange={(e) => setValue("isCarousel", e.target.value === "true")}
+            value={watch("isCarousel") ? "true" : "false"}
           />
-          {watch("isCarrossel") && (
+          {watch("isCarousel") && (
             <>
               <Selection
-                id="orderCarrossel"
+                id="orderCarousel"
                 title="Ordem de aparição"
                 placeholder="-"
                 icon={<FaGear />}
-                options={[
-                  { id: 1, text: "1°" },
-                  { id: 2, text: "2°" },
-                  // USAR O GET ALL CARROSSEL ACTIVE ORDER
-                ]}
+                options={carouselOptions}
                 required={true}
-                value={watch("isCarrossel") ? "true" : undefined}
-                {...register("orderCarrossel")}
+                value={watch("orderCarousel")?.toString() ?? ""}
+                onChange={(e) =>
+                  setValue("orderCarousel", Number(e.target.value))
+                }
+              />
+              <TypeInput
+                id="extraURL"
+                title="URL Extra Carousel"
+                type="text"
+                placeholder="Cole um link"
+                icon={<FaGear />}
+                required={false}
+                {...register("extraURL")}
               />
             </>
           )}
+          <Selection
+            id="status"
+            title="Status"
+            icon={<FaGear />}
+            nullOption={false}
+            options={[
+              { id: "draft", text: "Rascunho" },
+              { id: "published", text: "Público" },
+            ]}
+            {...register("status")}
+            required={true}
+          />
           <Textarea
-            id="project_about_html"
+            id="about_html"
             title="Sobre o Projeto"
             placeholder="Digite o conteúdo"
             required={false}
-            {...register("project_about_html")}
+            {...register("about_html")}
           />
         </>
       )}

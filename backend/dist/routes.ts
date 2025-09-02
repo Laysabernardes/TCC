@@ -14,7 +14,7 @@ import { PerspectiveController } from './../src/controllers/perspective.controll
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { PersonController } from './../src/controllers/person.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { CarrosselController } from './../src/controllers/carousel.controller';
+import { CarouselController } from './../src/controllers/carousel.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AuthController } from './../src/controllers/auth.controller';
 import { expressAuthentication } from './../src/middleware/auth.middleware';
@@ -100,8 +100,8 @@ const models: TsoaRoute.Models = {
             "about_html": {"dataType":"string","required":true},
             "team": {"dataType":"array","array":{"dataType":"refObject","ref":"PersonResponseType"},"required":true},
             "status": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}],"required":true},
-            "isCarrossel": {"dataType":"boolean"},
-            "orderCarrossel": {"dataType":"double"},
+            "isCarousel": {"dataType":"boolean"},
+            "orderCarousel": {"dataType":"double"},
             "banner": {"dataType":"string"},
             "extraURL": {"dataType":"string"},
             "createdAt": {"dataType":"datetime","required":true},
@@ -112,12 +112,12 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateProjectInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarrossel":{"dataType":"double"},"isCarrossel":{"dataType":"boolean"},"status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"slug":{"dataType":"string"},"subtitle":{"dataType":"string"},"title":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"slug":{"dataType":"string"},"subtitle":{"dataType":"string"},"title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UpdateProjectInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarrossel":{"dataType":"double"},"isCarrossel":{"dataType":"boolean"},"status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"slug":{"dataType":"string"},"subtitle":{"dataType":"string"},"title":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"slug":{"dataType":"string"},"subtitle":{"dataType":"string"},"title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "IReferenceDTO": {
@@ -139,8 +139,8 @@ const models: TsoaRoute.Models = {
             "content": {"dataType":"array","array":{"dataType":"string"},"required":true},
             "references": {"dataType":"array","array":{"dataType":"refObject","ref":"IReferenceDTO"},"required":true},
             "authors": {"dataType":"array","array":{"dataType":"refObject","ref":"PersonResponseType"},"required":true},
-            "isCarrossel": {"dataType":"boolean"},
-            "orderCarrossel": {"dataType":"double"},
+            "isCarousel": {"dataType":"boolean"},
+            "orderCarousel": {"dataType":"double"},
             "banner": {"dataType":"string"},
             "extraURL": {"dataType":"string"},
             "createdAt": {"dataType":"datetime","required":true},
@@ -151,12 +151,12 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreatePerspectiveInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"content":{"dataType":"string"},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarrossel":{"dataType":"double"},"isCarrossel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"},"projectId":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"content":{"dataType":"string"},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"},"projectId":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UpdatePerspectiveInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"content":{"dataType":"string"},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarrossel":{"dataType":"double"},"isCarrossel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"content":{"dataType":"string"},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreatePersonInput": {
@@ -169,15 +169,15 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"contact":{"dataType":"string"},"description":{"dataType":"array","array":{"dataType":"string"}},"kind":{"dataType":"string"},"imageUrl":{"dataType":"string"},"name":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CarrosselResponseType": {
+    "CarouselResponseType": {
         "dataType": "refObject",
         "properties": {
             "_id": {"dataType":"string","required":true},
             "title": {"dataType":"string","required":true},
             "collection_type": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["project"]},{"dataType":"enum","enums":["perspective"]}],"required":true},
             "banner": {"dataType":"string"},
-            "isCarrossel": {"dataType":"boolean"},
-            "orderCarrossel": {"dataType":"double"},
+            "isCarousel": {"dataType":"boolean"},
+            "orderCarousel": {"dataType":"double"},
             "extraURL": {"dataType":"string"},
         },
         "additionalProperties": false,
@@ -1162,21 +1162,21 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        const argsCarrosselController_getAllCarouselOrder: Record<string, TsoaRoute.ParameterSchema> = {
+        const argsCarouselController_getAllCarouselOrder: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/carrossel',
-            ...(fetchMiddlewares<RequestHandler>(CarrosselController)),
-            ...(fetchMiddlewares<RequestHandler>(CarrosselController.prototype.getAllCarouselOrder)),
+        app.get('/carousel',
+            ...(fetchMiddlewares<RequestHandler>(CarouselController)),
+            ...(fetchMiddlewares<RequestHandler>(CarouselController.prototype.getAllCarouselOrder)),
 
-            async function CarrosselController_getAllCarouselOrder(request: ExRequest, response: ExResponse, next: any) {
+            async function CarouselController_getAllCarouselOrder(request: ExRequest, response: ExResponse, next: any) {
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
             let validatedArgs: any[] = [];
             try {
-                validatedArgs = templateService.getValidatedArgs({ args: argsCarrosselController_getAllCarouselOrder, request, response });
+                validatedArgs = templateService.getValidatedArgs({ args: argsCarouselController_getAllCarouselOrder, request, response });
 
-                const controller = new CarrosselController();
+                const controller = new CarouselController();
 
               await templateService.apiHandler({
                 methodName: 'getAllCarouselOrder',
