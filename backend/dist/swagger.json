@@ -212,7 +212,8 @@
 			"ProjectResponseType": {
 				"properties": {
 					"_id": {
-						"type": "string"
+						"type": "string",
+						"description": "O identificador único do projeto no banco de dados."
 					},
 					"title": {
 						"type": "string"
@@ -222,6 +223,13 @@
 					},
 					"slug": {
 						"type": "string"
+					},
+					"category": {
+						"type": "string"
+					},
+					"year": {
+						"type": "number",
+						"format": "double"
 					},
 					"about_html": {
 						"type": "string"
@@ -240,17 +248,21 @@
 						]
 					},
 					"isCarousel": {
-						"type": "boolean"
+						"type": "boolean",
+						"description": "Flag booleana que indica se o projeto deve aparecer no carrossel principal."
 					},
 					"orderCarousel": {
 						"type": "number",
-						"format": "double"
+						"format": "double",
+						"description": "O número que define a ordem de exibição do projeto no carrossel."
 					},
 					"banner": {
-						"type": "string"
+						"type": "string",
+						"description": "A URL da imagem principal (banner) do projeto."
 					},
 					"extraURL": {
-						"type": "string"
+						"type": "string",
+						"description": "Uma URL adicional que pode ser usada para um link específico no carrossel."
 					},
 					"createdAt": {
 						"type": "string",
@@ -266,6 +278,8 @@
 					"title",
 					"subtitle",
 					"slug",
+					"category",
+					"year",
 					"about_html",
 					"team",
 					"status",
@@ -304,6 +318,13 @@
 						"type": "array"
 					},
 					"about_html": {
+						"type": "string"
+					},
+					"year": {
+						"type": "number",
+						"format": "double"
+					},
+					"category": {
 						"type": "string"
 					},
 					"slug": {
@@ -347,6 +368,13 @@
 						"type": "array"
 					},
 					"about_html": {
+						"type": "string"
+					},
+					"year": {
+						"type": "number",
+						"format": "double"
+					},
+					"category": {
 						"type": "string"
 					},
 					"slug": {
@@ -394,16 +422,11 @@
 					},
 					"content": {
 						"type": "string"
-					},
-					"level": {
-						"type": "number",
-						"format": "double"
 					}
 				},
 				"required": [
 					"type",
-					"content",
-					"level"
+					"content"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -597,10 +620,6 @@
 								},
 								{
 									"properties": {
-										"level": {
-											"type": "number",
-											"format": "double"
-										},
 										"content": {
 											"type": "string"
 										},
@@ -731,10 +750,6 @@
 								},
 								{
 									"properties": {
-										"level": {
-											"type": "number",
-											"format": "double"
-										},
 										"content": {
 											"type": "string"
 										},
@@ -1558,6 +1573,44 @@
 						"schema": {
 							"type": "string"
 						}
+					}
+				]
+			}
+		},
+		"/projects/category/{category}": {
+			"get": {
+				"operationId": "GetProjectsByCategory",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ProjectResponseType"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Filtra projetos por uma categoria específica.",
+				"summary": "Filtra projetos por categoria.",
+				"tags": [
+					"Projects"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "A categoria para filtrar.",
+						"in": "path",
+						"name": "category",
+						"required": true,
+						"schema": {
+							"type": "string"
+						},
+						"example": "Urbanismo"
 					}
 				]
 			}

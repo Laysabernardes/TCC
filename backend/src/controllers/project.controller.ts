@@ -103,6 +103,17 @@ export class ProjectController extends Controller {
   }
 
   /**
+   * Filtra projetos por uma categoria específica.
+   * @summary Filtra projetos por categoria.
+   * @param category A categoria para filtrar.
+   * @example category "Urbanismo"
+   */
+  @Get("category/{category}")
+  public async getProjectsByCategory(@Path() category: string): Promise<ProjectResponseType[]> {
+    return await ProjectService.findByCategory(category);
+  }
+
+  /**
    * Atualiza os dados de um projeto existente.
    * @summary Atualiza um projeto.
    * @param id O ID do projeto a ser atualizado.

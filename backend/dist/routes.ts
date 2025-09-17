@@ -97,6 +97,8 @@ const models: TsoaRoute.Models = {
             "title": {"dataType":"string","required":true},
             "subtitle": {"dataType":"string","required":true},
             "slug": {"dataType":"string","required":true},
+            "category": {"dataType":"string","required":true},
+            "year": {"dataType":"double","required":true},
             "about_html": {"dataType":"string","required":true},
             "team": {"dataType":"array","array":{"dataType":"refObject","ref":"PersonResponseType"},"required":true},
             "status": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}],"required":true},
@@ -112,12 +114,12 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateProjectInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"slug":{"dataType":"string"},"subtitle":{"dataType":"string"},"title":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"year":{"dataType":"double"},"category":{"dataType":"string"},"slug":{"dataType":"string"},"subtitle":{"dataType":"string"},"title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UpdateProjectInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"slug":{"dataType":"string"},"subtitle":{"dataType":"string"},"title":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"year":{"dataType":"double"},"category":{"dataType":"string"},"slug":{"dataType":"string"},"subtitle":{"dataType":"string"},"title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ITextBlock": {
@@ -134,7 +136,6 @@ const models: TsoaRoute.Models = {
         "properties": {
             "type": {"dataType":"enum","enums":["title"],"required":true},
             "content": {"dataType":"string","required":true},
-            "level": {"dataType":"double","required":true},
         },
         "additionalProperties": false,
     },
@@ -194,7 +195,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreatePerspectiveInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"contentBlocks":{"dataType":"array","array":{"dataType":"union","subSchemas":[{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["text"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"level":{"dataType":"double"},"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["title"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"caption":{"dataType":"string"},"imageUrl":{"dataType":"string"},"type":{"dataType":"enum","enums":["image"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["highlight"]}}}]}},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"},"projectId":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"contentBlocks":{"dataType":"array","array":{"dataType":"union","subSchemas":[{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["text"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["title"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"caption":{"dataType":"string"},"imageUrl":{"dataType":"string"},"type":{"dataType":"enum","enums":["image"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["highlight"]}}}]}},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"},"projectId":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ErrorResponse": {
@@ -207,7 +208,7 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UpdatePerspectiveInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"contentBlocks":{"dataType":"array","array":{"dataType":"union","subSchemas":[{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["text"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"level":{"dataType":"double"},"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["title"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"caption":{"dataType":"string"},"imageUrl":{"dataType":"string"},"type":{"dataType":"enum","enums":["image"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["highlight"]}}}]}},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"contentBlocks":{"dataType":"array","array":{"dataType":"union","subSchemas":[{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["text"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["title"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"caption":{"dataType":"string"},"imageUrl":{"dataType":"string"},"type":{"dataType":"enum","enums":["image"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["highlight"]}}}]}},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreatePersonInput": {
@@ -800,6 +801,36 @@ export function RegisterRoutes(app: Router) {
 
               await templateService.apiHandler({
                 methodName: 'getProjectBySlug',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsProjectController_getProjectsByCategory: Record<string, TsoaRoute.ParameterSchema> = {
+                category: {"in":"path","name":"category","required":true,"dataType":"string"},
+        };
+        app.get('/projects/category/:category',
+            ...(fetchMiddlewares<RequestHandler>(ProjectController)),
+            ...(fetchMiddlewares<RequestHandler>(ProjectController.prototype.getProjectsByCategory)),
+
+            async function ProjectController_getProjectsByCategory(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsProjectController_getProjectsByCategory, request, response });
+
+                const controller = new ProjectController();
+
+              await templateService.apiHandler({
+                methodName: 'getProjectsByCategory',
                 controller,
                 response,
                 next,
