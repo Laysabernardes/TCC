@@ -20,82 +20,111 @@ import {
   updatePerspectiveSchema,
 } from "../zod/schemas/perspective.schema";
 
-// Tipos inferidos do Zod
+// Tipos inferidos do Zod para uso nos parâmetros do controller
 type CreatePerspectiveInput = z.infer<typeof createPerspectiveSchema>["body"];
 type UpdatePerspectiveInput = z.infer<typeof updatePerspectiveSchema>["body"];
 
+// Um tipo para respostas de erro consistentes
+interface ErrorResponse {
+  message: string;
+}
+
 @Tags("Perspectives")
-@Route("")
+@Route("api/perspectives") // Define uma rota base para todos os métodos
 export class PerspectiveController extends Controller {
-  @Post("/projects/{projectId}/perspectives")
+
+  /**
+   * Cria uma nova perspectiva associada a um projeto.
+   * @param projectId O ID do projeto ao qual a perspectiva pertence.
+   * @param body Os dados da nova perspectiva a ser criada.
+   */
+  @Post("/projects/{projectId}")
   @SuccessResponse("201", "Created")
-  @Security("jwt")
+  @Security("jwt") // Indica que esta rota requer autenticação
   public async createPerspective(
     @Path() projectId: string,
     @Body() body: CreatePerspectiveInput
   ): Promise<PerspectiveResponseType> {
-    // Garantimos que o projectId do corpo da requisição seja o mesmo da URL
-    body.projectId = projectId;
-    const perspective = await PerspectiveService.create(body);
+    // Garante que o projectId do corpo da requisição seja o mesmo da URL, mantendo a consistência dos dados.
+    const perspectiveData = { ...body, projectId };
+    const perspective = await PerspectiveService.create(perspectiveData);
     this.setStatus(201);
     return perspective;
   }
 
-  @Get("/perspectives")
+  /**
+   * Retorna todas as perspectivas de todos os projetos.
+   */
+  @Get("/")
   public async getAllPerspectives(): Promise<PerspectiveResponseType[]> {
-    return await PerspectiveService.findAll();
+    return PerspectiveService.findAll();
   }
 
-  @Get("/projects/{projectId}/perspectives")
+  /**
+   * Retorna todas as perspectivas de um projeto específico.
+   * @param projectId O ID do projeto para o qual as perspectivas serão buscadas.
+   */
+  @Get("/projects/{projectId}")
   public async getPerspectivesForProject(
     @Path() projectId: string
   ): Promise<PerspectiveResponseType[]> {
-    return await PerspectiveService.findByProjectId(projectId);
+    return PerspectiveService.findByProjectId(projectId);
   }
 
-  @Get("/perspectives/{perspectiveId}")
-  @Response("404", "Not Found")
-  @Security("jwt")
+  /**
+   * Retorna uma perspectiva específica pelo seu ID.
+   * @param perspectiveId O ID da perspectiva a ser encontrada.
+   */
+  @Get("/{perspectiveId}")
+  @Response<ErrorResponse>(404, "Not Found")
   public async getPerspectiveById(
     @Path() perspectiveId: string
-  ): Promise<PerspectiveResponseType> {
+  ): Promise<PerspectiveResponseType | ErrorResponse> {
     const perspective = await PerspectiveService.findById(perspectiveId);
     if (!perspective) {
       this.setStatus(404);
-      return { message: "Perspectiva não encontrada" } as any;
+      return { message: "Perspectiva não encontrada" };
     }
     return perspective;
   }
 
-  @Put("/perspectives/{perspectiveId}")
-  @Response("404", "Not Found")
+  /**
+   * Atualiza uma perspectiva existente.
+   * @param perspectiveId O ID da perspectiva a ser atualizada.
+   * @param body Os dados a serem atualizados na perspectiva.
+   */
+  @Put("/{perspectiveId}")
+  @Response<ErrorResponse>(404, "Not Found")
   @Security("jwt")
   public async updatePerspective(
     @Path() perspectiveId: string,
     @Body() body: UpdatePerspectiveInput
-  ): Promise<PerspectiveResponseType> {
+  ): Promise<PerspectiveResponseType | ErrorResponse> {
     const updatedPerspective = await PerspectiveService.update(
       perspectiveId,
       body
     );
     if (!updatedPerspective) {
       this.setStatus(404);
-      return { message: "Perspectiva não encontrada para atualizar" } as any;
+      return { message: "Perspectiva não encontrada para atualizar" };
     }
     return updatedPerspective;
   }
 
-  @Delete("/perspectives/{perspectiveId}")
+  /**
+   * Deleta uma perspectiva.
+   * @param perspectiveId O ID da perspectiva a ser deletada.
+   */
+  @Delete("/{perspectiveId}")
   @SuccessResponse("204", "No Content")
-  @Response("404", "Not Found")
+  @Response<ErrorResponse>(404, "Not Found")
   @Security("jwt")
   public async deletePerspective(@Path() perspectiveId: string): Promise<void> {
-    try {
-      await PerspectiveService.delete(perspectiveId);
-      this.setStatus(204);
-    } catch (error: any) {
-      this.setStatus(404);
-      throw error;
-    }
+    // O próprio service já lança um erro se não encontrar,
+    // que será capturado por um middleware de erro.
+    // Se der certo, apenas setamos o status.
+    await PerspectiveService.delete(perspectiveId);
+    this.setStatus(204);
+    return;
   }
 }

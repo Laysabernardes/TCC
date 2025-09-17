@@ -120,6 +120,49 @@ const models: TsoaRoute.Models = {
         "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"status":{"dataType":"union","subSchemas":[{"dataType":"enum","enums":["draft"]},{"dataType":"enum","enums":["published"]}]},"team":{"dataType":"array","array":{"dataType":"string"}},"about_html":{"dataType":"string"},"slug":{"dataType":"string"},"subtitle":{"dataType":"string"},"title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ITextBlock": {
+        "dataType": "refObject",
+        "properties": {
+            "type": {"dataType":"enum","enums":["text"],"required":true},
+            "content": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ITitleBlock": {
+        "dataType": "refObject",
+        "properties": {
+            "type": {"dataType":"enum","enums":["title"],"required":true},
+            "content": {"dataType":"string","required":true},
+            "level": {"dataType":"double","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IImageBlock": {
+        "dataType": "refObject",
+        "properties": {
+            "type": {"dataType":"enum","enums":["image"],"required":true},
+            "imageUrl": {"dataType":"string","required":true},
+            "caption": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IHighlightBlock": {
+        "dataType": "refObject",
+        "properties": {
+            "type": {"dataType":"enum","enums":["highlight"],"required":true},
+            "content": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "IContentBlock": {
+        "dataType": "refAlias",
+        "type": {"dataType":"union","subSchemas":[{"ref":"ITextBlock"},{"ref":"ITitleBlock"},{"ref":"IImageBlock"},{"ref":"IHighlightBlock"}],"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "IReferenceDTO": {
         "dataType": "refObject",
         "properties": {
@@ -136,12 +179,12 @@ const models: TsoaRoute.Models = {
             "title": {"dataType":"string","required":true},
             "slug": {"dataType":"string","required":true},
             "order": {"dataType":"double","required":true},
-            "content": {"dataType":"array","array":{"dataType":"string"},"required":true},
+            "contentBlocks": {"dataType":"array","array":{"dataType":"refAlias","ref":"IContentBlock"},"required":true},
             "references": {"dataType":"array","array":{"dataType":"refObject","ref":"IReferenceDTO"},"required":true},
             "authors": {"dataType":"array","array":{"dataType":"refObject","ref":"PersonResponseType"},"required":true},
+            "banner": {"dataType":"string"},
             "isCarousel": {"dataType":"boolean"},
             "orderCarousel": {"dataType":"double"},
-            "banner": {"dataType":"string"},
             "extraURL": {"dataType":"string"},
             "createdAt": {"dataType":"datetime","required":true},
             "updatedAt": {"dataType":"datetime","required":true},
@@ -151,12 +194,20 @@ const models: TsoaRoute.Models = {
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreatePerspectiveInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"content":{"dataType":"string"},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"},"projectId":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"contentBlocks":{"dataType":"array","array":{"dataType":"union","subSchemas":[{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["text"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"level":{"dataType":"double"},"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["title"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"caption":{"dataType":"string"},"imageUrl":{"dataType":"string"},"type":{"dataType":"enum","enums":["image"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["highlight"]}}}]}},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"},"projectId":{"dataType":"string"}},"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ErrorResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "message": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UpdatePerspectiveInput": {
         "dataType": "refAlias",
-        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"content":{"dataType":"string"},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"}},"validators":{}},
+        "type": {"dataType":"nestedObjectLiteral","nestedProperties":{"authors":{"dataType":"array","array":{"dataType":"string"}},"references":{"dataType":"array","array":{"dataType":"nestedObjectLiteral","nestedProperties":{"text":{"dataType":"string"}}}},"contentBlocks":{"dataType":"array","array":{"dataType":"union","subSchemas":[{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["text"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"level":{"dataType":"double"},"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["title"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"caption":{"dataType":"string"},"imageUrl":{"dataType":"string"},"type":{"dataType":"enum","enums":["image"]}}},{"dataType":"nestedObjectLiteral","nestedProperties":{"content":{"dataType":"string"},"type":{"dataType":"enum","enums":["highlight"]}}}]}},"extraURL":{"dataType":"string"},"banner":{"dataType":"string"},"orderCarousel":{"dataType":"double"},"isCarousel":{"dataType":"boolean"},"slug":{"dataType":"string"},"order":{"dataType":"double"},"title":{"dataType":"string"}},"validators":{}},
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreatePersonInput": {
@@ -827,7 +878,7 @@ export function RegisterRoutes(app: Router) {
                 projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                 body: {"in":"body","name":"body","required":true,"ref":"CreatePerspectiveInput"},
         };
-        app.post('/projects/:projectId/perspectives',
+        app.post('/api/perspectives/projects/:projectId',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.createPerspective)),
@@ -857,7 +908,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsPerspectiveController_getAllPerspectives: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/perspectives',
+        app.get('/api/perspectives',
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.getAllPerspectives)),
 
@@ -887,7 +938,7 @@ export function RegisterRoutes(app: Router) {
         const argsPerspectiveController_getPerspectivesForProject: Record<string, TsoaRoute.ParameterSchema> = {
                 projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
         };
-        app.get('/projects/:projectId/perspectives',
+        app.get('/api/perspectives/projects/:projectId',
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.getPerspectivesForProject)),
 
@@ -917,8 +968,7 @@ export function RegisterRoutes(app: Router) {
         const argsPerspectiveController_getPerspectiveById: Record<string, TsoaRoute.ParameterSchema> = {
                 perspectiveId: {"in":"path","name":"perspectiveId","required":true,"dataType":"string"},
         };
-        app.get('/perspectives/:perspectiveId',
-            authenticateMiddleware([{"jwt":[]}]),
+        app.get('/api/perspectives/:perspectiveId',
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.getPerspectiveById)),
 
@@ -949,7 +999,7 @@ export function RegisterRoutes(app: Router) {
                 perspectiveId: {"in":"path","name":"perspectiveId","required":true,"dataType":"string"},
                 body: {"in":"body","name":"body","required":true,"ref":"UpdatePerspectiveInput"},
         };
-        app.put('/perspectives/:perspectiveId',
+        app.put('/api/perspectives/:perspectiveId',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.updatePerspective)),
@@ -980,7 +1030,7 @@ export function RegisterRoutes(app: Router) {
         const argsPerspectiveController_deletePerspective: Record<string, TsoaRoute.ParameterSchema> = {
                 perspectiveId: {"in":"path","name":"perspectiveId","required":true,"dataType":"string"},
         };
-        app.delete('/perspectives/:perspectiveId',
+        app.delete('/api/perspectives/:perspectiveId',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.deletePerspective)),
