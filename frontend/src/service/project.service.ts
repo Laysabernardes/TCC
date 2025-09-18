@@ -1,13 +1,13 @@
 import api from "./api";
 import type ProjectRequest from "../dto/request/projectRequest";
-import type ProjectResponse from "../dto/response/projectResponse";
+import type {ProjectResponseType}   from "../features/projetos/components/project.types";
 
 export const ProjectService = {
   createProject: async (
     token: string,
     project: ProjectRequest
-  ): Promise<ProjectResponse> => {
-    const response = await api.post<ProjectResponse>("/projects", project, {
+  ): Promise<ProjectResponseType> => {
+    const response = await api.post<ProjectResponseType>("/projects", project, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -15,8 +15,8 @@ export const ProjectService = {
     return response.data;
   },
 
-  getAllProjects: async (token: string): Promise<ProjectResponse[]> => {
-    const response = await api.get<ProjectResponse[]>("/projects", {
+  getAllProjects: async (token: string): Promise<ProjectResponseType[]> => {
+    const response = await api.get<ProjectResponseType[]>("/projects", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -27,8 +27,8 @@ export const ProjectService = {
   getProjectBySlug: async (
     token: string,
     project: ProjectRequest
-  ): Promise<ProjectResponse> => {
-    const response = await api.get<ProjectResponse>(
+  ): Promise<ProjectResponseType> => {
+    const response = await api.get<ProjectResponseType>(
       `/projects/${project.slug}`,
       {
         headers: {
@@ -43,8 +43,8 @@ export const ProjectService = {
     token: string,
     project: ProjectRequest,
     id?: string
-  ): Promise<ProjectResponse> => {
-    const response = await api.put<ProjectResponse>(
+  ): Promise<ProjectResponseType> => {
+    const response = await api.put<ProjectResponseType>(
       `/projects/${id}`,
       project,
       {

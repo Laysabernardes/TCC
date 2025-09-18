@@ -142,21 +142,6 @@ function Textarea({
           required={required}
           className="w-full h-50 max-h-50 bg-dark-1 p-2 pl-4 rounded-lg text-red-3 resize-none"
         />
-        <div className="flex items-center gap-2 h-10 mt-2">
-          <input
-            id={`${id}-img-link`} // ID único vinculado ao textarea
-            type="text"
-            placeholder="Insira a URL da imagem aqui"
-            className="w-[80%] bg-dark-1 p-2 pl-4 rounded-lg text-red-3"
-          />
-          <button
-            type="button"
-            onClick={addImg}
-            className="w-[20%] h-full px-2 bg-red-3 transition hover:bg-red-2 cursor-pointer text-white rounded"
-          >
-            Adicionar
-          </button>
-        </div>
       </div>
     </div>
   );
