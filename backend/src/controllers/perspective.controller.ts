@@ -89,6 +89,23 @@ export class PerspectiveController extends Controller {
   }
 
   /**
+   * Busca um projeto único pelo seu slug.
+   * @summary Busca um projeto por slug.
+   * @param slug O slug único do projeto a ser recuperado.
+   */
+  @Get("/slug/{slug}")
+  @Response("404", "Not Found")
+  public async getPerspectiveBySlug(@Path() slug: string): Promise<PerspectiveResponseType> {
+    const perspective = await PerspectiveService.findBySlug(slug);
+    if (!perspective) {
+      this.setStatus(404);
+      return { message: "Perspectiva não encontrada" } as any;
+    }
+    return perspective;
+  }
+  
+
+  /**
    * Atualiza uma perspectiva existente.
    * @param perspectiveId O ID da perspectiva a ser atualizada.
    * @param body Os dados a serem atualizados na perspectiva.

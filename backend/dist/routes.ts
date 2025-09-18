@@ -1026,6 +1026,36 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsPerspectiveController_getPerspectiveBySlug: Record<string, TsoaRoute.ParameterSchema> = {
+                slug: {"in":"path","name":"slug","required":true,"dataType":"string"},
+        };
+        app.get('/perspectives/slug/:slug',
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
+            ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.getPerspectiveBySlug)),
+
+            async function PerspectiveController_getPerspectiveBySlug(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsPerspectiveController_getPerspectiveBySlug, request, response });
+
+                const controller = new PerspectiveController();
+
+              await templateService.apiHandler({
+                methodName: 'getPerspectiveBySlug',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsPerspectiveController_updatePerspective: Record<string, TsoaRoute.ParameterSchema> = {
                 perspectiveId: {"in":"path","name":"perspectiveId","required":true,"dataType":"string"},
                 body: {"in":"body","name":"body","required":true,"ref":"UpdatePerspectiveInput"},

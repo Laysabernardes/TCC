@@ -100,6 +100,19 @@ export class PerspectiveService {
   }
 
   /**
+   * Busca uma perspectiva única pelo seu slug.
+   * @param {string} slug O slug da perspectiva.
+   * @returns {Promise<PerspectiveResponseType | null>} A perspectiva encontrada ou nulo.
+   */
+   static async findBySlug(slug: string): Promise<PerspectiveResponseType | null> {
+     const perspective = await PerspectiveModel.findOne({ slug })
+       .populate("authors")
+       .populate("projectId")
+       .lean();
+     if (!perspective) return null;
+     return toPerspectiveResponse(perspective);
+   }
+  /**
    * Atualiza uma perspectiva existente pelo seu ID.
    * @param {string} id - O ID da perspectiva a ser atualizada.
    * @param {UpdatePerspectiveInput} input - Os novos dados para a perspectiva.

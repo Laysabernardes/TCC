@@ -1961,6 +1961,43 @@
 				]
 			}
 		},
+		"/perspectives/slug/{slug}": {
+			"get": {
+				"operationId": "GetPerspectiveBySlug",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PerspectiveResponseType"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"description": "Busca um projeto único pelo seu slug.",
+				"summary": "Busca um projeto por slug.",
+				"tags": [
+					"Perspectives"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "O slug único do projeto a ser recuperado.",
+						"in": "path",
+						"name": "slug",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/people": {
 			"post": {
 				"operationId": "CreatePerson",
