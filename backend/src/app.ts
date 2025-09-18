@@ -7,6 +7,7 @@ import express, {
 import swaggerUi from 'swagger-ui-express';
 import { ValidateError } from 'tsoa';
 import cors from 'cors'; 
+import { ZodError } from "zod";
 
 import { connectDB } from './config/database';
 import { RegisterRoutes } from '../dist/routes'; 
@@ -38,6 +39,12 @@ const startServer = async () => {
     res: ExResponse,
     next: NextFunction
   ): ExResponse | void {
+    if (err instanceof ZodError) {
+      return res.status(422).json({
+        message: "Validation Failed",
+        errors: err.flatten(),
+      });
+    }
     if (err instanceof ValidateError) {
       return res.status(422).json({
         message: "Validation Failed",

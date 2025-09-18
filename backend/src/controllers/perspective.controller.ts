@@ -30,7 +30,7 @@ interface ErrorResponse {
 }
 
 @Tags("Perspectives")
-@Route("api/perspectives") // Define uma rota base para todos os métodos
+@Route("perspectives") // Define uma rota base para todos os métodos
 export class PerspectiveController extends Controller {
 
   /**

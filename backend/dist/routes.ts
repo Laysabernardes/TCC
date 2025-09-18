@@ -909,7 +909,7 @@ export function RegisterRoutes(app: Router) {
                 projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
                 body: {"in":"body","name":"body","required":true,"ref":"CreatePerspectiveInput"},
         };
-        app.post('/api/perspectives/projects/:projectId',
+        app.post('/perspectives/projects/:projectId',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.createPerspective)),
@@ -939,7 +939,7 @@ export function RegisterRoutes(app: Router) {
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsPerspectiveController_getAllPerspectives: Record<string, TsoaRoute.ParameterSchema> = {
         };
-        app.get('/api/perspectives',
+        app.get('/perspectives',
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.getAllPerspectives)),
 
@@ -969,7 +969,7 @@ export function RegisterRoutes(app: Router) {
         const argsPerspectiveController_getPerspectivesForProject: Record<string, TsoaRoute.ParameterSchema> = {
                 projectId: {"in":"path","name":"projectId","required":true,"dataType":"string"},
         };
-        app.get('/api/perspectives/projects/:projectId',
+        app.get('/perspectives/projects/:projectId',
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.getPerspectivesForProject)),
 
@@ -999,7 +999,7 @@ export function RegisterRoutes(app: Router) {
         const argsPerspectiveController_getPerspectiveById: Record<string, TsoaRoute.ParameterSchema> = {
                 perspectiveId: {"in":"path","name":"perspectiveId","required":true,"dataType":"string"},
         };
-        app.get('/api/perspectives/:perspectiveId',
+        app.get('/perspectives/:perspectiveId',
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.getPerspectiveById)),
 
@@ -1030,7 +1030,7 @@ export function RegisterRoutes(app: Router) {
                 perspectiveId: {"in":"path","name":"perspectiveId","required":true,"dataType":"string"},
                 body: {"in":"body","name":"body","required":true,"ref":"UpdatePerspectiveInput"},
         };
-        app.put('/api/perspectives/:perspectiveId',
+        app.put('/perspectives/:perspectiveId',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.updatePerspective)),
@@ -1061,7 +1061,7 @@ export function RegisterRoutes(app: Router) {
         const argsPerspectiveController_deletePerspective: Record<string, TsoaRoute.ParameterSchema> = {
                 perspectiveId: {"in":"path","name":"perspectiveId","required":true,"dataType":"string"},
         };
-        app.delete('/api/perspectives/:perspectiveId',
+        app.delete('/perspectives/:perspectiveId',
             authenticateMiddleware([{"jwt":[]}]),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController)),
             ...(fetchMiddlewares<RequestHandler>(PerspectiveController.prototype.deletePerspective)),

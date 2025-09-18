@@ -1700,7 +1700,7 @@
 				]
 			}
 		},
-		"/api/perspectives/projects/{projectId}": {
+		"/perspectives/projects/{projectId}": {
 			"post": {
 				"operationId": "CreatePerspective",
 				"responses": {
@@ -1783,7 +1783,7 @@
 				]
 			}
 		},
-		"/api/perspectives": {
+		"/perspectives": {
 			"get": {
 				"operationId": "GetAllPerspectives",
 				"responses": {
@@ -1809,7 +1809,7 @@
 				"parameters": []
 			}
 		},
-		"/api/perspectives/{perspectiveId}": {
+		"/perspectives/{perspectiveId}": {
 			"get": {
 				"operationId": "GetPerspectiveById",
 				"responses": {

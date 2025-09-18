@@ -172,7 +172,6 @@ const perspectiveSchema = new Schema<IPerspective>(
           enum: ['text', 'title', 'image', 'highlight'], // Garante a integridade dos tipos de bloco.
         },
         content: { type: String, required: false },
-        level: { type: Number, required: false, default: 2 },
         imageUrl: { type: String, required: false },
         caption: { type: String, required: false },
       }, { _id: false }) // Evita a criação de IDs para os sub-documentos de bloco.
