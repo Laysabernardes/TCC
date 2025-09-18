@@ -7,12 +7,12 @@ import type { PerspectiveFormData } from "./perspective.schema";
 // Serviços da API
 import { PerspectiveService } from "../perspective.service";
 import { PeopleService } from "../../../../service/people.service";
-import { ProjectService } from "../../../../service/project.service";
+import { ProjectService } from "../../../projects/project.service";
 
 // DTOs (Tipos de Resposta)
 import type { PerspectiveResponseType } from "./perspective.types";
 import type { PeopleResponseType } from "../../../people/components/people.types";
-import type { ProjectResponseType } from "../../../projetos/components/project.types";
+import type { ProjectResponseType } from "../../../projects/components/project.types";
 
 export function usePerspectiveForm(action: "Create" | "Update" | "Delete", onFormSubmit: () => void) {
     const [allPerspectives, setAllPerspectives] = useState<PerspectiveResponseType[]>([]);
@@ -36,7 +36,7 @@ export function usePerspectiveForm(action: "Create" | "Update" | "Delete", onFor
                 const token = localStorage.getItem("authToken") || "";
                 const [perspectivesData, projectsData, peopleData] = await Promise.all([
                     PerspectiveService.getAllPerspectives(),
-                    ProjectService.getAllProjects(token),
+                    ProjectService.getAllProjects(),
                     PeopleService.getAllPeople(token),
                 ]);
                 setAllPerspectives(perspectivesData);
@@ -63,6 +63,9 @@ export function usePerspectiveForm(action: "Create" | "Update" | "Delete", onFor
             const formData: Partial<PerspectiveFormData> = {
                 ...perspectiveToLoad,
                 authors: perspectiveToLoad.authors.map(author => author._id),
+                projectId: typeof perspectiveToLoad.projectId === 'object' && perspectiveToLoad.projectId !== null
+                    ? perspectiveToLoad.projectId._id
+                    : perspectiveToLoad.projectId,
             };
             formMethods.reset(formData);
         }

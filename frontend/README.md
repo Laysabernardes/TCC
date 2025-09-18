@@ -52,3 +52,56 @@ export default tseslint.config({
   },
 })
 ```
+
+
+```
+/frontend
+└── src/
+    ├── assets/
+    │
+    ├── components/ # <-- APENAS componentes de UI GENÉRICOS e REUTILIZÁVEIS
+    │   ├── inputs/
+    │   │   └── index.tsx          # Seus inputs (TypeInput, Selection, etc.)
+    │   ├── layout/
+    │   │   ├── Header.tsx         # O cabeçalho do site
+    │   │   └── Footer.tsx         # O rodapé do site
+    │   └── ui/
+    │       ├── Button.tsx         # Um componente de botão genérico
+    │       └── Spinner.tsx        # Um ícone de carregamento
+    │
+    ├── features/ # <-- CORAÇÃO DO PROJETO: Cada funcionalidade vive aqui
+    │   ├── auth/                  # Lógica de autenticação
+    │   │   └── auth.service.ts
+    │   │
+    │   ├── perspectives/
+    │   │   ├── components/
+    │   │   │   ├── FormPerspective/ # O formulário de admin
+    │   │   │   │   ├── index.tsx
+    │   │   │   │   ├── usePerspectiveForm.ts
+    │   │   │   │   ├── ContentBlockEditor.tsx
+    │   │   │   │   └── perspective.schema.ts
+    │   │   │   └── PerspectiveDetail.tsx # A view de detalhe da perspectiva
+    │   │   ├── perspective.service.ts
+    │   │   └── perspective.types.ts
+    │   │
+    │   └── projects/
+    │       ├── components/
+    │       │   ├── FormProject/
+    │       │   │   └── index.tsx
+    │       │   ├── ProjectCard.tsx      # O card de um projeto na lista
+    │       │   └── ProjectList.tsx      # A grade de projetos com o filtro
+    │       ├── project.service.ts
+    │       └── project.types.ts
+    │
+    ├── lib/ # Para código auxiliar, como a configuração do Axios
+    │   └── axios.ts
+    │
+    ├── pages/ # <-- APENAS para definir as ROTAS e MONTAR as páginas
+    │   ├── AdmManagementPage.tsx
+    │   ├── HomePage.tsx
+    │   ├── LoginPage.tsx
+    │   ├── ProjectDetailPage.tsx
+    │   └── ProjectsListPage.tsx
+    │
+    └── main.tsx # Arquivo principal que configura o ROTEAMENTO
+´´´

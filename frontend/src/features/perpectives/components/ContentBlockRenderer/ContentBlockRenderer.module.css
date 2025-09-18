@@ -1,0 +1,59 @@
+.contentWrapper {
+  color: #e0e0e0; /* Cinza claro para o texto */
+  line-height: 1.7;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #333; /* Linha sutil abaixo do título */
+  padding-bottom: 0.5rem;
+  color: #ffffff; /* Branco para destaque */
+}
+
+.text {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  color: #b0b0b0; /* Um cinza um pouco mais escuro para o corpo do texto */
+}
+
+.highlight {
+  border-left: 4px solid #e50914; /* Vermelho característico */
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: rgba(229, 9, 20, 0.05); /* Fundo sutil */
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.singleImage, .imageGroup {
+  margin: 2.5rem 0;
+}
+
+.singleImage img, .imageGroup img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.singleImage figcaption, .imageGroup figcaption {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #999; /* Cinza para a legenda */
+  margin-top: 0.75rem;
+}
+
+.imageGroup {
+  display: flex;
+  gap: 1.5rem; /* Espaçamento entre as imagens */
+}
+
+.imageGroup figure {
+  flex: 1; /* Faz cada imagem ocupar o mesmo espaço */
+  margin: 0;
+}

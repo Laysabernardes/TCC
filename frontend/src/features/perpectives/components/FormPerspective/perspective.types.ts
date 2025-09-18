@@ -1,4 +1,5 @@
 import type { PeopleResponseType } from "../../../people/components/people.types";
+import type { ProjectResponseType } from '../../../projects/components/project.types';
 
 
 // --- TIPOS DOS BLOCOS DE CONTEÚDO ---
@@ -37,7 +38,7 @@ export interface PerspectiveRequest {
  */
 export interface PerspectiveResponseType {
   _id: string;
-  projectId: string;
+  projectId:  ProjectResponseType;
   title: string;
   slug: string;
   order: number;

@@ -1,4 +1,4 @@
-import api from "./api.ts";
+import api from "../lib/api.ts";
 import type PeopleRequest from "../dto/request/peopleRequest.ts";
 import type PeopleResponse from "../dto/response/peopleResponse.ts";
 

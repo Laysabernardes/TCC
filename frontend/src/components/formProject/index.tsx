@@ -9,7 +9,7 @@ import {
   MultiSelect,
 } from "../../components/inputs";
 import { FaGear } from "react-icons/fa6";
-import { ProjectService } from "../../service/project.service";
+import { ProjectService } from "../../features/projects/project.service";
 import { PeopleService } from "../../service/people.service";
 import { CarouselService } from "../../service/carousel.service";
 import type ProjectRequest from "../../dto/request/projectRequest";
