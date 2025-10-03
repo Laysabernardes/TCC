@@ -4,23 +4,54 @@
  */
 
 import api from "../../lib/api"; // Importa a instância central do Axios
-import type { ProjectRequestType, ProjectResponseType } from "./components/project.types";
+import type { ProjectRequestType, ProjectResponseType, PaginatedProjectsResponse } from "./components/project.types";
 
 /**
  * @class ProjectService
  * @description Classe estática que agrupa as chamadas de API para a entidade 'Project'.
  */
 export class ProjectService {
-  /**
-   * Busca todos os projetos.
-   * O token é adicionado automaticamente pelo interceptor do Axios em `api.ts`.
-   * @returns {Promise<ProjectResponseType[]>} Uma lista de todos os projetos.
-   */
-  static async getAllProjects(): Promise<ProjectResponseType[]> {
-    const response = await api.get('/projects');
-    return response.data;
-  }
 
+  /**
+     * Busca projetos paginados, com ou sem filtro de categoria.
+     * Esta é a única rota de listagem usada pela página de projetos.
+     * @param page O número da página (padrão 1).
+     * @param limit O limite de projetos por página (ex: 6).
+     * @param category Opcional. A categoria para filtrar. Se for 'Todos', busca a rota geral.
+     * @returns {Promise<PaginatedProjectsResponse>} Um objeto com os projetos e o total de páginas.
+     */
+    static async getProjects(
+        page: number, 
+        limit: number, 
+        category: string
+    ): Promise<PaginatedProjectsResponse> {
+        let basePath: string;
+        
+        // Determina a base da URL (com ou sem filtro de categoria)
+        if (category === 'Todos') {
+            basePath = '/projects'; // GET /projects
+        } else {
+            basePath = `/projects/category/${category}`; // GET /projects/category/Urbanizacao
+        }
+
+        // 1. Constrói os Query Parameters de forma segura
+        const params = new URLSearchParams({
+            page: page.toString(),    // Garante que o número 'page' é uma string na URL
+            limit: limit.toString()
+        });
+        
+        // 2. Monta a URL final: /projects?page=X&limit=Y
+        const url = `${basePath}?${params.toString()}`;
+
+        try {
+            const response = await api.get<PaginatedProjectsResponse>(url);
+            return response.data;
+        } catch (error) {
+            console.error(`Error fetching projects from ${url}:`, error);
+            throw new Error("Failed to load projects from API."); 
+        }
+    }
+    
   /**
    * Busca um único projeto pelo seu slug.
    * @param {string} slug - O slug do projeto a ser buscado.

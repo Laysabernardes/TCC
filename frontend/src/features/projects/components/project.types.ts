@@ -10,7 +10,7 @@ export interface ProjectBase {
   subtitle?: string;
   slug: string;
   year: number;
-  category: string[];
+  category: string;
   about_html?: string;
   status: "draft" | "published";
   isCarousel?: boolean;
@@ -39,4 +39,10 @@ export interface ProjectResponseType extends ProjectBase {
   team: PeopleResponseType[]; // Ao receber da API, os dados da equipe vêm completos
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface PaginatedProjectsResponse {
+    data: ProjectResponseType[]; 
+    totalPages: number;         
+    // currentPage?: number; // Opcional
 }
