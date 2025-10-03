@@ -40,6 +40,14 @@ const toProjectResponse = (project: IProject | any): ProjectResponseType => {
 };
 
 /**
+ * Interface que define a estrutura da resposta paginada que o Controller retornará.
+ */
+interface PaginatedProjectsResponse {
+  data: ProjectResponseType[]; // O array de projetos mapeados (do tipo ProjectResponseType)
+  totalPages: number;         // O número total de páginas
+}
+
+/**
  * @class ProjectService
  * @description Classe estática que agrupa os métodos para manipular os 'Projects'.
  */
@@ -115,6 +123,53 @@ export class ProjectService {
   static async findAll(): Promise<ProjectResponseType[]> {
     const projects = await ProjectModel.find().lean();
     return projects.map(toProjectResponse);
+  }
+
+  /**
+ * Busca todos os projetos (sem filtro de categoria), aplicando paginação.
+ * @param page O número da página (padrão 1).
+ * @param limit O limite de projetos por página (padrão 6).
+ * @returns {Promise<PaginatedProjectsResponse>} Projetos paginados e total de páginas.
+ */
+  static async findPaginated(
+    page: number = 1,
+    limit: number = 6
+  ): Promise<PaginatedProjectsResponse> {
+
+    // CORREÇÃO CRUCIAL: Forçar a conversão para número
+    const numPage = Number(page);
+    const numLimit = Number(limit);
+
+    // Garantir que a página não é zero ou negativa
+    const safePage = Math.max(1, numPage);
+
+    // O cálculo agora é feito com números garantidos
+    const skipIndex = (safePage - 1) * numLimit;
+    const query = {};
+
+    try {
+      // Para debug, adicione este log no backend:
+      console.log(`Service - Page: ${safePage}, Limit: ${numLimit}, Skip: ${skipIndex}`);
+
+      // 1. Busca do total de documentos
+      const totalCount = await ProjectModel.countDocuments(query);
+
+      // 2. Busca dos projetos com skip e limit
+      const projects = await ProjectModel.find(query)
+        .skip(skipIndex) // O skipIndex agora está correto
+        .limit(numLimit)
+        .lean();
+
+      // 3. Mapeia a resposta e calcula o total de páginas
+      const data = projects.map(toProjectResponse)
+      const totalPages = Math.ceil(totalCount / numLimit);
+
+      // 4. Retorna o objeto de paginação
+      return { data, totalPages };
+    } catch (error) {
+      console.error("Erro no Service findPaginated:", error);
+      throw new Error("Falha na consulta de todos os projetos paginados.");
+    }
   }
 
   /**
@@ -197,14 +252,45 @@ export class ProjectService {
       throw new Error("Project not found to delete.");
     }
   }
-
   /**
-   * Busca todos os projetos que pertencem a uma categoria específica.
-   * @param category A categoria para filtrar os projetos.
-   * @returns {Promise<ProjectResponseType[]>} Um array com os projetos encontrados.
-   */
-  static async findByCategory(category: string): Promise<ProjectResponseType[]> {
-    const projects = await ProjectModel.find({ category }).lean();
-    return projects.map(toProjectResponse);
+ * Busca projetos de uma categoria, aplicando paginação.
+ * @param category A categoria para filtrar.
+ * @param page O número da página (padrão 1).
+ * @param limit O limite de projetos por página (padrão 6).
+ * @returns {Promise<{ data: ProjectResponseType[], totalPages: number }>} Projetos paginados e total de páginas.
+ */
+  static async findByCategory(
+    category: string,
+    page: number = 1,
+    limit: number = 6
+  ): Promise<PaginatedProjectsResponse> {
+
+    const query = { category: category };
+
+    // 2. Cálculo do índice para pular
+    const skipIndex = (page - 1) * limit;
+
+    try {
+      // 3. Busca do total de documentos que atendem o filtro
+      const totalCount = await ProjectModel.countDocuments(query);
+
+      // 4. Busca dos projetos com skip e limit
+      const projects = await ProjectModel.find(query)
+        .skip(skipIndex) // Pula os documentos das páginas anteriores
+        .limit(limit)   // Limita ao número máximo da página
+        .lean();
+
+      // 5. Mapeia a resposta e calcula o total de páginas
+      const data = projects.map(toProjectResponse);
+      const totalPages = Math.ceil(totalCount / limit);
+
+      // 6. Retorna o objeto de paginação
+      return { data, totalPages };
+
+    } catch (error) {
+      console.error("Erro no Service findByCategory:", error);
+      // Lança um erro para ser capturado e tratado no Controller
+      throw new Error("Falha na consulta ao banco de dados durante a paginação.");
+    }
   }
 }

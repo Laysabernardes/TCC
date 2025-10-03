@@ -7,6 +7,11 @@ import { createProjectSchema, updateProjectSchema } from '../zod/schemas/project
 type CreateProjectInput = z.infer<typeof createProjectSchema>['body'];
 type UpdateProjectInput = z.infer<typeof updateProjectSchema>['body'];
 
+interface PaginatedProjectsResponse {
+  data: ProjectResponseType[];
+  totalPages: number;
+}
+
 @Route("projects")
 @Tags("Projects")
 export class ProjectController extends Controller {
@@ -19,7 +24,7 @@ export class ProjectController extends Controller {
   @Post("/")
   @SuccessResponse("201", "Created")
   @Response("409", "Conflict")
-  @Security("jwt") 
+  @Security("jwt")
   public async createProject(@Body() body: CreateProjectInput): Promise<ProjectResponseType> {
     try {
       const project = await ProjectService.create(body);
@@ -32,12 +37,18 @@ export class ProjectController extends Controller {
   }
 
   /**
-   * Retorna uma lista de todos os projetos.
-   * @summary Retorna todos os projetos.
+   * Retorna uma lista de todos os projetos, com paginação.
+   * @summary Retorna todos os projetos (paginado).
+   * @param page O número da página desejada (padrão 1).
+   * @param limit O número de itens por página (padrão 9).
    */
   @Get("/")
-  public async getAllProjects(): Promise<ProjectResponseType[]> {
-    return await ProjectService.findAll();
+  public async getAllProjects(
+    @Query() page: number = 1,
+    @Query() limit: number = 6
+  ): Promise<PaginatedProjectsResponse> { 
+    console.log(`Controller Recebeu: Page ${page}, Limit ${limit}`); 
+    return await ProjectService.findPaginated(page, limit);
   }
 
   /**
@@ -103,15 +114,23 @@ export class ProjectController extends Controller {
   }
 
   /**
-   * Filtra projetos por uma categoria específica.
-   * @summary Filtra projetos por categoria.
+   * Filtra projetos por uma categoria específica e retorna uma lista paginada.
+   * @summary Filtra projetos por categoria (paginado).
    * @param category A categoria para filtrar.
-   * @example category "Urbanismo"
+   * @param page O número da página desejada (padrão 1).
+   * @param limit O número de itens por página (padrão 9).
    */
   @Get("category/{category}")
-  public async getProjectsByCategory(@Path() category: string): Promise<ProjectResponseType[]> {
-    return await ProjectService.findByCategory(category);
+  public async getProjectsByCategory(
+    @Path() category: string,
+    // Captura os parâmetros page e limit da query string (ex: ?page=2&limit=6)
+    @Query() page: number = 1,
+    @Query() limit: number = 6
+  ): Promise<PaginatedProjectsResponse> {
+    const result = await ProjectService.findByCategory(category, page, limit);
+    return result;
   }
+
 
   /**
    * Atualiza os dados de um projeto existente.
@@ -121,7 +140,7 @@ export class ProjectController extends Controller {
    */
   @Put("{id}")
   @Response("404", "Not Found")
-  @Security("jwt") 
+  @Security("jwt")
   public async updateProject(@Path() id: string, @Body() body: UpdateProjectInput): Promise<ProjectResponseType> {
     const updatedProject = await ProjectService.update(id, body);
     if (!updatedProject) {
@@ -139,7 +158,7 @@ export class ProjectController extends Controller {
   @Delete("{id}")
   @SuccessResponse("204", "No Content")
   @Response("404", "Not Found")
-  @Security("jwt") 
+  @Security("jwt")
   public async deleteProject(@Path() id: string): Promise<void> {
     try {
       await ProjectService.delete(id);
