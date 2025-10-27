@@ -4,7 +4,7 @@
  */
 
 import api from "../../lib/api"; // Importa a instância central do Axios
-import type { ProjectRequestType, ProjectResponseType, PaginatedProjectsResponse } from "./components/project.types";
+import type { ProjectRequestType, ProjectResponseType, PaginatedProjectsResponse } from "./project.types";
 
 /**
  * @class ProjectService

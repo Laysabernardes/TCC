@@ -6,6 +6,7 @@ import { RiArrowGoBackFill } from "react-icons/ri";
 
 //import { FormProject } from "../../components/formProject/index";
 import { FormPerspective } from "../../features/perpectives/components/FormPerspective/index";
+import { FormProject } from "../../features/projects/components/FormProject/index";
 
 // Tipos para garantir a consistência do nosso estado
 type CollectionType = "Project" | "Perspective" | "Timeline" | "People" | "";
@@ -31,7 +32,7 @@ export default function AdmManagement() {
   useEffect(() => {
     setAction(""); // Reseta para o valor inicial vazio
   }, [collection]);
-  
+
   // Função que será passada para os formulários filhos
   const handleFormSubmit = () => {
     setFeedback({ type: "success", message: "Operação concluída com sucesso!" });
@@ -62,9 +63,8 @@ export default function AdmManagement() {
               {/* Componente de Feedback renderizado aqui */}
               {feedback && (
                 <div
-                  className={`p-3 rounded-lg text-white text-center transition-opacity duration-300 ${
-                    feedback.type === "success" ? "bg-green-600/90" : "bg-red-600/90"
-                  }`}
+                  className={`p-3 rounded-lg text-white text-center transition-opacity duration-300 ${feedback.type === "success" ? "bg-green-600/90" : "bg-red-600/90"
+                    }`}
                 >
                   {feedback.message}
                 </div>
@@ -100,12 +100,13 @@ export default function AdmManagement() {
               </div>
               <div className="mt-6 border-t border-gray-700 pt-6">
                 {collection === "Project" && action ? (
-                  <div className="p-4 border border-dashed border-gray-600 rounded-md">
-                    <p className="text-gray-400 text-center">O formulário de Projetos será implementado aqui.</p>
-                  </div>
+                  <FormProject // <--- SUBSTITUÍDO O PLACEHOLDER
+                    action={action as "Create" | "Update" | "Delete"}
+                    onFormSubmit={handleFormSubmit}
+                  />
                 ) : collection === "Perspective" && action ? (
-                  <FormPerspective 
-                    action={action} 
+                  <FormPerspective
+                    action={action}
                     onFormSubmit={handleFormSubmit}
                   />
                 ) : null}

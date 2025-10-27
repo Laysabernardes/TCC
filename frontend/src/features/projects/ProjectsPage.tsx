@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import ProjectCard from './components/ProjectCard';
 import { ProjectService } from './project.service';
-import type { ProjectResponseType, PaginatedProjectsResponse } from './components/project.types';
+import type { ProjectResponseType, PaginatedProjectsResponse } from './project.types';
 
 // Lista de categorias MOCKADA (Inalterada)
 const MOCK_CATEGORIES = [
