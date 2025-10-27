@@ -339,6 +339,26 @@
 				},
 				"type": "object"
 			},
+			"PaginatedProjectsResponse": {
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/ProjectResponseType"
+						},
+						"type": "array"
+					},
+					"totalPages": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"data",
+					"totalPages"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"UpdateProjectInput": {
 				"properties": {
 					"extraURL": {
@@ -1373,22 +1393,42 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ProjectResponseType"
-									},
-									"type": "array"
+									"$ref": "#/components/schemas/PaginatedProjectsResponse"
 								}
 							}
 						}
 					}
 				},
-				"description": "Retorna uma lista de todos os projetos.",
-				"summary": "Retorna todos os projetos.",
+				"description": "Retorna uma lista de todos os projetos, com paginação.",
+				"summary": "Retorna todos os projetos (paginado).",
 				"tags": [
 					"Projects"
 				],
 				"security": [],
-				"parameters": []
+				"parameters": [
+					{
+						"description": "O número da página desejada (padrão 1).",
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "O número de itens por página (padrão 9).",
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 6,
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
 			}
 		},
 		"/projects/status/{status}": {
@@ -1586,17 +1626,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ProjectResponseType"
-									},
-									"type": "array"
+									"$ref": "#/components/schemas/PaginatedProjectsResponse"
 								}
 							}
 						}
 					}
 				},
-				"description": "Filtra projetos por uma categoria específica.",
-				"summary": "Filtra projetos por categoria.",
+				"description": "Filtra projetos por uma categoria específica e retorna uma lista paginada.",
+				"summary": "Filtra projetos por categoria (paginado).",
 				"tags": [
 					"Projects"
 				],
@@ -1609,8 +1646,29 @@
 						"required": true,
 						"schema": {
 							"type": "string"
-						},
-						"example": "Urbanismo"
+						}
+					},
+					{
+						"description": "O número da página desejada (padrão 1).",
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 1,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "O número de itens por página (padrão 9).",
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"default": 6,
+							"format": "double",
+							"type": "number"
+						}
 					}
 				]
 			}

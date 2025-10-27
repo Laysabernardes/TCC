@@ -40,7 +40,7 @@ export function usePerspectiveForm(action: "Create" | "Update" | "Delete", onFor
                     PeopleService.getAllPeople(token),
                 ]);
                 setAllPerspectives(perspectivesData);
-                setProjects(projectsData);
+                setProjects(projectsData.data);
                 setPeople(peopleData);
             } catch (err) {
                 setError("Falha ao carregar dados. Verifique a conexão com a API.");
