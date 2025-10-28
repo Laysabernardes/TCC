@@ -97,7 +97,7 @@ export class ProjectService {
    * @returns {Promise<ProjectResponseType>} O projeto atualizado.
    */
   static async update(id: string, data: Partial<ProjectRequestType>): Promise<ProjectResponseType> {
-    const response = await api.put(`/projects/${id}`, data);
+    const response = await api.patch(`/projects/${id}`, data);
     return response.data;
   }
 
