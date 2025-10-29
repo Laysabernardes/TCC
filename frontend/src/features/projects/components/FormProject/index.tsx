@@ -2,7 +2,7 @@ import { Controller } from "react-hook-form";
 // Renomeie os inputs conforme o nome do seu componente
 import { TypeInput, Selection, MultiSelect } from "../../../../components/inputs";
 // Importa o hook customizado do Projeto
-import { useProjectForm } from "../../useProjectForm"; 
+import { useProjectForm } from "../../useProjectForm";
 
 // Assumindo que você tem os tipos definidos no useProjectForm
 interface FormProjectProps {
@@ -13,10 +13,10 @@ interface FormProjectProps {
 export function FormProject({ action, onFormSubmit }: FormProjectProps) {
     // Puxa toda a lógica do hook useProjectForm
     const { formMethods, state, actions } = useProjectForm(action, onFormSubmit);
-    
+
     // Desestrutura os métodos do React Hook Form
     const { register, control, handleSubmit } = formMethods;
-    
+
     // Desestrutura os estados e ações do hook
     const { allProjects, people, selectedProjectId, isLoading, error } = state;
     const { setSelectedProjectId, onSubmit, handleDelete } = actions;
@@ -38,15 +38,15 @@ export function FormProject({ action, onFormSubmit }: FormProjectProps) {
     }));
 
     // Mapeamento das opções de Pessoas para o MultiSelect (Team)
-    const peopleOptions = people.map(p => ({ 
-        id: p._id, 
-        text: p.name 
+    const peopleOptions = people.map(p => ({
+        id: p._id,
+        text: p.name
     }));
 
 
     return (
         <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-6 p-4">
-            
+
             {(action === "Update" || action === "Delete") && (
                 <Selection
                     id="project_selector"
@@ -60,10 +60,10 @@ export function FormProject({ action, onFormSubmit }: FormProjectProps) {
 
             {action === "Delete" && selectedProjectId && (
                 <div className="text-center">
-                    <button 
-                        type="button" 
-                        onClick={handleDelete} 
-                        disabled={isLoading} 
+                    <button
+                        type="button"
+                        onClick={handleDelete}
+                        disabled={isLoading}
                         className="w-full p-3 bg-red-700 hover:bg-red-600 rounded text-white font-bold transition-colors"
                     >
                         {isLoading ? "Deletando..." : "Confirmar Deleção"}
@@ -75,29 +75,30 @@ export function FormProject({ action, onFormSubmit }: FormProjectProps) {
             {(action === "Create" || (action === "Update" && selectedProjectId)) && (
                 <>
                     <fieldset className="border border-gray-700 p-4 rounded-md">
-                        <legend className="text-lg font-semibold px-2">Informações Principais do Projeto</legend>
+                        <legend className="text-lg font-semibold px-2 text-light-3">Informações Principais do Projeto</legend>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            
+
                             <TypeInput id="title" title="Título do Projeto" {...register("title")} required />
                             <TypeInput id="subtitle" title="Subtítulo (Opcional)" {...register("subtitle")} />
                             <TypeInput id="slug" title="Slug (URL)" {...register("slug")} required />
-                            
+
                             <TypeInput id="category" title="Categoria" {...register("category")} required />
-                            
-                            <TypeInput 
-                                id="year" 
-                                type="number" 
-                                title="Ano de Conclusão" 
+
+                            <TypeInput
+                                id="year"
+                                type="number"
+                                title="Ano de Conclusão"
                                 {...register("year", { valueAsNumber: true })} // Importante para o Zod coerce
                                 required
                             />
-                            
+
                             {/* Associações */}
                             <Controller
                                 control={control}
                                 name="status"
                                 render={({ field }) => (
                                     <Selection
+                                        // Mantendo seus estilos
                                         id="status"
                                         title="Status"
                                         options={[
@@ -115,17 +116,17 @@ export function FormProject({ action, onFormSubmit }: FormProjectProps) {
 
                     {/* Campo about_html (usando textarea simples) */}
                     <fieldset className="border border-gray-700 p-4 rounded-md">
-                         <legend className="text-lg font-semibold px-2">Sobre (HTML)</legend>
-                         <textarea 
-                             id="about_html"
-                             {...register("about_html")} 
-                             className="w-full bg-dark-3 text-light-3 border border-gray-600 rounded p-2"
-                             rows={6}
-                         />
+                        <legend className="text-lg font-semibold px-2 text-light-3">Sobre (HTML)</legend>
+                        <textarea
+                            id="about_html"
+                            {...register("about_html")}
+                            className="w-full bg-dark-3 text-light-3 border border-gray-600 rounded p-2"
+                            rows={6}
+                        />
                     </fieldset>
 
                     <fieldset className="border border-gray-700 p-4 rounded-md">
-                        <legend className="text-lg font-semibold px-2">Metadados e Equipe</legend>
+                        <legend className="text-lg font-semibold px-2 text-light-3">Metadados e Equipe</legend>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* MultiSelect para Team */}
                             <Controller
@@ -133,6 +134,7 @@ export function FormProject({ action, onFormSubmit }: FormProjectProps) {
                                 name="team"
                                 render={({ field }) => (
                                     <MultiSelect
+                                        // Mantendo seus estilos
                                         id="team"
                                         name={field.name}
                                         title="Equipe"
@@ -146,26 +148,24 @@ export function FormProject({ action, onFormSubmit }: FormProjectProps) {
                         </div>
                     </fieldset>
 
+                    {/* Opções de Destaque - AGORA SIMPLES */}
                     <fieldset className="border border-gray-700 p-4 rounded-md">
-                        <legend className="text-lg font-semibold px-2">Opções de Destaque</legend>
+                        <legend className="text-lg font-semibold px-2 text-light-3">Opções de Carrossel</legend>
                         <div className="flex items-center gap-4">
-                            <input id="isCarousel" type="checkbox" {...register("isCarousel")} className="h-5 w-5" />
-                            <label htmlFor="isCarousel" className="text-light-3">Incluir no Carrossel Principal?</label>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4 mt-2">
-                            <TypeInput 
-                                id="orderCarousel" 
-                                type="number" 
-                                title="Ordem no Carrossel" 
-                                {...register("orderCarousel", { valueAsNumber: true })} 
+                            <input
+                                id="isCarousel"
+                                type="checkbox"
+                                {...register("isCarousel")}
+                                className="h-5 w-5 bg-dark-3 text-light-3 border-gray-600 rounded" // Mantendo seus estilos
                             />
-                            <TypeInput id="extraURL" title="URL Extra (Carrossel)" {...register("extraURL")} />
+                            <label htmlFor="isCarousel" className="text-light-3">Quero incluir no Carrossel Principal?</label>
                         </div>
+                        {/* CAMPOS orderCarousel e extraURL REMOVIDOS */}
                     </fieldset>
 
-                    <button 
-                        type="submit" 
-                        disabled={isLoading} 
+                    <button
+                        type="submit"
+                        disabled={isLoading}
                         className="w-full p-3 bg-blue-600 hover:bg-blue-500 rounded text-white text-xl font-bold transition-colors"
                     >
                         {isLoading ? "Salvando..." : (action === "Create" ? "Criar Novo Projeto" : "Salvar Alterações")}
