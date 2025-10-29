@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { useCarouselForm } from './useCarouselForm'; 
-import type { CarouselResponseType } from './carousel.types'; 
-
-// Ajuste os caminhos de importação do seu useCarouselForm e tipos conforme a estrutura real
-// O código abaixo assume que os tipos e o hook estão acessíveis.
+import { useCarouselForm } from './useCarouselForm';
+import type { CarouselResponseType } from './carousel.types';
 
 // --- Componente de Linha (Implementa a lógica Edit/Save/Remove) ---
 const CarouselItemRow: React.FC<{ 
@@ -65,16 +62,19 @@ const CarouselItemRow: React.FC<{
         setRowFeedback('');
     };
 
-    const typeColor = item.collection_type === 'project' ? 'text-blue-600' : 'text-green-600';
+    // Cores de destaque para o tipo de coleção (Laranja para Projeto, Roxo para Perspectiva)
+    const typeColor = item.collection_type === 'project' ? 'text-orange-400' : 'text-purple-400'; 
     const isOrdered = item.orderCarousel !== undefined && item.orderCarousel !== null && item.orderCarousel >= 0;
-    const feedbackStyle = rowFeedback.includes('Erro') ? 'text-red-500' : 'text-green-600';
+    const feedbackStyle = rowFeedback.includes('Erro') ? 'text-red-400' : 'text-green-400'; 
 
 
     return (
-        <tr className={`border-b hover:bg-gray-50 ${isOrdered ? 'bg-white' : 'bg-yellow-50/50'} ${isEditing ? 'border-2 border-indigo-400' : ''}`}>
+        <tr className={`border-b border-dark-1 hover:bg-dark-1 
+            ${isOrdered ? 'bg-dark-2' : 'bg-yellow-900/40'} 
+            ${isEditing ? 'border-2 border-indigo-500' : ''}`}> {/* Aplicando fundo escuro/alerta */}
 
             {/* Coluna de Título/Tipo */}
-            <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+            <td className="px-6 py-4 font-medium text-gray-100 whitespace-nowrap"> {/* Texto CLARO */}
                 {item.title}
                 <span className={`ml-2 text-xs font-semibold ${typeColor}`}>
                     [{item.collection_type.toUpperCase()}]
@@ -89,10 +89,10 @@ const CarouselItemRow: React.FC<{
                     value={item.orderCarousel === undefined || item.orderCarousel === null ? "" : item.orderCarousel}
                     onChange={handleOrderChange}
                     disabled={!isEditing || isRowSaving}
-                    className="w-20 p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                    className="w-20 p-2 border border-gray-600 rounded focus:ring-blue-500 focus:border-blue-500 bg-dark-1 text-gray-100" // Input escuro
                     placeholder="Sem ordem"
                 />
-                {!isOrdered && <p className="text-xs text-red-500 mt-1">Item **inativo**</p>}
+                {!isOrdered && <p className="text-xs text-red-400 mt-1">Item **inativo**</p>}
             </td>
 
             {/* Coluna da URL Extra */}
@@ -102,7 +102,7 @@ const CarouselItemRow: React.FC<{
                     value={item.extraURL || ""}
                     onChange={handleUrlChange}
                     disabled={!isEditing || isRowSaving}
-                    className="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full p-2 border border-gray-600 rounded focus:ring-blue-500 focus:border-blue-500 bg-dark-1 text-gray-100" // Input escuro
                     placeholder="URL Opcional"
                 />
             </td>
@@ -115,14 +115,14 @@ const CarouselItemRow: React.FC<{
                         <button
                             onClick={() => setIsEditing(true)}
                             disabled={isSaving}
-                            className={`p-2 rounded text-white text-xs font-bold transition-colors w-24 bg-yellow-600 hover:bg-yellow-700`}
+                            className={`p-2 rounded text-white text-xs font-bold transition-colors w-24 bg-teal-600 hover:bg-teal-500`} // EDITAR: VERDE ÁGUA/AZUL CLARO
                         >
                             Editar
                         </button>
                         <button
                             onClick={removeCurrentItem}
                             disabled={isSaving}
-                            className={`p-2 rounded text-xs transition-colors w-24 bg-red-600 text-white hover:bg-red-700`}
+                            className={`p-2 rounded text-xs transition-colors w-24 bg-red-700 text-white hover:bg-red-600`} // REMOVER: Vermelho escuro
                         >
                             Remover Destaque
                         </button>
@@ -134,14 +134,14 @@ const CarouselItemRow: React.FC<{
                             onClick={saveCurrentItem}
                             disabled={isRowSaving || isSaving}
                             className={`p-2 rounded text-white text-xs font-bold transition-colors w-24
-                                ${isRowSaving || isSaving ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
+                                ${isRowSaving || isSaving ? 'bg-gray-600 cursor-not-allowed' : 'bg-green-700 hover:bg-green-600'}`} // SALVAR: Verde escuro
                         >
                             {isRowSaving ? 'Salvando...' : 'Salvar'}
                         </button>
                         <button
                             onClick={cancelEdit}
                             disabled={isRowSaving || isSaving}
-                            className={`p-2 rounded text-xs transition-colors w-24 bg-gray-200 text-gray-700 hover:bg-gray-300`}
+                            className={`p-2 rounded text-xs transition-colors w-24 bg-gray-600 text-gray-100 hover:bg-gray-500`} // CANCELAR: Cinza escuro
                         >
                             Cancelar
                         </button>
@@ -161,14 +161,9 @@ const CarouselItemRow: React.FC<{
 
 export const FormCarouselHighlights: React.FC = () => {
     const { state, actions } = useCarouselForm();
-    const { highlightItems, isLoading, error, isSaving, inactiveItems } = state;
+    const { highlightItems, isLoading, error, isSaving } = state;
 
-    // Desestruturação correta
     const { handleSaveItem, updateItemField, handleDeactivateItem } = actions; 
-
-    // NOVO ESTADO: Controla a seleção do item inativo a ser adicionado
-    const [selectedInactiveId, setSelectedInactiveId] = useState('');
-    const selectedItem = inactiveItems.find(item => item._id === selectedInactiveId);
 
     const sortedItems = highlightItems;
 
@@ -176,46 +171,44 @@ export const FormCarouselHighlights: React.FC = () => {
         return <div className="text-center py-8 text-gray-400">Carregando itens do carrossel...</div>;
     }
 
-    if (error && highlightItems.length === 0) {
-        return <div className="p-6 bg-white shadow-lg rounded-lg text-red-600 text-center py-8">
-            Falha crítica ao carregar destaques. Verifique o console e a API.
+    if (error && highlightItems.length === 0) {
+        return <div className="p-6 bg-dark-1 shadow-lg rounded-lg text-red-400 text-center py-8">
+            Falha ao carregar destaques do carrossel. Verifique a API.
         </div>;
     }
     
-    // Se não há itens para gerenciar
     if (highlightItems.length === 0 && !isLoading && !error) {
          return (
-            <div className="p-6 bg-white shadow-lg rounded-lg">
-                <h2 className="text-2xl font-bold mb-6">✨ Gestão de Destaques do Carrossel</h2>
-                <p className="text-gray-600 p-4 border rounded">Não há itens marcados como candidatos ao carrossel. Por favor, use a opção 'Adicionar Novo Item' no menu superior.</p>
+            <div className="p-6 bg-dark-1 shadow-lg rounded-lg">
+                <h2 className="text-2xl font-bold mb-6 text-gray-100">✨ Gestão de Destaques do Carrossel</h2>
+                <p className="text-gray-400 p-4 border border-gray-600 rounded">Não há itens marcados como candidatos ao carrossel. Por favor, use a opção 'Adicionar Novo Item' no menu superior.</p>
             </div>
         );
     }
 
 
     return (
-        <div className="p-6 bg-white shadow-lg rounded-lg">
-            <h2 className="text-2xl font-bold mb-6">✨ Gestão de Destaques do Carrossel</h2>
+        <div className="p-6 bg-dark-2 shadow-lg rounded-lg"> {/* Fundo de card (cinza escuro principal) */}
+            <h2 className="text-2xl font-bold mb-6 text-gray-100">Gestão de Destaques do Carrossel</h2> {/* Título branco/claro */}
             
-            {/* 1. Mensagem de Erro (Se a lista carregou, mas há um erro de fundo) */}
             {error && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                <div className="bg-red-700 border border-red-500 text-white px-4 py-3 rounded relative mb-4">
                     Atenção: Houve um erro de API, a lista pode estar incompleta.
                 </div>
             )}
 
             <div className="flex justify-between items-center mb-4">
-                <p className="text-gray-600">
+                <p className="text-gray-400">
                     Clique em **Editar** para desbloquear os campos e salvar item por item.
                 </p>
             </div>
 
-            <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
-                <table className="w-full text-sm text-left text-gray-500">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <div className="overflow-x-auto relative border border-dark-1 rounded-lg">
+                <table className="w-full text-sm text-left text-dark-2">
+                    <thead className="text-xs text-gray-300 uppercase bg-gray-700">
                         <tr>
                             <th scope="col" className="px-6 py-3">Item (Projeto/Perspectiva)</th>
-                            <th scope="col" className="px-6 py-3">Ordem (0, 1, 2...)</th>
+                            <th scope="col" className="px-6 py-3">Ordem (1, 2...)</th>
                             <th scope="col" className="px-6 py-3">URL Extra</th>
                             <th scope="col" className="px-6 py-3 text-center">Ação</th>
                         </tr>
@@ -227,7 +220,7 @@ export const FormCarouselHighlights: React.FC = () => {
                                 item={item}
                                 updateField={updateItemField}
                                 handleSaveItem={handleSaveItem}
-                                handleDeactivateItem={handleDeactivateItem} // NOVO PROP
+                                handleDeactivateItem={handleDeactivateItem} 
                                 isSaving={isSaving}
                             />
                         ))}
