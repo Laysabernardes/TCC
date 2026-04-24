@@ -15,6 +15,7 @@ import Parceiros from "./pages/Parceiros";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Sobre from "./pages/Sobre";
+import NotFound from "./pages/NotFound";
 
 const router = createHashRouter([
   {
@@ -64,6 +65,10 @@ const router = createHashRouter([
         <AdmManagement />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

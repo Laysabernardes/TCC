@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import { CarouselService, type CarouselResponseType } from "../service/carousel.service";
 import { ProjectService } from "../service/projects/project.service";
 import { type PaginatedProjectsResponse, type ProjectResponseType } from "../features/projects/project.types";
-import LoadingOverlay from '../components/LoadingOverlay'; // 1. Importe o componente
+import LoadingOverlay from '../components/LoadingOverlay';
 
 
 function Home() {
@@ -114,7 +114,6 @@ function Home() {
   return (
     <>
       <Header />
-      {loading && <LoadingOverlay />}
       <section className="relative w-full min-h-[82vh] h-full py-5 flex flex-col items-center justify-center text-center bg-cover bg-center text-white"
         style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url(${background})` }}>
         <h2 className="h-max max-w-5xl text-white text-center text-3xl sm:text-4xl lg:text-5xl font-bold px-4 mb-3">Transformando Comunidades Através da Economia Criativa e do Urbanismo</h2>
@@ -128,20 +127,24 @@ function Home() {
           <h2 className="text-white text-3xl font-bold text-center mb-7">
             Projetos em Destaque
           </h2>
-          <Slider {...carouselSettings}>
-            {carouselData.map((card, index) => (
-              <CardCarousel
-                key={index}
-                variant="short"
-                theme="dark"
-                title={card.title}
-                subtitle={card.title}
-                img={card.banner ? card.banner : "https://static.vecteezy.com/ti/fotos-gratis/t2/57068323-solteiro-fresco-vermelho-morango-em-mesa-verde-fundo-comida-fruta-doce-macro-suculento-plantar-imagem-foto.jpg"}
-                slug={card.slug}
-                collection={card.collection_type}
-              />
-            ))}
-          </Slider>
+          {loading && carouselData.length === 0 ? (
+            <LoadingOverlay minHeightClass="min-h-[300px]" />
+          ) : (
+            <Slider {...carouselSettings}>
+              {carouselData.map((card, index) => (
+                <CardCarousel
+                  key={index}
+                  variant="short"
+                  theme="dark"
+                  title={card.title}
+                  subtitle={card.title}
+                  img={card.banner ? card.banner : "https://static.vecteezy.com/ti/fotos-gratis/t2/57068323-solteiro-fresco-vermelho-morango-em-mesa-verde-fundo-comida-fruta-doce-macro-suculento-plantar-imagem-foto.jpg"}
+                  slug={card.slug}
+                  collection={card.collection_type}
+                />
+              ))}
+            </Slider>
+          )}
         </div>
       </section>
       <DestaqueSection />
@@ -151,21 +154,25 @@ function Home() {
           <h2 className="text-white text-3xl font-bold text-center mb-7">
             Últimas Novidades
           </h2>
-          <Slider {...settings}>
-            {lastProjectsData?.data.map((card, index) => (
-              <CardCarousel
-                key={index}
-                variant="long"
-                theme="light"
-                date={convertDate(card.createdAt)}
-                title={card.title}
-                subtitle={card.subtitle? card.subtitle : ""}
-                img={card.banner ? card.banner : "https://static.vecteezy.com/ti/fotos-gratis/t2/57068323-solteiro-fresco-vermelho-morango-em-mesa-verde-fundo-comida-fruta-doce-macro-suculento-plantar-imagem-foto.jpg"}
-                slug={card.slug}
-                collection={"project"}
-              />
-            ))}
-          </Slider>
+          {loading && !lastProjectsData?.data?.length ? (
+            <LoadingOverlay minHeightClass="min-h-[300px]" />
+          ) : (
+            <Slider {...settings}>
+              {lastProjectsData?.data.map((card, index) => (
+                <CardCarousel
+                  key={index}
+                  variant="long"
+                  theme="light"
+                  date={convertDate(card.createdAt)}
+                  title={card.title}
+                  subtitle={card.subtitle? card.subtitle : ""}
+                  img={card.banner ? card.banner : "https://static.vecteezy.com/ti/fotos-gratis/t2/57068323-solteiro-fresco-vermelho-morango-em-mesa-verde-fundo-comida-fruta-doce-macro-suculento-plantar-imagem-foto.jpg"}
+                  slug={card.slug}
+                  collection={"project"}
+                />
+              ))}
+            </Slider>
+          )}
         </div>
       </section>
       <Footer />

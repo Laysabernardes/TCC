@@ -17,7 +17,7 @@ export function FormProject({ action, onFormSubmit }: FormProjectProps) {
     const [validationError, setValidationError] = useState<string | null>(null);
 
     if (isLoading) {
-        return <LoadingOverlay />;
+        return <LoadingOverlay minHeightClass="min-h-[420px]" />;
     }
 
     const onInvalid = (errors: any) => {

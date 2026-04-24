@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { PerspectiveService } from '../features/perpectives/components/perspective.service';
 import type { PerspectiveResponseType } from '../features/perpectives/components/FormPerspective/perspective.types';
 import { PerspectiveDetailView } from '../features/perpectives/components/PerspectiveDetailView';
-import LoadingOverlay from '../components/LoadingOverlay';
+import { PageLoadingShell } from '../components/PageLoadingShell';
+import { PageErrorState } from '../components/PageErrorState';
 
 export default function PerspectiveDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -15,7 +16,7 @@ export default function PerspectiveDetail() {
     window.scrollTo(0, 0);
     if (!slug) {
       setIsLoading(false);
-      setError("Slug not found in URL.");
+      setError("Endereço inválido: falta o identificador do conteúdo na URL.");
       return;
     };
 
@@ -32,7 +33,7 @@ export default function PerspectiveDetail() {
           throw new Error("Perspective not found.");
         }
       } catch (err) {
-        setError("Could not load perspective data. Please check API connection.");
+        setError("Não foi possível obter os dados desta perspectiva. Verifique sua conexão ou tente novamente mais tarde.");
         setIsLoading(false);
       }
     }
@@ -59,19 +60,24 @@ export default function PerspectiveDetail() {
   }, [perspective]);
 
   if (isLoading) {
-    return <LoadingOverlay />;
+    return <PageLoadingShell />;
   }
   if (error) {
     return (
-      <div className="flex items-center justify-center p-20 text-red-500 bg-gray-900 h-screen text-center">
-        <div>
-          <h1 className="text-2xl font-bold mb-4">Error</h1>
-          <p>{error}</p>
-        </div>
-      </div>
+      <PageErrorState
+        title="Não foi possível carregar esta perspectiva"
+        description={error}
+      />
     );
   }
-  if (!perspective) return <div className="text-center p-20 text-white bg-gray-900 h-screen">Perspectiva não encontrada.</div>;
+  if (!perspective) {
+    return (
+      <PageErrorState
+        title="Perspectiva não encontrada"
+        description="O capítulo ou conteúdo solicitado não está disponível. Você pode voltar ao início ou abrir outro projeto."
+      />
+    );
+  }
 
   return <PerspectiveDetailView perspective={perspective}/>;
 }

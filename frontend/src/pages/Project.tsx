@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Person from "../components/Person";
-import LoadingOverlay from '../components/LoadingOverlay';
+import { PageLoadingShell } from '../components/PageLoadingShell';
+import { PageErrorState } from '../components/PageErrorState';
 
 export default function ProjectDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -33,19 +34,24 @@ export default function ProjectDetailPage() {
   }, [slug]);
 
   if (isLoading) {
-    return <LoadingOverlay />;
+    return <PageLoadingShell />;
   }
   if (error) {
     return (
-      <div className="flex items-center justify-center p-20 text-red-500 bg-gray-900 h-screen text-center">
-        <div>
-          <h1 className="text-2xl font-bold mb-4">Error</h1>
-          <p>{error}</p>
-        </div>
-      </div>
+      <PageErrorState
+        title="Erro ao carregar o projeto"
+        description={error}
+      />
     );
   }
-  if (!project) return <div>Projeto não encontrado.</div>;
+  if (!project) {
+    return (
+      <PageErrorState
+        title="Projeto não encontrado"
+        description="Este projeto não existe, foi removido ou ainda não está publicado. Use os links abaixo para continuar navegando."
+      />
+    );
+  }
 
   return (
     <>

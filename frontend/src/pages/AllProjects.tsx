@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ProjectCard from '../components/ProjectCard';
-import LoadingOverlay from '../components/LoadingOverlay'; // 1. Importe o componente
+import LoadingOverlay from '../components/LoadingOverlay';
+import { PageErrorState } from '../components/PageErrorState';
 import { ProjectService } from '../service/projects/project.service';
 import type { ProjectResponseType, PaginatedProjectsResponse } from '../features/projects/project.types';
 import background from "../assets/bg_projetos.png";
@@ -67,7 +68,7 @@ const AllProjects: React.FC = () => {
         } catch (err) {
             console.error('Fetch error:', err);
             console.log(err);
-            setError("Error loading projects. Please check API connection.");
+            setError("Verifique sua conexão ou tente novamente em alguns instantes.");
             setProjects([]);
             
         } finally {
@@ -89,26 +90,16 @@ const AllProjects: React.FC = () => {
 
     if (error) {
         return (
-            <div className="flex items-center justify-center text-red-500 p-8 bg-gray-900 min-h-screen text-center">
-                <div>
-                    <h1 className="text-2xl font-bold mb-2">API Error</h1>
-                    <p>{error}</p>
-                    <button 
-                        onClick={() => window.location.reload()} 
-                        className="mt-4 px-4 py-2 bg-red-600 text-white rounded"
-                    >
-                        Retry
-                    </button>
-                </div>
-            </div>
+            <PageErrorState
+                title="Não foi possível carregar os projetos"
+                description={error}
+            />
         );
     }
 
     return (
         <>
             <Header />
-            {loading && <LoadingOverlay />}
-            
             <article className="bg-gray-900 min-h-screen text-gray-200">
                 {/* Banner */}
                 <section className="relative w-full min-h-[50vh] h-full p-5 flex flex-col items-center justify-center text-center bg-cover bg-center text-white"
@@ -140,22 +131,25 @@ const AllProjects: React.FC = () => {
                 <div className="max-w-7xl mx-auto p-4 md:p-8 bg-gray-900">
                     {/* Grid de Projetos */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {projects.length > 0 ? (
+                        {loading && projects.length === 0 ? (
+                            <div className="col-span-full">
+                                <LoadingOverlay minHeightClass="min-h-[420px]" />
+                            </div>
+                        ) : projects.length > 0 ? (
                             projects.map(project => (
                                 <ProjectCard key={project._id} project={project} />
                             ))
                         ) : (
-                            !loading && (
-                                <p className="col-span-full text-center text-xl text-gray-400">
-                                    Não há projetos disponíveis.
-                                </p>
-                            )
+                            <p className="col-span-full text-center text-xl text-gray-400">
+                                Não há projetos disponíveis.
+                            </p>
                         )}
                     </div>
 
-                    {/* Loading Indicator para Load More (só aparece se já houver projetos na tela) */}
                     {loading && projects.length > 0 && (
-                        <div className="col-span-full text-center mt-8 text-gray-400">Carregando mais...</div>
+                        <div className="mt-8 flex justify-center">
+                            <LoadingOverlay minHeightClass="min-h-[120px]" className="max-w-xs rounded-lg bg-gray-800/50" />
+                        </div>
                     )}
 
                     {/* --- Barra de Paginação Numérica (Nova Implementação) --- */}

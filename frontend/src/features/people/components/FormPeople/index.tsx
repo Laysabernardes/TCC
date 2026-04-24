@@ -16,7 +16,7 @@ export function FormPeople({ action, onFormSubmit }: FormPeopleProps) {
     const { allPeople, selectedPeopleId, isLoading, error } = state;
     const { setSelectedPeopleId, onSubmit, handleDelete } = actions;
 
-    if (isLoading) return <LoadingOverlay />;
+    if (isLoading) return <LoadingOverlay minHeightClass="min-h-[380px]" />;
 
     if (error)
         return <p className="text-center p-4 text-red-500">Erro: {error}</p>;

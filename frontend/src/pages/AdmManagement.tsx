@@ -12,8 +12,6 @@ import { FormProject } from "../features/projects/components/FormProject/index";
 import { FormCarouselHighlights } from "../features/carousel/index";
 import { FormCarouselAdd } from "../features/carousel/FormCarouselAdd/index";
 import { FormPeople } from "../features/people/components/FormPeople/index";
-import LoadingOverlay from '../components/LoadingOverlay'; // Importe o spinner
-
 // Tipos para garantir a consistência do nosso estado
 type CollectionType = "Project" | "Perspective" | "Carousel" | "Timeline" | "People" | "";
 type ActionType = "Create" | "Update" | "Delete" | "Manage" | "Add" | "";
@@ -23,8 +21,6 @@ export default function AdmManagement() {
   const [action, setAction] = useState<ActionType>("");
   const [collection, setCollection] = useState<CollectionType>("");
   const [feedback, setFeedback] = useState<FeedbackType | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-
   // Efeito para o feedback desaparecer após 5 segundos
   useEffect(() => {
     if (feedback) {
@@ -42,7 +38,6 @@ export default function AdmManagement() {
 
   // Função que será passada para os formulários filhos
   const handleFormSubmit = () => {
-    setIsProcessing(false);
     setFeedback({ type: "success", message: "Operação concluída com sucesso!" });
     // Reseta as seleções para o estado inicial após a submissão
     setAction("");
@@ -52,7 +47,6 @@ export default function AdmManagement() {
   return (
     <>
       <Header />
-      {isProcessing && <LoadingOverlay />}
       <div
         id="hero"
         className="w-full min-h-screen flex flex-col items-center bg-gray-700-1 p-4"

@@ -23,7 +23,7 @@ export function FormPerspective({ action, onFormSubmit }: { action: "Create" | "
     }) : [];
 
     
-    if (isLoading) return <LoadingOverlay />;
+    if (isLoading) return <LoadingOverlay minHeightClass="min-h-[420px]" />;
 
     const onInvalid = (errors: any) => {
         console.error("ERROS DE VALIDAÇÃO:", errors);

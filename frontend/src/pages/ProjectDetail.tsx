@@ -7,7 +7,8 @@ import type { PerspectiveResponseType } from '../features/perpectives/components
 import { ContentBlockRenderer } from '../features/perpectives/components/ContentBlockRenderer/index';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import LoadingOverlay from '../components/LoadingOverlay';
+import { PageLoadingShell } from '../components/PageLoadingShell';
+import { PageErrorState } from '../components/PageErrorState';
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -48,19 +49,24 @@ export default function ProjectDetail() {
   }, [slug]);
 
   if (isLoading) {
-    return <LoadingOverlay />;
+    return <PageLoadingShell />;
   }
   if (error) {
     return (
-      <div className="flex items-center justify-center p-20 text-red-500 bg-gray-900 h-screen text-center">
-        <div>
-          <h1 className="text-2xl font-bold mb-4">Error</h1>
-          <p>{error}</p>
-        </div>
-      </div>
+      <PageErrorState
+        title="Erro ao carregar o projeto"
+        description={error}
+      />
     );
   }
-  if (!project) return <div>Projeto não encontrado.</div>;
+  if (!project) {
+    return (
+      <PageErrorState
+        title="Projeto não encontrado"
+        description="Não encontramos este conteúdo. Confira o endereço ou volte à página inicial."
+      />
+    );
+  }
 
   return (
     <>
